@@ -18,6 +18,9 @@ const items = ref<AccordionItem[]>([
     content: 'You can customize components by using the `class` / `ui` props or in your app.config.ts.'
   }
 ])
+
+const varoNodeGroups = getVaroNodeGroups(dummyVaroNodes);
+
 </script>
 
 <template>
@@ -30,6 +33,14 @@ const items = ref<AccordionItem[]>([
         :node="node"
       />
     </div>
+
+    <USeparator class="py-6"/>
+
+    <VaroNodeGroupCard
+      v-for="group in varoNodeGroups"
+      :key="group.id"
+      :group="group"
+    />
 
     <!-- grouped categories -->
     <UAccordion :items="items" type="multiple" />

@@ -1,75 +1,150 @@
 import { VaroNode } from "~/types/VaroNode";
 
 export const dummyVaroNodes: VaroNode[] = [
-  new VaroNode({
-    id: "uuid-3dsmax",
-    name: "3ds Max",
+  // 3ds Max
+  {
+    id: "uuid-3dsmax-2022",
+    groupId: "3dsmax",
+    name: "3ds Max 2022",
     category: "3D",
     icon: "./icons/3dsmax.svg",
-    variants: [
-      {id:"0", name: "3ds Max 2022" },
-      {id:"1", name: "3ds Max 2023" },
-      {id:"2", name: "3ds Max 2024", default: true, description: "Latest stable version for all artists to use for production", status: { name: "Deprecated", color: "#000000", background: "#fb2c36" } },
-      {id:"3", name: "3ds Max 2025", },
-      {id:"4", name: "3ds Max 2026", description: "Testing" },
-    ],
-  }),
-  new VaroNode({
-    id: "uuid-maya",
-    name: "Maya",
+    status: {
+      name: "Deprecated",
+      color: "error",
+    },
+  },
+  {
+    id: "uuid-3dsmax-2023",
+    groupId: "3dsmax",
+    name: "3ds Max 2023",
+    visible: false,
+    category: "3D",
+    icon: "./icons/3dsmax.svg"
+  },
+  {
+    id: "uuid-3dsmax-2024",
+    groupId: "3dsmax",
+    name: "3ds Max 2024",
+    category: "3D",
+    icon: "./icons/3dsmax.svg",
+    defaultForGroup: true,
+    description: "Latest stable version for all artists to use for production",
+    status: {
+      name: "Default",
+      color: "neutral",
+    },
+  },
+  {
+    id: "uuid-3dsmax-2025",
+    groupId: "3dsmax",
+    name: "3ds Max 2025",
+    category: "3D",
+    icon: "./icons/3dsmax.svg",
+    status: {
+      name: "Beta",
+      color: "warning",
+    },
+  },
+  {
+    id: "uuid-3dsmax-2026",
+    groupId: "3dsmax",
+    name: "3ds Max 2026",
+    category: "3D",
+    icon: "./icons/3dsmax.svg",
+    description: "Testing"
+  },
+
+  // Maya
+  {
+    id: "uuid-maya-2020",
+    groupId: "maya",
+    name: "Maya 2020",
+    category: "3D",
+    icon: "./icons/maya.svg"
+  },
+  {
+    id: "uuid-maya-2022",
+    groupId: "maya",
+    name: "Maya 2022",
+    category: "3D",
+    icon: "./icons/maya.svg"
+  },
+  {
+    id: "uuid-maya-2024",
+    groupId: "maya",
+    name: "Maya 2024",
     category: "3D",
     icon: "./icons/maya.svg",
-    variants: [
-      {id:"0", name: "Maya 2020", },
-      {id:"1", name: "Maya 2022", },
-      {id:"2", name: "Maya 2024", status: { name: "Beta", color: "#000", background: "#ffc107" } },
-    ],
-  }),
-  new VaroNode({
-    id: "uuid-blender",
-    name: "Blender",
+    status: {
+      name: "Beta",
+      color: "warning",
+    }
+  },
+
+  // Blender
+  {
+    id: "uuid-blender-2022",
+    groupId: "blender",
+    name: "Blender 2022",
+    category: "3D",
+    icon: "./icons/blender.svg"
+  },
+  {
+    id: "uuid-blender-2024",
+    groupId: "blender",
+    name: "Blender 2024",
     category: "3D",
     icon: "./icons/blender.svg",
-    variants: [
-      {id:"0", name: "Blender 2022" },
-      {id:"1", name: "Blender 2024", status: { name: "Default", color: "#000", background: "#ffc107" } },
-    ],
-  }),
-  new VaroNode({
-    id: "uuid-nuke",
-    name: "Nuke",
+    status: {
+      name: "Default",
+      color: "info",
+    }
+  },
+
+  // Nuke
+  {
+    id: "uuid-nuke-13.1",
+    groupId: "nuke",
+    name: "Nuke 13.1",
+    category: "Compositing",
+    icon: "./icons/nuke.svg"
+  },
+  {
+    id: "uuid-nuke-14",
+    groupId: "nuke",
+    name: "Nuke 14 Beta",
     category: "Compositing",
     icon: "./icons/nuke.svg",
-    variants: [
-      {id:"0", name: "Nuke 13.1" },
-      {id:"1", name: "Nuke 14 Beta", default: true, status: { name: "Beta", color: "#fff", background: "#f44336" } },
-    ],
-  }),
-  new VaroNode({
-    id: "uuid-affinity",
-    name: "Affinity Photo",
+    status: {
+      name: "Beta",
+      color: "warning",
+    }
+  },
+
+  // Affinity Photo
+  {
+    id: "uuid-affinity-2",
+    groupId: "affinity",
+    name: "Affinity Photo 2",
     category: "2D",
-    icon: "./icons/affinity.svg",
-    variants: [
-      {id:"0", name: "Affinity Photo 2" },
-    ],
-  }),
-  new VaroNode({
-    id: "uuid-nim",
-    name: "NIM",
+    icon: "./icons/affinity.svg"
+  },
+
+  // NIM
+  {
+    id: "uuid-nim-5.0",
+    groupId: "nim",
+    name: "NIM 5.0",
     category: "Pipeline",
-    icon: "./icons/nim.svg",
-    variants: [
-      {id:"0", name: "NIM 5.0" },
-    ],
-  }),
-  new VaroNode({
-    id: "uuid-nim",
+    icon: "./icons/nim.svg"
+  },
+
+  // Documentation
+  {
+    id: "uuid-docs",
+    groupId: "docs",
     name: "Documentation",
     category: "Pipeline",
-    icon: "./icons/nim.svg",
-    variants: [
-      {id:"0", name: "Documentation" },
-    ],
-  }),
+    icon: "./icons/nim.svg"
+  }
 ];
