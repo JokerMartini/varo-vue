@@ -9,7 +9,7 @@ export const dummyVaroNodes: VaroNode[] = [
     variants: [
       {id:"0", name: "3ds Max 2022" },
       {id:"1", name: "3ds Max 2023" },
-      {id:"2", name: "3ds Max 2024", default: true, description: "Latest stable version" },
+      {id:"2", name: "3ds Max 2024", default: true, description: "Latest stable version for all artists to use for production", status: { name: "Deprecated", color: "#000000", background: "#fb2c36" } },
       {id:"3", name: "3ds Max 2025", },
       {id:"4", name: "3ds Max 2026", description: "Testing" },
     ],

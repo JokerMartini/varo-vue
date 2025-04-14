@@ -23,7 +23,7 @@ const items = ref<AccordionItem[]>([
 <template>
   <div class="p-4">
 
-    <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
+    <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
       <VaroNodeCard
         v-for="node in dummyVaroNodes"
         :key="node.uid"
