@@ -3,32 +3,40 @@ export class VaroNodeGroup {
   name: string;
   visible: boolean;
   nodes: VaroNode[];
-  defaultNodeId?: string;
+  selectedNodeId?: string;
 
   constructor(data: {
     id: string;
     name: string;
     visible?: boolean;
     nodes?: VaroNode[];
-    defaultNodeId?: string;
+    selectedNodeId?: string;
   }) {
     this.id = data.id;
     this.name = data.name;
     this.visible = data.visible ?? true;
     this.nodes = data.nodes ?? [];
-    this.defaultNodeId = data.defaultNodeId;
+    this.selectedNodeId = data.selectedNodeId ?? this.getDefaultNodeId();
   }
 
   /**
-   * Returns the default VaroNode for this group, falling back to first available node.
+   * Returns the currently selected VaroNode, falling back to default or first node.
    */
-  // getDefaultNode(): VaroNode | undefined {
-  //   if (this.defaultNodeId) {
-  //     const found = this.nodes.find(n => n.id === this.defaultNodeId);
-  //     if (found) return found;
-  //   }
-  //   return this.nodes[0];
-  // }
+  get selectedNode(): VaroNode | undefined {
+    if (this.selectedNodeId) {
+      const found = this.nodes.find(n => n.id === this.selectedNodeId);
+      if (found) return found;
+    }
+    return this.nodes[0];
+  }
+
+  /**
+   * Returns the first node marked defaultForGroup, or fallback to first.
+   */
+  private getDefaultNodeId(): string | undefined {
+    const defaultNode = this.nodes.find(n => n.defaultForGroup);
+    return defaultNode?.id ?? this.nodes[0]?.id;
+  }
 }
 
 export class VaroNode {

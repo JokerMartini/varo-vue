@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { dummyVaroNodes } from '@/data/dummyNodes';
+import { getVaroNodeGroups } from '@/utils/groupVaroNodes';
 
 const items = ref<AccordionItem[]>([
   {
@@ -26,23 +27,31 @@ const varoNodeGroups = getVaroNodeGroups(dummyVaroNodes);
 <template>
   <div class="p-4">
 
-    <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
+    <!-- Ungrouped -->
+    <p class="font-semibold text-lg py-2">Ungrouped {{dummyVaroNodes.length}} nodes</p>
+
+    <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
       <VaroNodeCard
-        v-for="node in dummyVaroNodes"
-        :key="node.uid"
-        :node="node"
+      v-for="node in dummyVaroNodes"
+      :key="node.uid"
+      :node="node"
       />
     </div>
-
+    
     <USeparator class="py-6"/>
-
-    <VaroNodeGroupCard
+    
+    <!-- Grouped -->
+    <p class="font-semibold text-lg py-2">Grouped {{varoNodeGroups.length}} nodes</p>
+    
+    <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
+      <VaroNodeGroupCard
       v-for="group in varoNodeGroups"
       :key="group.id"
       :group="group"
-    />
+      />
+    </div>
 
     <!-- grouped categories -->
-    <UAccordion :items="items" type="multiple" />
+    <!-- <UAccordion :items="items" type="multiple" /> -->
   </div>
 </template>

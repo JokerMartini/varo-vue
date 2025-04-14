@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { VaroNode } from '@/types/VaroNode';
 
+const toast = useToast()
+
 const props = defineProps<{ node: VaroNode }>();
 
 const items = ref<DropdownMenuItem[]>([
@@ -13,6 +15,16 @@ const items = ref<DropdownMenuItem[]>([
         icon: 'i-lucide-pencil'
     }
 ])
+
+function handleExecuteClick() {
+  console.log('Button clicked!');
+  toast.add({
+    title: `Launching ${props.node.name}`,
+    description: 'Your wish is my command...',
+    icon: "i-lucide-rocket",
+    color: "success"
+  })
+}
 
 </script>
 
@@ -29,7 +41,13 @@ const items = ref<DropdownMenuItem[]>([
         <div class="flex gap-2 items-start w-full flex-nowrap">
             <!-- Action Button/Icon -->
             <div>
-                <UButton icon="i-lucide-box" variant="ghost" size="2xl" color="neutral" class="shrink-0 cursor-pointer">
+                <UButton 
+                    @click="handleExecuteClick"
+                    icon="i-lucide-box" 
+                    variant="ghost" 
+                    size="2xl" 
+                    color="neutral" 
+                    class="shrink-0 cursor-pointer">
                 </UButton>
             </div>
 
@@ -49,12 +67,7 @@ const items = ref<DropdownMenuItem[]>([
 
             <!-- Menu/Button -->
             <div>
-
-                <UDropdownMenu size="md" :items="items" :content="{
-                    align: 'start'
-                }" :ui="{
-                            content: 'w-48'
-                        }">
+                <UDropdownMenu size="md" :items="items">
                     <UButton icon="i-lucide-ellipsis-vertical" variant="link" color="neutral" class="shrink-0">
                     </UButton>
                 </UDropdownMenu>

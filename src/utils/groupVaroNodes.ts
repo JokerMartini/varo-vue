@@ -1,31 +1,36 @@
-import type { VaroNode, VaroNodeGroup } from '~/types/VaroNode';
+import { VaroNodeGroup } from '~/types/VaroNode';
+import type { VaroNode } from '~/types/VaroNode';
 
 /**
  * Groups VaroNodes into VaroNodeGroups using their `groupId`.
  */
 export function getVaroNodeGroups(nodes: VaroNode[]): VaroNodeGroup[] {
-  const groups = new Map<string, VaroNodeGroup>();
+  const groupMap = new Map<string, VaroNodeGroup>();
 
   for (const node of nodes) {
     if (!node.groupId) continue;
 
-    if (!groups.has(node.groupId)) {
-      groups.set(node.groupId, {
+    let group = groupMap.get(node.groupId);
+
+    // Create new group if not present
+    if (!group) {
+      group = new VaroNodeGroup({
         id: node.groupId,
-        name: node.name,
+        name: node.name, // Could override with a display name map later
         visible: true,
         nodes: [],
-        defaultNodeId: undefined,
       });
+      groupMap.set(node.groupId, group);
     }
 
-    const group = groups.get(node.groupId)!;
     group.nodes.push(node);
 
-    // if (node.defaultForGroup) {
-    //   group.defaultNodeId = node;
-    // }
+    // Assign the selected node ID if this one is marked as defaultForGroup
+    if (node.defaultForGroup) {
+      group.selectedNodeId = node.id;
+    }
   }
 
-  return Array.from(groups.values());
+  // Fallback: if no selectedNodeId is explicitly set, the class handles it in the constructor or getter
+  return Array.from(groupMap.values());
 }
