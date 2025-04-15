@@ -8,13 +8,38 @@ const props = defineProps<{ node: VaroNode }>();
 const items = ref<DropdownMenuItem[]>([
     {
         label: 'Hide',
-        icon: 'i-lucide-eye-off'
+        icon: 'i-lucide-eye-off',
+        onSelect(e: Event) {
+            props.node.visible = !props.node.visible
+        }
+    },
+    {
+        label: 'Unhide',
+        icon: 'i-lucide-eye',
+        onSelect(e: Event) {
+            props.node.visible = !props.node.visible
+        }
     },
     {
         label: 'Edit',
-        icon: 'i-lucide-pencil'
+        icon: 'i-lucide-pencil',
+        onSelect(e: Event) {
+            console.log('TOOD')
+        }
     }
 ])
+
+function toggleVisibility() {
+  isVisible.value = !isVisible.value
+//   props.node.visible = isVisible.value
+
+  toast.add({
+    title: `${isVisible.value ? 'Visible' : 'Hidden'}`,
+    description: `${props.node.name} is now ${isVisible.value ? 'visible' : 'hidden'}`,
+    icon: isVisible.value ? 'i-lucide-eye' : 'i-lucide-eye-off',
+    color: isVisible.value ? 'green' : 'gray'
+  })
+}
 
 function handleExecuteClick() {
   console.log('Button clicked!');
@@ -33,7 +58,7 @@ function handleExecuteClick() {
 
         <!-- hidden -->
         <div v-if="node.visible === false"
-            class="w-12 h-12 -z-100 absolute top-0 left-0 w-full h-full text-(--ui-text-dimmed)/50
+            class="-z-100 absolute top-0 left-0 w-full h-full text-(--ui-text-dimmed)/50
             bg-[size:10px_10px] 
             bg-fixed bg-[image:repeating-linear-gradient(315deg,currentColor_0,currentColor_1px,_transparent_0,_transparent_50%)]">
         </div>
