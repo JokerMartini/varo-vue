@@ -2,6 +2,12 @@
 import { dummyVaroNodes } from '@/data/dummyNodes';
 import { getVaroNodeGroups } from '@/utils/groupVaroNodes';
 
+const nodeStore = useVaroNodeStore()
+
+onMounted(() => {
+  nodeStore.setNodes(dummyVaroNodes);
+})
+
 const items = ref<AccordionItem[]>([
   {
     label: 'Icons',
@@ -20,19 +26,17 @@ const items = ref<AccordionItem[]>([
   }
 ])
 
-const varoNodeGroups = getVaroNodeGroups(dummyVaroNodes);
-
 </script>
 
 <template>
   <div class="p-4">
 
     <!-- Ungrouped -->
-    <p class="font-semibold text-lg py-2">Ungrouped {{dummyVaroNodes.length}} nodes</p>
+    <p class="font-semibold text-lg py-2">Ungrouped {{nodeStore.nodes.length}} nodes</p>
 
     <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
       <VaroNodeCard
-      v-for="node in dummyVaroNodes"
+      v-for="node in nodeStore.nodes"
       :key="node.uid"
       :node="node"
       />
@@ -41,11 +45,11 @@ const varoNodeGroups = getVaroNodeGroups(dummyVaroNodes);
     <USeparator class="py-6"/>
     
     <!-- Grouped -->
-    <p class="font-semibold text-lg py-2">Grouped {{varoNodeGroups.length}} nodes</p>
+    <p class="font-semibold text-lg py-2">Grouped {{nodeStore.nodeGroups.length}} nodes</p>
     
     <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
       <VaroNodeGroupCard
-      v-for="group in varoNodeGroups"
+      v-for="group in nodeStore.nodeGroups"
       :key="group.id"
       :group="group"
       />

@@ -8,11 +8,28 @@ const props = defineProps<{ group: VaroNodeGroup }>();
 const items = ref<DropdownMenuItem[]>([
     {
         label: 'Hide',
-        icon: 'i-lucide-eye-off'
+        icon: 'i-lucide-eye-off',
+        onSelect(e: Event) {
+            console.log(props.group.visible)
+            props.group.visible = false;
+            console.log(props.group.visible)
+        }
+    },
+    {
+        label: 'Unhide',
+        icon: 'i-lucide-eye',
+        onSelect(e: Event) {
+            console.log(props.group.visible)
+            props.group.visible = true;
+            console.log(props.group.visible)
+        }
     },
     {
         label: 'Edit',
-        icon: 'i-lucide-pencil'
+        icon: 'i-lucide-pencil',
+        onSelect(e: Event) {
+            console.log('TOOD')
+        }
     }
 ])
 
@@ -55,7 +72,7 @@ function handleExecuteClick() {
             <!-- Title -->
             <div class="flex-grow space-y-1">
                 <UTooltip :text="group.selectedNode.description" :disabled="!group.selectedNode.description">
-                    <h3 v-if="group.nodes.length === 1" class="text-md font-semibold">{{ group.selectedNode.name }}</h3>
+                    <h3 v-if="group.nodes.length === 1" class="font-semibold">{{ group.selectedNode.name }}</h3>
                     <UButton v-else trailing-icon="i-lucide-chevron-down" variant="subtle" color="neutral" class="shrink-0 text-left w-full">
                         <span class="w-full">
                             {{ group.selectedNode.name }}

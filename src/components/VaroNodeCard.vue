@@ -10,14 +10,14 @@ const items = ref<DropdownMenuItem[]>([
         label: 'Hide',
         icon: 'i-lucide-eye-off',
         onSelect(e: Event) {
-            props.node.visible = !props.node.visible
+            props.node.visible = false
         }
     },
     {
         label: 'Unhide',
         icon: 'i-lucide-eye',
         onSelect(e: Event) {
-            props.node.visible = !props.node.visible
+            props.node.visible = true
         }
     },
     {
@@ -28,18 +28,6 @@ const items = ref<DropdownMenuItem[]>([
         }
     }
 ])
-
-function toggleVisibility() {
-  isVisible.value = !isVisible.value
-//   props.node.visible = isVisible.value
-
-  toast.add({
-    title: `${isVisible.value ? 'Visible' : 'Hidden'}`,
-    description: `${props.node.name} is now ${isVisible.value ? 'visible' : 'hidden'}`,
-    icon: isVisible.value ? 'i-lucide-eye' : 'i-lucide-eye-off',
-    color: isVisible.value ? 'green' : 'gray'
-  })
-}
 
 function handleExecuteClick() {
   console.log('Button clicked!');
@@ -55,7 +43,7 @@ function handleExecuteClick() {
 
 <template>
     <div class="bg-(--ui-bg-elevated)/50 p-2.5 rounded-[calc(var(--ui-radius)*2)] relative overflow-hidden">
-
+        
         <!-- hidden -->
         <div v-if="node.visible === false"
             class="-z-100 absolute top-0 left-0 w-full h-full text-(--ui-text-dimmed)/50
@@ -79,7 +67,7 @@ function handleExecuteClick() {
             <!-- Title -->
             <div class="flex-grow space-y-1">
                 <UTooltip :text="node.description" :disabled="!node.description">
-                    <h3 class="text-md font-semibold">{{ node.name }}</h3>
+                    <h3 class="font-semibold">{{ node.name }}</h3>
                 </UTooltip>
 
                 <!-- Badges -->

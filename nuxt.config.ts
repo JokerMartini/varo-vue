@@ -6,6 +6,9 @@ export default defineNuxtConfig({
  routeRules: {
 	"/": { prerender: true }
 },
- modules: ["@nuxt/ui"],
+ modules: [
+	"@nuxt/ui",
+	'@pinia/nuxt'
+],
  compatibilityDate: "2025-04-10"
 });
