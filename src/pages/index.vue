@@ -1,86 +1,171 @@
 <script setup lang="ts">
-import { dummyVaroNodes } from '@/data/dummyNodes';
-import { getVaroNodeGroups } from '@/utils/groupVaroNodes';
-import { invoke } from '@tauri-apps/api/core';
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
+import { useNuxtApp } from '#app';
 
-const nodeStore = useVaroNodeStore()
-
-onMounted(() => {
-  nodeStore.setNodes(dummyVaroNodes);
-})
-
-const items = ref<AccordionItem[]>([
-  {
-    label: 'Icons',
-    icon: 'i-lucide-smile',
-    content: 'You have nothing to do, @nuxt/icon will handle it automatically.'
-  },
-  {
-    label: 'Colors',
-    icon: 'i-lucide-swatch-book',
-    content: 'Choose a primary and a neutral color from your Tailwind CSS theme.'
-  },
-  {
-    label: 'Components',
-    icon: 'i-lucide-box',
-    content: 'You can customize components by using the `class` / `ui` props or in your app.config.ts.'
-  }
-])
-
-interface TextFile {
+interface FileInfo {
+  name: string;
   path: string;
-  modified: string;
+  modified_date: string;
   content: string;
 }
 
-const textFiles = ref<TextFile[]>([]);
-const loading = ref(false);
-const error = ref('');
+const files = ref<FileInfo[]>([]);
+const error = ref<string>('');
+const isLoading = ref(false);
+const isTauriEnv = ref(false);
+const { $tauri } = useNuxtApp();
 
-async function refreshTextFiles() {
-  loading.value = true;
-  error.value = '';
-  textFiles.value = []; // Clear existing files
+// Check if we're in a Tauri environment
+onMounted(() => {
+  isTauriEnv.value = typeof window !== 'undefined' && !!window.__TAURI__;
+  console.log('Running in Tauri environment:', isTauriEnv.value);
+  
+  // Initial load
+  refreshFiles();
+
+  // Add window focus event listener
+  window.addEventListener('focus', refreshFiles);
+});
+
+// Clean up event listener
+onUnmounted(() => {
+  window.removeEventListener('focus', refreshFiles);
+});
+
+async function refreshFiles() {
+  if (isLoading.value) return;
   
   try {
-    const files = await invoke<TextFile[]>('get_text_files');
-    textFiles.value = files;
-  } catch (err) {
-    error.value = err as string;
+    isLoading.value = true;
+    error.value = '';
+    
+    // Clear the files array before fetching new files
+    files.value = [];
+    
+    if (!$tauri?.invoke) {
+      throw new Error('Tauri plugin not initialized');
+    }
+    
+    files.value = await $tauri.invoke('get_txt_files');
+  } catch (e) {
+    error.value = e instanceof Error ? e.message : String(e);
+    console.error('Error refreshing files:', e);
   } finally {
-    loading.value = false;
+    isLoading.value = false;
+  }
+}
+
+async function viewFile(file: FileInfo) {
+  try {
+    if (!$tauri?.invoke) {
+      throw new Error('Tauri plugin not initialized');
+    }
+    
+    const content = await $tauri.invoke('read_file', { path: file.path });
+    // Update the file content in the UI
+    file.content = content;
+  } catch (e) {
+    error.value = e instanceof Error ? e.message : String(e);
+    console.error('Error viewing file:', e);
   }
 }
 </script>
 
 <template>
-  <div class="container mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-6">VARO Text Files</h1>
-    
-    <UButton 
-      color="primary" 
-      @click="refreshTextFiles"
-      class="mb-6"
-      :loading="loading"
-    >
-      Refresh Files
-    </UButton>
-    
-    <div v-if="error" class="text-red-500 mb-4 p-4 bg-red-100 rounded">
-      {{ error }}
+  <div class="p-4">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold">Text File Viewer</h1>
+      <div class="flex items-center gap-2">
+        <span v-if="!isTauriEnv" class="text-amber-500 text-sm">
+          Running in web mode (mock data)
+        </span>
+        <UButton
+          icon="i-lucide-refresh-cw"
+          @click="refreshFiles"
+          :loading="isLoading"
+          :disabled="isLoading"
+        >
+          {{ isLoading ? 'Loading...' : 'Refresh' }}
+        </UButton>
+      </div>
     </div>
-    
-    <div v-if="textFiles.length === 0 && !loading && !error" class="text-gray-500 italic">
-      No text files found or haven't refreshed yet.
-    </div>
-    
-    <ol v-else class="space-y-6 list-decimal pl-5">
-      <li v-for="file in textFiles" :key="file.path" class="border rounded p-4">
-        <h2 class="text-lg font-semibold">{{ file.path }}</h2>
-        <p class="text-gray-600 italic">Last modified: {{ file.modified }}</p>
-        <p class="mt-2 whitespace-pre-wrap">{{ file.content }}</p>
+
+    <UAlert
+      v-if="error"
+      type="error"
+      :title="error"
+      class="mb-4"
+    />
+
+    <ol v-if="files.length > 0" class="space-y-6">
+      <li v-for="file in files" :key="file.path" class="p-4 border rounded-lg">
+        <h2 class="text-xl font-semibold mb-2">{{ file.path }}</h2>
+        <p class="text-gray-600 italic mb-4">Last modified: {{ file.modified_date }}</p>
+        <div class="flex justify-between items-center mb-4">
+          <UButton
+            icon="i-lucide-eye"
+            @click="viewFile(file)"
+          >
+            View Content
+          </UButton>
+        </div>
+        <p v-if="file.content" class="whitespace-pre-wrap">{{ file.content }}</p>
       </li>
     </ol>
+
+    <p v-else-if="!error && !isLoading" class="text-gray-600 text-center py-8">
+      No text files found. Please set the VARO_PATH environment variable to a directory containing .txt files.
+    </p>
+    
+    <div v-if="isLoading && !error" class="text-center py-8">
+      <p class="text-gray-600">Loading files...</p>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.container {
+  margin: 0;
+  padding-top: 10vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+</style>
+
+<script lang="ts">
+// Add TypeScript declaration for window.__TAURI__
+declare global {
+  interface Window {
+    __TAURI__: {
+      invoke: (cmd: string, args?: any) => Promise<any>;
+    };
+  }
+}
+</script>
