@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { VaroNodeGroup } from '@/types/VaroNode';
+import type { VaroNodeGroup } from '@/models/VaroNodeGroup';
+import type { DropdownMenuItem } from '@nuxt/ui';
 
 const toast = useToast()
 
@@ -72,8 +73,12 @@ function handleExecuteClick() {
             <!-- Title -->
             <div class="flex-grow space-y-1">
                 <UTooltip :text="group.selectedNode.description" :disabled="!group.selectedNode.description">
-                    <h3 v-if="group.nodes.length === 1" class="font-semibold">{{ group.selectedNode.name }}</h3>
-                    <UButton v-else trailing-icon="i-lucide-chevron-down" variant="subtle" color="neutral" class="shrink-0 text-left w-full">
+                    <h3 v-if="group.nodes.length === 1" class="font-semibold text-sm">{{ group.selectedNode.name }}</h3>
+                    <UButton v-else 
+                        trailing-icon="i-lucide-chevron-down" 
+                        variant="subtle" 
+                        color="neutral" 
+                        class="shrink-0 text-left w-full">
                         <span class="w-full">
                             {{ group.selectedNode.name }}
                         </span>
@@ -95,7 +100,11 @@ function handleExecuteClick() {
             <!-- Menu/Button -->
             <div>
                 <UDropdownMenu size="md" :items="items">
-                    <UButton icon="i-lucide-ellipsis-vertical" variant="link" color="neutral" class="shrink-0">
+                    <UButton 
+                        icon="i-lucide-ellipsis-vertical" 
+                        variant="ghost" 
+                        color="neutral" 
+                        class="shrink-0">
                     </UButton>
                 </UDropdownMenu>
             </div>

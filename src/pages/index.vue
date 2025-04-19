@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { dummyVaroNodes } from '@/data/dummyNodes';
-import { getVaroNodeGroups } from '@/utils/groupVaroNodes';
+import type { AccordionItem } from '@nuxt/ui';
 
 const nodeStore = useVaroNodeStore()
 
@@ -29,6 +29,7 @@ const items = ref<AccordionItem[]>([
 </script>
 
 <template>
+  <AppHeader/>
   <div class="p-4">
 
     <!-- Ungrouped -->
@@ -37,7 +38,7 @@ const items = ref<AccordionItem[]>([
     <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
       <VaroNodeCard
       v-for="node in nodeStore.nodes"
-      :key="node.uid"
+      :key="node.id"
       :node="node"
       />
     </div>
@@ -58,4 +59,5 @@ const items = ref<AccordionItem[]>([
     <!-- grouped categories -->
     <!-- <UAccordion :items="items" type="multiple" /> -->
   </div>
+  <AppFooter/>
 </template>

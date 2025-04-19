@@ -1,5 +1,5 @@
-import { VaroNodeGroup } from '~/types/VaroNode';
-import type { VaroNode } from '~/types/VaroNode';
+import { VaroNodeGroup } from '~/models/VaroNodeGroup';
+import type { VaroNode } from '~/models/VaroNode';
 
 /**
  * Groups VaroNodes into VaroNodeGroups using their `groupId`.

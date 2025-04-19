@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { VaroNode } from '@/types/VaroNode';
+import type { VaroNode } from '@/models/VaroNode';
+import type { DropdownMenuItem } from '@nuxt/ui';
 
 const toast = useToast()
 
@@ -51,9 +52,9 @@ function handleExecuteClick() {
             bg-fixed bg-[image:repeating-linear-gradient(315deg,currentColor_0,currentColor_1px,_transparent_0,_transparent_50%)]">
         </div>
 
-        <div class="flex gap-2 items-start w-full flex-nowrap">
+        <div class="flex gap-2 items-stretch justify-stretch w-full flex-nowrap ">
             <!-- Action Button/Icon -->
-            <div>
+            <div class="">
                 <UButton 
                     @click="handleExecuteClick"
                     icon="i-lucide-box" 
@@ -65,9 +66,9 @@ function handleExecuteClick() {
             </div>
 
             <!-- Title -->
-            <div class="flex-grow space-y-1">
+            <div class="flex flex-col w-full space-y-1 ">
                 <UTooltip :text="node.description" :disabled="!node.description">
-                    <h3 class="font-semibold">{{ node.name }}</h3>
+                    <h3 class="text-sm font-semibold text-wrap">{{ node.name }}</h3>
                 </UTooltip>
 
                 <!-- Badges -->
@@ -79,9 +80,9 @@ function handleExecuteClick() {
             </div>
 
             <!-- Menu/Button -->
-            <div>
+            <div class="">
                 <UDropdownMenu size="md" :items="items">
-                    <UButton icon="i-lucide-ellipsis-vertical" variant="link" color="neutral" class="shrink-0">
+                    <UButton icon="i-lucide-ellipsis-vertical" variant="ghost" color="neutral" class="shrink-0">
                     </UButton>
                 </UDropdownMenu>
             </div>

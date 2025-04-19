@@ -1,3 +1,5 @@
+import type { VaroNode } from "./VaroNode";
+
 export class VaroNodeGroup {
   id: string;
   name: string;
@@ -33,48 +35,8 @@ export class VaroNodeGroup {
   /**
    * Returns the first node marked defaultForGroup, or fallback to first.
    */
-  private getDefaultNodeId(): string | undefined {
+  private getDefaultNodeId(): string {
     const defaultNode = this.nodes.find(n => n.defaultForGroup);
     return defaultNode?.id ?? this.nodes[0]?.id;
-  }
-}
-
-export class VaroNode {
-  id: string;
-  name: string;
-  category: string;
-  groupId: string;
-  icon: string;
-  visible?: boolean;
-  defaultForGroup?: boolean;
-  description?: string;
-  status?: {
-    name: string;
-    color: string;
-  };
-
-  constructor(data: {
-    id: string;
-    name: string;
-    category?: string;
-    groupId?: string;
-    icon?: string;
-    visible?: boolean;
-    defaultForGroup?: boolean;
-    description?: string;
-    status?: {
-      name: string;
-      color: string;
-    };
-  }) {
-    this.id = data.id;
-    this.name = data.name;
-    this.category = data.category ?? 'Uncategorized';
-    this.groupId = data.groupId ?? '';
-    this.icon = data.icon ?? '';
-    this.visible = data.visible ?? true;
-    this.defaultForGroup = data.defaultForGroup ?? false;
-    this.description = data.description;
-    this.status = data.status;
   }
 }

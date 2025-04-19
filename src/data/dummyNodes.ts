@@ -1,4 +1,4 @@
-import { VaroNode } from "~/types/VaroNode";
+import { VaroNode } from "~/models/VaroNode";
 
 export const dummyVaroNodes: VaroNode[] = [
   // 3ds Max

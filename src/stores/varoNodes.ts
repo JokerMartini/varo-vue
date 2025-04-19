@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { getVaroNodeGroups } from '@/utils/groupVaroNodes'
-import type { VaroNode } from '~/types/VaroNode'
-import { VaroNodeGroup } from '@/types/VaroNode'
+import type { VaroNode } from '~/models/VaroNode'
+import { VaroNodeGroup } from '~/models/VaroNodeGroup'
 
 export const useVaroNodeStore = defineStore('varoNodes', () => {
   const nodes = ref<VaroNode[]>([])
