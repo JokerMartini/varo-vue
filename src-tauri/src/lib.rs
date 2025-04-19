@@ -2,57 +2,72 @@
 use std::env;
 use std::fs;
 use std::path::Path;
-use chrono::{DateTime, Local};
+use std::time::SystemTime;
+use chrono::{DateTime, Utc};
 use serde::{Serialize, Deserialize};
 
-#[derive(Debug, Serialize, Deserialize)]
-struct FileInfo {
+#[derive(Serialize, Deserialize, Debug)]
+pub struct TextFile {
     path: String,
-    modified_date: String,
+    modified: String,
     content: String,
 }
 
 #[tauri::command]
-async fn get_txt_files() -> Result<Vec<FileInfo>, String> {
-    // Get VARO_PATH environment variable
-    let varo_path = env::var("VARO_PATH").map_err(|_| "VARO_PATH environment variable not set".to_string())?;
+fn greet(name: &str) -> String {
+    format!("Hello, {}! You've been greeted from Rust!", name)
+}
+
+#[tauri::command]
+fn get_text_files() -> Result<Vec<TextFile>, String> {
+    // Get VARO_PATH from environment
+    let varo_path = match env::var("VARO_PATH") {
+        Ok(path) => path,
+        Err(_) => return Err("VARO_PATH environment variable is not set".to_string()),
+    };
     
-    // Check if path exists
+    // Check if path exists and is a directory
     let path = Path::new(&varo_path);
-    if !path.exists() {
-        return Err("VARO_PATH does not point to an existing directory".to_string());
+    if !path.exists() || !path.is_dir() {
+        return Err(format!("VARO_PATH '{}' is not a valid directory", varo_path));
     }
     
     // Collect all .txt files
-    let mut files = Vec::new();
+    let mut text_files = Vec::new();
+    
     for entry in fs::read_dir(path).map_err(|e| e.to_string())? {
         let entry = entry.map_err(|e| e.to_string())?;
-        let path = entry.path();
+        let file_path = entry.path();
         
-        if path.is_file() && path.extension().and_then(|s| s.to_str()) == Some("txt") {
-            let metadata = fs::metadata(&path).map_err(|e| e.to_string())?;
-            let modified: DateTime<Local> = metadata.modified()
-                .map_err(|e| e.to_string())?
-                .into();
+        // Check if it's a .txt file
+        if file_path.is_file() && 
+           file_path.extension().map_or(false, |ext| ext == "txt") {
             
-            let content = fs::read_to_string(&path).map_err(|e| e.to_string())?;
+            // Get last modified time
+            let metadata = fs::metadata(&file_path).map_err(|e| e.to_string())?;
+            let modified = metadata.modified().map_err(|e| e.to_string())?;
+            let datetime: DateTime<Utc> = modified.into();
+            let modified_str = datetime.format("%Y-%m-%d %H:%M:%S").to_string();
             
-            files.push(FileInfo {
-                path: path.to_string_lossy().into_owned(),
-                modified_date: modified.format("%Y-%m-%d %H:%M:%S").to_string(),
+            // Read content
+            let content = fs::read_to_string(&file_path).map_err(|e| e.to_string())?;
+            
+            text_files.push(TextFile {
+                path: file_path.to_string_lossy().to_string(),
+                modified: modified_str,
                 content,
             });
         }
     }
     
-    Ok(files)
+    Ok(text_files)
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![get_txt_files])
+        .invoke_handler(tauri::generate_handler![greet, get_text_files])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
