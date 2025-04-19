@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { DropdownMenuItem } from '@nuxt/ui';
-
 
 const searchText = ref('');
 
@@ -69,8 +67,8 @@ const items = computed(() => [
 </script>
 
 <template>
-    <div class="bg-(--ui-bg)/75 backdrop-blur border-b border-(--ui-border) h-14 sticky top-0 z-50">
-        <div class="flex items-center justify-between gap-3 h-full px-4 ">
+    <div class="bg-(--ui-bg)/75 backdrop-blur border-b border-(--ui-border) h-14 sticky top-0 z-50 shrink-0">
+        <div class="flex items-center justify-between gap-3 h-full px-4">
             <!-- left -->
             <div class="flex items-center">
                 <UTooltip text="Great">

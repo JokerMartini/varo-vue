@@ -21,13 +21,13 @@ const items = ref<DropdownMenuItem[]>([
             props.node.visible = true
         }
     },
-    {
-        label: 'Edit',
-        icon: 'i-lucide-pencil',
-        onSelect(e: Event) {
-            console.log('TOOD')
-        }
-    }
+    // {
+    //     label: 'Edit',
+    //     icon: 'i-lucide-pencil',
+    //     onSelect(e: Event) {
+    //         console.log('TOOD')
+    //     }
+    // }
 ])
 
 function handleExecuteClick() {
@@ -81,7 +81,7 @@ function handleExecuteClick() {
 
             <!-- Menu/Button -->
             <div class="">
-                <UDropdownMenu size="md" :items="items">
+                <UDropdownMenu :items="items">
                     <UButton icon="i-lucide-ellipsis-vertical" variant="ghost" color="neutral" class="shrink-0">
                     </UButton>
                 </UDropdownMenu>

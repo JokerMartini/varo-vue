@@ -6,7 +6,7 @@ const toast = useToast()
 
 const props = defineProps<{ group: VaroNodeGroup }>();
 
-const items = ref<DropdownMenuItem[]>([
+const groupMenuItems = ref<DropdownMenuItem[]>([
     {
         label: 'Hide',
         icon: 'i-lucide-eye-off',
@@ -25,14 +25,29 @@ const items = ref<DropdownMenuItem[]>([
             console.log(props.group.visible)
         }
     },
-    {
-        label: 'Edit',
-        icon: 'i-lucide-pencil',
-        onSelect(e: Event) {
-            console.log('TOOD')
-        }
-    }
+    // {
+    //     label: 'Edit',
+    //     icon: 'i-lucide-pencil',
+    //     onSelect(e: Event) {
+    //         console.log('TOOD')
+    //     }
+    // }
 ])
+
+const groupNodeItems = computed<DropdownMenuItem[]>(() => {
+  return props.group.nodes.map((node) => ({
+    item: node,
+    // label: node.name,
+    // icon: 'i-lucide-cube',
+    // icon: node.icon || 'i-lucide-cube', // fallback if node.icon is missing
+    onSelect: (e: Event) => {
+        props.group.selectedNodeId = node.id;
+        console.log(node);
+        console.log(props.group.selectedNodeId);
+    //   props.group.selectedNode = node
+    }
+  }));
+});
 
 function handleExecuteClick() {
   console.log('Button clicked!');
@@ -74,15 +89,40 @@ function handleExecuteClick() {
             <div class="flex-grow space-y-1">
                 <UTooltip :text="group.selectedNode.description" :disabled="!group.selectedNode.description">
                     <h3 v-if="group.nodes.length === 1" class="font-semibold text-sm">{{ group.selectedNode.name }}</h3>
-                    <UButton v-else 
-                        trailing-icon="i-lucide-chevron-down" 
-                        variant="subtle" 
-                        color="neutral" 
-                        class="shrink-0 text-left w-full">
-                        <span class="w-full">
-                            {{ group.selectedNode.name }}
-                        </span>
-                    </UButton>
+                    <UDropdownMenu :items="groupNodeItems" v-else>
+                        <UButton  
+                            trailing-icon="i-lucide-chevron-down" 
+                            variant="subtle" 
+                            color="neutral" 
+                            class="shrink-0 text-left w-full">
+                            <span class="w-full">
+                                {{ group.selectedNode.name }}
+                            </span>
+                        </UButton>
+
+                        <template #item="{ item }">
+                            <div class="w-full space-y-1">
+                                {{ item }}
+                                <!-- <div class="flex flex-row gap-1 items-start w-full flex-nowrap">
+                                    <div class="flex-1">
+                                        <h3 class="text-md font-semibold">{{ item.name }}</h3>
+                                    </div>
+                                    <UBadge 
+                                        v-if="item.status" 
+                                        class="rounded-sm " 
+                                        
+                                        variant="subtle"
+                                        :style="{ backgroundColor: item.status.background, color: item.status.color }"
+                                        >
+                                        {{ item.status.name }}
+                                    </UBadge>
+                                    <UButton variant="subtle" color="neutral" icon="i-lucide-rocket" size="xs"></UButton>                     
+                                </div> -->
+                                <!-- <p v-if="item.description" class="text-xs text-(--ui-text-dimmed)">{{ item.description }}</p> -->
+                            </div>
+                        </template>
+
+                    </UDropdownMenu>
                 </UTooltip>
 
                 <!-- Badges -->
@@ -99,7 +139,7 @@ function handleExecuteClick() {
 
             <!-- Menu/Button -->
             <div>
-                <UDropdownMenu size="md" :items="items">
+                <UDropdownMenu :items="groupMenuItems">
                     <UButton 
                         icon="i-lucide-ellipsis-vertical" 
                         variant="ghost" 

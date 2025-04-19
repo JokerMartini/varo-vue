@@ -29,35 +29,41 @@ const items = ref<AccordionItem[]>([
 </script>
 
 <template>
-  <AppHeader/>
-  <div class="p-4">
+  <div class="h-dvh flex flex-col">
+    <AppHeader/>
+    <div class="p-4 grow">
 
-    <!-- Ungrouped -->
-    <p class="font-semibold text-lg py-2">Ungrouped {{nodeStore.nodes.length}} nodes</p>
+      <!-- Ungrouped -->
+      <p class="text-xs py-2 text-(--ui-text-muted)">
+        Results ({{ nodeStore.nodes.length }} of {{ nodeStore.hiddenUngroupedCount }})
+      </p>
 
-    <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
-      <VaroNodeCard
-      v-for="node in nodeStore.nodes"
-      :key="node.id"
-      :node="node"
-      />
+      <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
+        <VaroNodeCard
+        v-for="node in nodeStore.nodes"
+        :key="node.id"
+        :node="node"
+        />
+      </div>
+      
+      <USeparator class="py-6"/>
+      
+      <!-- Grouped -->
+      <p class="text-xs py-2 text-(--ui-text-muted)">
+        Results ({{ nodeStore.nodeGroups.length }} of {{ nodeStore.hiddenGroupedCount }})
+      </p>
+      
+      <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
+        <VaroNodeGroupCard
+        v-for="group in nodeStore.nodeGroups"
+        :key="group.id"
+        :group="group"
+        />
+      </div>
+
+      <!-- grouped categories -->
+      <!-- <UAccordion :items="items" type="multiple" /> -->
     </div>
-    
-    <USeparator class="py-6"/>
-    
-    <!-- Grouped -->
-    <p class="font-semibold text-lg py-2">Grouped {{nodeStore.nodeGroups.length}} nodes</p>
-    
-    <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
-      <VaroNodeGroupCard
-      v-for="group in nodeStore.nodeGroups"
-      :key="group.id"
-      :group="group"
-      />
-    </div>
-
-    <!-- grouped categories -->
-    <!-- <UAccordion :items="items" type="multiple" /> -->
+    <AppFooter/>
   </div>
-  <AppFooter/>
 </template>

@@ -12,10 +12,20 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
     nodeGroups.value = getVaroNodeGroups(newNodes)
   }
 
+  const hiddenUngroupedCount = computed(() =>
+    nodes.value.filter(n => !n.visible).length
+  )
+
+  const hiddenGroupedCount = computed(() =>
+    nodeGroups.value.filter(n => !n.visible).length
+  )
+
   return {
     // properties
     nodes,
     nodeGroups,
+    hiddenUngroupedCount,
+    hiddenGroupedCount,
     // methods
     setNodes,
   }
