@@ -2,13 +2,30 @@
 import { dummyVaroNodes } from '@/data/dummyNodes';
 import { getVaroNodeGroups } from '@/utils/groupVaroNodes';
 import { invoke } from '@tauri-apps/api/core';
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 const nodeStore = useVaroNodeStore()
 
 onMounted(() => {
   nodeStore.setNodes(dummyVaroNodes);
-})
+  
+  // Initial load of text files when component mounts
+  refreshTextFiles();
+  
+  // Add focus event listener to window
+  window.addEventListener('focus', handleWindowFocus);
+});
+
+// Cleanup event listener when component is unmounted
+onUnmounted(() => {
+  window.removeEventListener('focus', handleWindowFocus);
+});
+
+// Function to handle window focus event
+function handleWindowFocus() {
+  console.log('Window focused - refreshing files');
+  refreshTextFiles();
+}
 
 const items = ref<AccordionItem[]>([
   {
