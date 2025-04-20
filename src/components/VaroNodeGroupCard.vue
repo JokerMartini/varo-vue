@@ -81,7 +81,7 @@ function handleExecuteClick() {
                     variant="ghost" 
                     size="2xl" 
                     color="neutral" 
-                    class="shrink-0 cursor-pointer">
+                    class="shrink-0 cursor-pointer transition transform hover:scale-105 active:scale-90 duration-100 ease-out">
                 </UButton>
             </div>
 
@@ -101,8 +101,9 @@ function handleExecuteClick() {
                         </UButton>
 
                         <template #item="{ item }">
-                            <div class="w-full space-y-1">
-                                {{ item }}
+                            <VaroNodeGroupOption :node="item.node"/>
+                            <!-- <div class="w-full space-y-1"> -->
+                                <!-- {{ item }} -->
                                 <!-- <div class="flex flex-row gap-1 items-start w-full flex-nowrap">
                                     <div class="flex-1">
                                         <h3 class="text-md font-semibold">{{ item.name }}</h3>
@@ -119,7 +120,7 @@ function handleExecuteClick() {
                                     <UButton variant="subtle" color="neutral" icon="i-lucide-rocket" size="xs"></UButton>                     
                                 </div> -->
                                 <!-- <p v-if="item.description" class="text-xs text-(--ui-text-dimmed)">{{ item.description }}</p> -->
-                            </div>
+                            <!-- </div> -->
                         </template>
 
                     </UDropdownMenu>
