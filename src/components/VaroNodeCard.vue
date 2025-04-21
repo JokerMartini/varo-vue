@@ -66,7 +66,7 @@ function handleExecuteClick() {
             </div>
 
             <!-- Title -->
-            <div class="flex flex-col w-full space-y-1 ">
+            <div class="flex flex-col w-full space-y-1 items-start">
                 <UTooltip :text="node.description" :disabled="!node.description">
                     <h3 class="text-sm font-semibold text-wrap">{{ node.name }}</h3>
                 </UTooltip>

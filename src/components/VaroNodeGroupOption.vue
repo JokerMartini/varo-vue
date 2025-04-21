@@ -1,34 +1,9 @@
 <script setup lang="ts">
 import type { VaroNode } from '@/models/VaroNode';
-import type { DropdownMenuItem } from '@nuxt/ui';
 
 const toast = useToast()
 
 const props = defineProps<{ node: VaroNode }>();
-
-const items = ref<DropdownMenuItem[]>([
-    {
-        label: 'Hide',
-        icon: 'i-lucide-eye-off',
-        onSelect(e: Event) {
-            props.node.visible = false
-        }
-    },
-    {
-        label: 'Unhide',
-        icon: 'i-lucide-eye',
-        onSelect(e: Event) {
-            props.node.visible = true
-        }
-    },
-    // {
-    //     label: 'Edit',
-    //     icon: 'i-lucide-pencil',
-    //     onSelect(e: Event) {
-    //         console.log('TOOD')
-    //     }
-    // }
-])
 
 function handleExecuteClick() {
   console.log('Button clicked!');
@@ -43,32 +18,27 @@ function handleExecuteClick() {
 </script>
 
 <template>
-    <div class="bg-(--ui-bg-elevated)/50 p-2.5 rounded-[calc(var(--ui-radius)*2)] relative overflow-hidden">
+    <div class="pr-1.5 relative overflow-hidden">
         
-        <!-- hidden -->
-        <div v-if="node.visible === false"
-            class="-z-100 absolute top-0 left-0 w-full h-full text-(--ui-text-dimmed)/50
-            bg-[size:10px_10px] 
-            bg-fixed bg-[image:repeating-linear-gradient(315deg,currentColor_0,currentColor_1px,_transparent_0,_transparent_50%)]">
-        </div>
-
         <div class="flex gap-2 items-stretch justify-stretch w-full flex-nowrap ">
             <!-- Action Button/Icon -->
             <div class="">
-                <UButton 
-                    @click="handleExecuteClick"
-                    icon="i-lucide-box" 
-                    variant="ghost" 
-                    size="2xl" 
-                    color="neutral" 
-                    class="shrink-0 cursor-pointer transition transform hover:scale-105 active:scale-90 duration-100 ease-out">
-                </UButton>
+                <UTooltip text="Quick launch">
+                    <UButton 
+                        @click="handleExecuteClick"
+                        icon="i-lucide-box" 
+                        variant="ghost" 
+                        size="2xl" 
+                        color="neutral" 
+                        class="shrink-0 cursor-pointer transition transform hover:scale-105 active:scale-90 duration-100 ease-out">
+                    </UButton>
+                </UTooltip>
             </div>
 
             <!-- Title -->
-            <div class="flex flex-col w-full space-y-1 ">
+            <div class="flex flex-col w-full space-y-1 items-start">
                 <UTooltip :text="node.description" :disabled="!node.description">
-                    <h3 class="text-sm font-semibold text-wrap">{{ node.name }}</h3>
+                    <h3 class="text-sm font-semibold">{{ node.name }}</h3>
                 </UTooltip>
 
                 <!-- Badges -->
@@ -77,14 +47,11 @@ function handleExecuteClick() {
                         {{ node.status.name }}
                     </UBadge>
                 </div>
-            </div>
 
-            <!-- Menu/Button -->
-            <div class="">
-                <UDropdownMenu :items="items">
-                    <UButton icon="i-lucide-ellipsis-vertical" variant="ghost" color="neutral" class="shrink-0">
-                    </UButton>
-                </UDropdownMenu>
+                <!-- Badges -->
+                <p v-if="node.description" class="text-xs text-(--ui-text-muted)">
+                    {{ node.description }}
+                </p>
             </div>
         </div>
 

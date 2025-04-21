@@ -86,7 +86,7 @@ function handleExecuteClick() {
             </div>
 
             <!-- Title -->
-            <div class="flex-grow space-y-1">
+            <div class="flex-grow space-y-1 items-start">
                 <UTooltip :text="group.selectedNode.description" :disabled="!group.selectedNode.description">
                     <h3 v-if="group.nodes.length === 1" class="font-semibold text-sm">{{ group.selectedNode.name }}</h3>
                     <UDropdownMenu :items="groupNodeItems" v-else>
@@ -101,26 +101,7 @@ function handleExecuteClick() {
                         </UButton>
 
                         <template #item="{ item }">
-                            <VaroNodeGroupOption :node="item.node"/>
-                            <!-- <div class="w-full space-y-1"> -->
-                                <!-- {{ item }} -->
-                                <!-- <div class="flex flex-row gap-1 items-start w-full flex-nowrap">
-                                    <div class="flex-1">
-                                        <h3 class="text-md font-semibold">{{ item.name }}</h3>
-                                    </div>
-                                    <UBadge 
-                                        v-if="item.status" 
-                                        class="rounded-sm " 
-                                        
-                                        variant="subtle"
-                                        :style="{ backgroundColor: item.status.background, color: item.status.color }"
-                                        >
-                                        {{ item.status.name }}
-                                    </UBadge>
-                                    <UButton variant="subtle" color="neutral" icon="i-lucide-rocket" size="xs"></UButton>                     
-                                </div> -->
-                                <!-- <p v-if="item.description" class="text-xs text-(--ui-text-dimmed)">{{ item.description }}</p> -->
-                            <!-- </div> -->
+                            <VaroNodeGroupOption :node="item.item"/>
                         </template>
 
                     </UDropdownMenu>

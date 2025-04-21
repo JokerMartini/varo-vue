@@ -81,6 +81,26 @@ export const dummyVaroNodes: VaroNode[] = [
     }
   }),
 
+  // Designer
+  new VaroNode({
+    id: "uuid-designer-9",
+    groupId: "designer",
+    name: "Adobe Substance Designer 9.0",
+    category: "2D",
+    icon: "./icons/designer.svg"
+  }),
+  new VaroNode({
+    id: "uuid-designer-10",
+    groupId: "designer",
+    name: "Adobe Substance Designer 10.0",
+    category: "2D",
+    icon: "./icons/designer.svg",
+    status: {
+      name: "Beta",
+      color: "warning",
+    }
+  }),
+
   // Blender
   new VaroNode({
     id: "uuid-blender-2022",
