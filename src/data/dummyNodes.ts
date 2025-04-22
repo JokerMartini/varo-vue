@@ -28,7 +28,7 @@ export const dummyVaroNodes: VaroNode[] = [
     category: "3D",
     icon: "./icons/3dsmax.svg",
     defaultForGroup: true,
-    description: "Latest stable version for all artists to use for production",
+    description: "Latest stable version for all artists to use for production this includes the latest vray, tyflow, fumefx and phoenix",
     status: {
       name: "Default",
       color: "neutral",
@@ -100,6 +100,17 @@ export const dummyVaroNodes: VaroNode[] = [
       color: "warning",
     }
   }),
+  new VaroNode({
+    id: "uuid-designer-11",
+    groupId: "designer",
+    name: "Adobe Substance Designer 11.0",
+    category: "Beta",
+    icon: "./icons/designer.svg",
+    status: {
+      name: "Beta",
+      color: "error",
+    }
+  }),
 
   // Blender
   new VaroNode({
@@ -166,5 +177,14 @@ export const dummyVaroNodes: VaroNode[] = [
     name: "Documentation",
     category: "Pipeline",
     icon: "./icons/nim.svg"
+  }),
+
+  // Dev
+  new VaroNode({
+    id: "uuid-jenkin",
+    groupId: "developer",
+    name: "Jenkins Server",
+    icon: "./icons/designer.svg"
   })
+
 ];

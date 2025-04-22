@@ -37,14 +37,10 @@ const groupMenuItems = ref<DropdownMenuItem[]>([
 const groupNodeItems = computed<DropdownMenuItem[]>(() => {
   return props.group.nodes.map((node) => ({
     item: node,
-    // label: node.name,
-    // icon: 'i-lucide-cube',
-    // icon: node.icon || 'i-lucide-cube', // fallback if node.icon is missing
     onSelect: (e: Event) => {
         props.group.selectedNodeId = node.id;
         console.log(node);
         console.log(props.group.selectedNodeId);
-    //   props.group.selectedNode = node
     }
   }));
 });
@@ -89,7 +85,11 @@ function handleExecuteClick() {
             <div class="flex-grow space-y-1 items-start">
                 <UTooltip :text="group.selectedNode.description" :disabled="!group.selectedNode.description">
                     <h3 v-if="group.nodes.length === 1" class="font-semibold text-sm">{{ group.selectedNode.name }}</h3>
-                    <UDropdownMenu :items="groupNodeItems" v-else>
+                    <UDropdownMenu v-else
+                        :items="groupNodeItems" 
+                        :ui="{
+                            content: 'max-w-3/4'
+                        }">
                         <UButton  
                             trailing-icon="i-lucide-chevron-down" 
                             variant="subtle" 

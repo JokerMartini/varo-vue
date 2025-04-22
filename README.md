@@ -19,3 +19,8 @@ You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/
 `bun dev`
 `bun tauri dev`
 `bun tauri build`
+
+
+# TODO
+- sort nodes by category then group, clean up the group and category usage
+- console

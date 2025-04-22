@@ -38,7 +38,7 @@ const items = ref<AccordionItem[]>([
         Results ({{ nodeStore.nodes.length }} of {{ nodeStore.hiddenUngroupedCount }})
       </p>
 
-      <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
+      <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]" >
         <VaroNodeCard
         v-for="node in nodeStore.nodes"
         :key="node.id"
@@ -53,7 +53,7 @@ const items = ref<AccordionItem[]>([
         Results ({{ nodeStore.nodeGroups.length }} of {{ nodeStore.hiddenGroupedCount }})
       </p>
       
-      <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
+      <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]" >
         <VaroNodeGroupCard
         v-for="group in nodeStore.nodeGroups"
         :key="group.id"
@@ -61,8 +61,33 @@ const items = ref<AccordionItem[]>([
         />
       </div>
 
+      <USeparator class="py-6"/>
+
       <!-- grouped categories -->
-      <!-- <UAccordion :items="items" type="multiple" /> -->
+      <UAccordion :items="nodeStore.categories" type="multiple" :open="true">
+
+        <template #leading="{ item }">
+          <div class="flex items-center flex-1 justify-between">
+              <h3 class="text-sm font-semibold text-wrap">{{ item.name }}</h3>
+              <!-- <p class="text-xs py-2 text-(--ui-text-muted)">
+                ({{ nodeStore.nodeGroups.length }} of {{ nodeStore.hiddenGroupedCount }})
+              </p> -->
+          </div>
+        </template>
+
+        <template #content="{ item }">
+          <div class="pb-4">
+              <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
+                <VaroNodeGroupCard
+                v-for="group in item.groups"
+                :key="group.id"
+                :group="group"
+                />
+              </div>
+          </div>
+        </template>
+      </UAccordion>
+
     </div>
     <AppFooter/>
   </div>

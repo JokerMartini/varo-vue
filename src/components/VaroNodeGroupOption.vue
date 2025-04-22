@@ -5,7 +5,8 @@ const toast = useToast()
 
 const props = defineProps<{ node: VaroNode }>();
 
-function handleExecuteClick() {
+function handleExecuteClick(event: Event) {
+  event.stopImmediatePropagation();
   console.log('Button clicked!');
   toast.add({
     title: `Launching ${props.node.name}`,
@@ -36,7 +37,7 @@ function handleExecuteClick() {
             </div>
 
             <!-- Title -->
-            <div class="flex flex-col w-full space-y-1 items-start">
+            <div class="flex flex-col space-y-1 items-start">
                 <UTooltip :text="node.description" :disabled="!node.description">
                     <h3 class="text-sm font-semibold">{{ node.name }}</h3>
                 </UTooltip>
@@ -48,8 +49,8 @@ function handleExecuteClick() {
                     </UBadge>
                 </div>
 
-                <!-- Badges -->
-                <p v-if="node.description" class="text-xs text-(--ui-text-muted)">
+                <!-- Description -->
+                <p v-if="node.description" class="text-xs text-left text-(--ui-text-muted) text-wrap">
                     {{ node.description }}
                 </p>
             </div>

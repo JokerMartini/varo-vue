@@ -6,6 +6,7 @@ export class VaroNodeGroup {
   visible: boolean;
   nodes: VaroNode[];
   selectedNodeId?: string;
+  category: string;
 
   constructor(data: {
     id: string;
@@ -13,9 +14,11 @@ export class VaroNodeGroup {
     visible?: boolean;
     nodes?: VaroNode[];
     selectedNodeId?: string;
+    category: string;
   }) {
     this.id = data.id;
     this.name = data.name;
+    this.category = data.category;
     this.visible = data.visible ?? true;
     this.nodes = data.nodes ?? [];
     this.selectedNodeId = data.selectedNodeId ?? this.getDefaultNodeId();

@@ -2,7 +2,7 @@ import { VaroNodeGroup } from '~/models/VaroNodeGroup';
 import type { VaroNode } from '~/models/VaroNode';
 
 /**
- * Groups VaroNodes into VaroNodeGroups using their `groupId`.
+ * Groups VaroNodes into VaroNodeGroups using `groupId`.
  */
 export function getVaroNodeGroups(nodes: VaroNode[]): VaroNodeGroup[] {
   const groupMap = new Map<string, VaroNodeGroup>();
@@ -10,17 +10,21 @@ export function getVaroNodeGroups(nodes: VaroNode[]): VaroNodeGroup[] {
   for (const node of nodes) {
     if (!node.groupId) continue;
 
-    let group = groupMap.get(node.groupId);
+    // const groupKey = `${node.groupId}|${node.category}`;
+    const groupKey = `${node.groupId}`;
+
+    let group = groupMap.get(groupKey);
 
     // Create new group if not present
     if (!group) {
       group = new VaroNodeGroup({
         id: node.groupId,
-        name: node.name, // Could override with a display name map later
+        name: node.name,
+        category: node.category ?? 'Uncategorized',
         visible: true,
         nodes: [],
       });
-      groupMap.set(node.groupId, group);
+      groupMap.set(groupKey, group);
     }
 
     group.nodes.push(node);
