@@ -7,7 +7,7 @@ export const dummyVaroNodes: VaroNode[] = [
     groupId: "3dsmax",
     name: "3ds Max 2022",
     category: "3D",
-    icon: "./icons/3dsmax.svg",
+    icon: "https://tmpfiles.org/dl/25729121/max.svg",
     status: {
       name: "Deprecated",
       color: "error",
@@ -19,14 +19,14 @@ export const dummyVaroNodes: VaroNode[] = [
     name: "3ds Max 2023",
     visible: false,
     category: "3D",
-    icon: "./icons/3dsmax.svg"
+    icon: "https://tmpfiles.org/dl/25729121/max.svg"
   }),
   new VaroNode({
     id: "uuid-3dsmax-2024",
     groupId: "3dsmax",
     name: "3ds Max 2024",
     category: "3D",
-    icon: "./icons/3dsmax.svg",
+    icon: "https://tmpfiles.org/dl/25729121/max.svg",
     defaultForGroup: true,
     description: "Latest stable version for all artists to use for production this includes the latest vray, tyflow, fumefx and phoenix",
     status: {
@@ -39,7 +39,7 @@ export const dummyVaroNodes: VaroNode[] = [
     groupId: "3dsmax",
     name: "3ds Max 2025",
     category: "3D",
-    icon: "./icons/3dsmax.svg",
+    icon: "https://tmpfiles.org/dl/25729121/max.svg",
     status: {
       name: "Beta",
       color: "warning",
@@ -50,7 +50,7 @@ export const dummyVaroNodes: VaroNode[] = [
     groupId: "3dsmax",
     name: "3ds Max 2026",
     category: "3D",
-    icon: "./icons/3dsmax.svg",
+    icon: "https://tmpfiles.org/dl/25729121/max.svg",
     description: "Testing"
   }),
 
@@ -138,14 +138,14 @@ export const dummyVaroNodes: VaroNode[] = [
     groupId: "nuke",
     name: "Nuke 13.1",
     category: "Compositing",
-    icon: "./icons/nuke.svg"
+    icon: "https://tmpfiles.org/dl/25729156/nuke.svg"
   }),
   new VaroNode({
     id: "uuid-nuke-14",
     groupId: "nuke",
     name: "Nuke 14 Beta",
     category: "Compositing",
-    icon: "./icons/nuke.svg",
+    icon: "https://tmpfiles.org/dl/25729156/nuke.svg",
     status: {
       name: "Beta",
       color: "warning",

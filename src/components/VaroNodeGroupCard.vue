@@ -85,11 +85,7 @@ function handleExecuteClick() {
             <div class="flex-grow space-y-1 items-start">
                 <UTooltip :text="group.selectedNode.description" :disabled="!group.selectedNode.description">
                     <h3 v-if="group.nodes.length === 1" class="font-semibold text-sm">{{ group.selectedNode.name }}</h3>
-                    <UDropdownMenu v-else
-                        :items="groupNodeItems" 
-                        :ui="{
-                            content: 'max-w-3/4'
-                        }">
+                    <UDropdownMenu v-else :items="groupNodeItems">
                         <UButton  
                             trailing-icon="i-lucide-chevron-down" 
                             variant="subtle" 

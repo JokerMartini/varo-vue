@@ -1,38 +1,13 @@
 <script setup lang="ts">
 
+const nodeStore = useVaroNodeStore()
+
 const searchText = ref('');
 
-const showGrouping = ref(true)
-const showCategories = ref(false)
 const showHidden = ref(false)
 
 const items = computed(() => [
     [
-        {
-            label: 'Enable Grouping',
-            icon: 'i-lucide-group',
-            type: 'checkbox',
-            checked: showGrouping.value,
-            onSelect(e: Event) {
-                // e.preventDefault()
-            },
-            onUpdateChecked(checked: boolean) {
-                showGrouping.value = checked
-            },
-        },
-        {
-            label: 'Enable Categories',
-            icon: 'i-lucide-list-tree',
-            type: 'checkbox',
-            checked: showCategories.value,
-            onSelect(e: Event) {
-                // e.preventDefault()
-            },
-            onUpdateChecked(checked: boolean) {
-                showCategories.value = checked
-            },
-            
-        },
         {
             label: 'Show Hidden',
             icon: 'i-lucide-eye',
@@ -67,6 +42,7 @@ const items = computed(() => [
 </script>
 
 <template>
+
     <div class="bg-(--ui-bg)/75 backdrop-blur border-b border-(--ui-border) h-14 sticky top-0 z-50 shrink-0">
         <div class="flex items-center justify-between gap-3 h-full px-4">
             <!-- left -->
@@ -98,8 +74,8 @@ const items = computed(() => [
                 </UInput>
             </div>
             <!-- right -->
-            <div>
-                <UDropdownMenu :items="items" :ui="{ content: 'w-48' }">
+            <div class="flex items-center">
+                <UDropdownMenu :items="items" :ui="{ content: 'w-60' }">
                     <UButton icon="i-lucide-ellipsis-vertical" 
                     variant="ghost" 
                     color="neutral" class="shrink-0">

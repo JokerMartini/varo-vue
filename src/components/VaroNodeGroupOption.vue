@@ -19,7 +19,7 @@ function handleExecuteClick(event: Event) {
 </script>
 
 <template>
-    <div class="pr-1.5 relative overflow-hidden">
+    <div class="pr-1.5 relative overflow-hidden min-w-24 max-w-96">
         
         <div class="flex gap-2 items-stretch justify-stretch w-full flex-nowrap ">
             <!-- Action Button/Icon -->
@@ -37,7 +37,7 @@ function handleExecuteClick(event: Event) {
             </div>
 
             <!-- Title -->
-            <div class="flex flex-col space-y-1 items-start">
+            <div class="flex flex-col space-y-1 items-start text-left">
                 <UTooltip :text="node.description" :disabled="!node.description">
                     <h3 class="text-sm font-semibold">{{ node.name }}</h3>
                 </UTooltip>

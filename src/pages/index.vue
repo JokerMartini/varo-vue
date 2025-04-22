@@ -34,25 +34,19 @@ const items = ref<AccordionItem[]>([
     <div class="p-4 grow">
 
       <!-- Ungrouped -->
-      <p class="text-xs py-2 text-(--ui-text-muted)">
-        Results ({{ nodeStore.nodes.length }} of {{ nodeStore.hiddenUngroupedCount }})
-      </p>
-
-      <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]" >
-        <VaroNodeCard
-        v-for="node in nodeStore.nodes"
-        :key="node.id"
-        :node="node"
-        />
-      </div>
-      
-      <USeparator class="py-6"/>
-      
-      <!-- Grouped -->
-      <p class="text-xs py-2 text-(--ui-text-muted)">
-        Results ({{ nodeStore.nodeGroups.length }} of {{ nodeStore.hiddenGroupedCount }})
-      </p>
-      
+       <p class="mb-2 font-bold">Ungrouped</p>
+       <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]" >
+         <VaroNodeCard
+         v-for="node in nodeStore.nodes"
+         :key="node.id"
+         :node="node"
+         />
+        </div>
+        
+        <USeparator class="py-6"/>
+        
+        <!-- Grouped -->      
+      <p class="mb-2 font-bold">Grouped</p>
       <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]" >
         <VaroNodeGroupCard
         v-for="group in nodeStore.nodeGroups"
@@ -64,14 +58,11 @@ const items = ref<AccordionItem[]>([
       <USeparator class="py-6"/>
 
       <!-- grouped categories -->
-      <UAccordion :items="nodeStore.categories" type="multiple" :open="true">
+      <!-- <UAccordion :items="nodeStore.categories" type="multiple" :open="true">
 
         <template #leading="{ item }">
           <div class="flex items-center flex-1 justify-between">
               <h3 class="text-sm font-semibold text-wrap">{{ item.name }}</h3>
-              <!-- <p class="text-xs py-2 text-(--ui-text-muted)">
-                ({{ nodeStore.nodeGroups.length }} of {{ nodeStore.hiddenGroupedCount }})
-              </p> -->
           </div>
         </template>
 
@@ -79,14 +70,21 @@ const items = ref<AccordionItem[]>([
           <div class="pb-4">
               <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
                 <VaroNodeGroupCard
-                v-for="group in item.groups"
-                :key="group.id"
-                :group="group"
+                  v-for="group in item.groups"
+                  :key="group.id"
+                  :group="group"
+                />
+              </div>
+              <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
+                <VaroNodeCard
+                  v-for="node in item.nodes"
+                  :key="node.id"
+                  :node="node"
                 />
               </div>
           </div>
         </template>
-      </UAccordion>
+      </UAccordion> -->
 
     </div>
     <AppFooter/>

@@ -18,4 +18,12 @@ export class VaroCategory {
     this.nodes = data.nodes ?? [];
     this.groups = data.groups ?? [];
   }
+
+  addGroup(group: VaroNodeGroup) {
+    this.groups.push(group);
+  }
+
+  addNode(node: VaroNode) {
+    this.nodes.push(node);
+  }
 }

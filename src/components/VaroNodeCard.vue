@@ -54,10 +54,10 @@ function handleExecuteClick() {
 
         <div class="flex gap-2 items-stretch justify-stretch w-full flex-nowrap ">
             <!-- Action Button/Icon -->
-            <div class="">
+            <div class="shrink-0">
                 <UButton 
                     @click="handleExecuteClick"
-                    icon="i-lucide-box" 
+                    icon="i-lucide-box"
                     variant="ghost" 
                     size="2xl" 
                     color="neutral" 
