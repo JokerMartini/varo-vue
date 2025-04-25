@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 96 96" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g id="DeadlineMonitor">
+        <g transform="matrix(1.40761,0,0,1.40761,1.50275,-0.101506)">
+            <path d="M-1.068,34.172C-1.068,59.082 7.332,68.273 33.033,68.273C58.734,68.273 67.133,58.906 67.133,34.172C67.133,9.439 58.646,0.072 33.033,0.072C7.419,0.072 -1.068,9.263 -1.068,34.172Z" style="fill:rgb(77,165,91);;"/>
+        </g>
+        <g transform="matrix(1.22727,0,0,1.22727,-10.9091,-13.5682)">
+            <path d="M52.879,35L61.102,26.777C61.035,26.529 61,26.269 61,26C61,24.344 62.344,23 64,23C65.656,23 67,24.344 67,26C67,27.656 65.656,29 64,29C63.731,29 63.471,28.965 63.223,28.898L57.121,35L66,35C68.208,35 70,36.792 70,39L70,66C70,68.208 68.208,70 66,70L30,70C27.792,70 26,68.208 26,66L26,39C26,36.792 27.792,35 30,35L40.879,35L34.777,28.898C34.529,28.965 34.269,29 34,29C32.344,29 31,27.656 31,26C31,24.344 32.344,23 34,23C35.656,23 37,24.344 37,26C37,26.269 36.965,26.529 36.898,26.777L45.121,35L52.879,35ZM64,41L32,41L32,64L64,64L64,41Z" style="fill:white;"/>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 96 96" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <path id="Vexus" d="M-0.001,47.999C-0.001,83.063 11.823,96 48,96C84.177,96 96,82.815 96,47.999C96,13.185 84.053,0 48,0C11.946,0 -0.001,12.937 -0.001,47.999Z" style="fill:rgb(240,71,68);"/>
+    <path d="M18,71L18,24L67,25L78,30L78,71L66,71L66,35L54,35L54,53L42,53L42,35L30,35L30,71L18,71Z" style="fill:white;"/>
+</svg>

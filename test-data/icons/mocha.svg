@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 96 96" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <path id="Vexus" d="M-0.001,47.999C-0.001,83.063 11.823,96 48,96C84.177,96 96,82.815 96,47.999C96,13.185 84.053,0 48,0C11.946,0 -0.001,12.937 -0.001,47.999Z" style="fill:rgb(27,41,50);"/>
+    <g transform="matrix(0.126087,7.50813e-32,-7.50813e-32,0.126087,-168.87,-22.2893)">
+        <g transform="matrix(0.928739,0,0,0.926724,122.569,44.5948)">
+            <path d="M1920.3,438L1920.3,670L1720,786L1519.7,670L1519.7,438L1720,322C1786.77,360.667 1853.53,399.333 1920.3,438Z" style="fill:rgb(86,28,0);fill-rule:nonzero;"/>
+        </g>
+        <g transform="matrix(0.928739,0,0,0.926724,122.569,44.5948)">
+            <path d="M1720,577.74L1732.67,546.661L1920.3,438L1920.3,670L1720,786L1720,577.74" style="fill:rgb(231,108,28);fill-rule:nonzero;"/>
+        </g>
+        <g transform="matrix(0.993534,0,0,0.991379,11.1207,8.77586)">
+            <path d="M1920.3,438L1920.3,670L1720,786L1519.7,670L1519.7,438L1720,322C1786.77,360.667 1853.53,399.333 1920.3,438ZM1538.49,448.866L1538.49,659.134L1720,764.253L1901.51,659.134L1901.51,448.866L1720,343.747C1659.5,378.787 1599,413.826 1538.49,448.866Z" style="fill:white;fill-rule:nonzero;"/>
+        </g>
+        <g transform="matrix(1,0,0,0.951613,0,31.0645)">
+            <path d="M1802,456L1754,456L1720,564.237L1685.93,456L1638,456L1624,642L1668,642L1674,531.661L1701,611.525L1739,611.525L1766,531.661L1772,642L1816,642L1802,456Z" style="fill:white;"/>
+        </g>
+    </g>
+</svg>

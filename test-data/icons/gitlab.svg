@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 96 96" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1.40761,0,0,1.40761,1.50275,-0.101506)">
+        <path d="M-1.068,34.172C-1.068,59.082 7.332,68.273 33.033,68.273C58.734,68.273 67.133,58.906 67.133,34.172C67.133,9.439 58.646,0.072 33.033,0.072C7.419,0.072 -1.068,9.263 -1.068,34.172Z" style="fill:white;"/>
+    </g>
+    <g id="logo_art" transform="matrix(0.205077,0,0,0.205077,-12.0952,-9.31883)">
+        <g>
+            <path id="path50_2_" d="M293.026,434.983L355.225,243.661L230.918,243.661L293.026,434.983Z" style="fill:rgb(226,67,41);fill-rule:nonzero;"/>
+            <path id="path66_6_" d="M143.798,243.662L124.857,301.788C123.143,307.066 124.994,312.892 129.518,316.182L293.027,434.983L143.798,243.662Z" style="fill:rgb(252,163,38);fill-rule:nonzero;"/>
+            <path id="path74_2_" d="M143.798,243.662L230.918,243.662L193.424,128.438C191.505,122.543 183.142,122.543 181.154,128.438L143.798,243.662Z" style="fill:rgb(226,67,41);fill-rule:nonzero;"/>
+            <path id="path82_6_" d="M442.346,243.662L461.219,301.788C462.933,307.066 461.082,312.892 456.558,316.182L293.026,434.983L442.346,243.662Z" style="fill:rgb(252,163,38);fill-rule:nonzero;"/>
+            <path id="path86_2_" d="M442.346,243.662L355.226,243.662L392.651,128.438C394.57,122.543 402.933,122.543 404.921,128.438L442.346,243.662Z" style="fill:rgb(226,67,41);fill-rule:nonzero;"/>
+            <path d="M293.026,434.983L355.225,243.662L442.346,243.662L293.026,434.983Z" style="fill:rgb(252,109,38);fill-rule:nonzero;"/>
+            <path d="M293.026,434.983L143.798,243.662L230.918,243.662L293.026,434.983Z" style="fill:rgb(252,109,38);fill-rule:nonzero;"/>
+        </g>
+    </g>
+</svg>

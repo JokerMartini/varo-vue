@@ -1,0 +1,34 @@
+{
+  "uid": "affinity-photo",
+  "name": "Affinity Photo",
+  "groupId": "affinity-photo",
+  "category": "Design",
+  "icon": "icons/affinityphoto.svg",
+  "visible": true,
+  "description": "This is a sample application",
+  "status": {
+    "name": "Beta",
+    "color": "#ffffff",
+    "background": "#dd55dd"
+  },
+  "access": {
+    "platforms": ["win", "mac"]
+  },
+  "commands": [
+    {
+      "path": "${ProgramFiles}/Affinity/Photo/Photo.exe",
+      "type": "rel"
+    }
+  ],
+  "env": [
+    {
+      "name": "AAA_1",
+      "value": "//Network/Path"
+    },
+    {
+      "name": "AAA_2",
+      "value": "${ProgramFiles}/libs",
+      "action": "append"
+    }
+  ]
+}

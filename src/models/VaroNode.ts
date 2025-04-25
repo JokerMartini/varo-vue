@@ -6,6 +6,7 @@ export class VaroNode {
     groupId: string;
     icon: string;
     visible?: boolean;
+    filepath?: string;
     defaultForGroup?: boolean;
     description?: string;
     status?: {
@@ -20,6 +21,7 @@ export class VaroNode {
       groupId?: string;
       icon?: string;
       visible?: boolean;
+      filepath?: string;
       defaultForGroup?: boolean;
       description?: string;
       status?: {
@@ -33,6 +35,7 @@ export class VaroNode {
       this.groupId = data.groupId ?? '';
       this.icon = data.icon ?? '';
       this.visible = data.visible ?? true;
+      this.filepath = data.filepath ?? '';
       this.defaultForGroup = data.defaultForGroup ?? false;
       this.description = data.description;
       this.status = data.status;

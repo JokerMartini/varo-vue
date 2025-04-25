@@ -1,0 +1,14 @@
+{
+  "uid": "gitlab",
+  "name": "GitLab",
+  "category": "Tech",
+  "icon": "C:/Users/joker/Documents/GitHub/varo-vue/test-data/nodes/icons/gitlab.svg",
+  "visible": true,
+  "commands": [
+    {
+      "path": "https://about.gitlab.com/",
+      "type": "url",
+      "nonBlocking": true
+    }
+  ]
+}

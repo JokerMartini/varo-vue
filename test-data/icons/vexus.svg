@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 96 96" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g id="Vexus">
+        <g transform="matrix(1.40761,0,0,1.40761,1.50275,-0.101506)">
+            <path d="M-1.068,34.172C-1.068,59.082 7.332,68.273 33.033,68.273C58.734,68.273 67.133,58.906 67.133,34.172C67.133,9.439 58.646,0.072 33.033,0.072C7.419,0.072 -1.068,9.263 -1.068,34.172Z" style="fill:rgb(3,185,192);"/>
+        </g>
+        <g transform="matrix(3.22222,0,0,3.22222,18.9996,21.841)">
+            <path d="M9,17L0,11.721L0,1.643L2.698,0.059L5.351,1.62L2.676,3.187L2.676,10.169L9,13.883L15.324,10.175L15.324,3.2L12.649,1.634L15.302,0.074L18,1.656L18,11.726L9,17ZM9,11.965L4.135,9.106L4.135,4.25L6.833,2.666L9.013,3.935L11.167,2.681L13.865,4.264L13.865,9.111L9,11.965Z" style="fill:white;"/>
+        </g>
+    </g>
+</svg>
