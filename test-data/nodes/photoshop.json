@@ -1,0 +1,13 @@
+{
+  "id": "photoshop",
+  "name": "Photoshop",
+  "groupId": "photoshop",
+  "category": "Design",
+  "icon": "${VARO_PATH}/icons/mari.svg",
+  "commands": [
+    {
+      "path": "${ProgramFiles}/Adobe/Photoshop.exe",
+      "type": "rel"
+    }
+  ]
+}

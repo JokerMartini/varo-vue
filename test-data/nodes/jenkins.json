@@ -1,9 +1,8 @@
 {
-  "uid": "jenkins",
+  "id": "jenkins",
   "name": "Jenkins",
   "category": "Tech",
-  "icon": "icons/jenkins.svg",
-  "visible": true,
+  "icon": "jenkins.png",
   "commands": [
     {
       "path": "https://www.jenkins.io/",

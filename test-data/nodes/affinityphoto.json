@@ -1,15 +1,13 @@
 {
-  "uid": "affinity-photo",
+  "id": "affinity-photo",
   "name": "Affinity Photo",
   "groupId": "affinity-photo",
   "category": "Design",
-  "icon": "icons/affinityphoto.svg",
-  "visible": true,
+  "icon": "affinityphoto.svg",
   "description": "This is a sample application",
   "status": {
     "name": "Beta",
-    "color": "#ffffff",
-    "background": "#dd55dd"
+    "color": "#ffffff"
   },
   "access": {
     "platforms": ["win", "mac"]

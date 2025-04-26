@@ -12,7 +12,7 @@ Each node is represented as a single `.json` file with this shape:
 
 ```json
 {
-  "uid": "ps-2018",
+  "id": "ps-2018",
   "name": "Photoshop 2018",
   "groupId": "photoshop",
   "category": "Design",
@@ -30,7 +30,7 @@ You may also include optional fields like `description`, `status`, `commands`, `
 
 | Property         | Type      | Required | Description |
 |------------------|-----------|----------|-------------|
-| `uid`            | `string`  | ✅       | A unique ID for the node. Used internally. |
+| `id`            | `string`  | ✅       | A unique ID for the node. Used internally. |
 | `name`           | `string`  | ✅       | Display name of the node. |
 | `groupId`        | `string`  | ⬜       | Optional group to associate multiple nodes (e.g., versions). |
 | `category`       | `string`  | ✅       | Logical category used for filtering or sorting (e.g., "Design", "Tech"). |
@@ -57,8 +57,7 @@ Displays a badge in the UI to indicate the status of the node:
 ```json
 "status": {
   "name": "Beta",
-  "color": "#ffffff",
-  "background": "#dd55dd"
+  "color": "#ffffff"
 }
 ```
 
@@ -66,7 +65,6 @@ Displays a badge in the UI to indicate the status of the node:
 |--------------|--------|-------------|
 | `name`       | string | Label shown in the UI (e.g., "Beta", "Live"). |
 | `color`      | hex    | Text color (e.g., `#ffffff`). |
-| `background` | hex    | Background color of the badge (e.g., `#ff00ff`). |
 
 ---
 
@@ -151,7 +149,7 @@ Defines environment variables that are set when launching commands.
 
 ```json
 {
-  "uid": "ps-2018",
+  "id": "ps-2018",
   "name": "Photoshop 2018",
   "groupId": "photoshop",
   "category": "Design",
@@ -162,7 +160,6 @@ Defines environment variables that are set when launching commands.
   "status": {
     "name": "Beta",
     "color": "#ffffff",
-    "background": "#dd55dd"
   },
   "access": {
     "platforms": ["win", "mac"],

@@ -35,7 +35,6 @@ VARO_PATH/
 ```json
 {
   "defaultEnv": "dev.env.json",
-  "iconFallback": "icons/default.svg",
 }
 ```
 

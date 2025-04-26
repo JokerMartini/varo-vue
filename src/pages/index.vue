@@ -6,6 +6,7 @@ const nodeStore = useVaroNodeStore()
 
 onMounted(() => {
   nodeStore.setNodes(dummyVaroNodes);
+  nodeStore.loadFiles();
 })
 
 const items = ref<AccordionItem[]>([
