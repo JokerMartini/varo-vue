@@ -80,6 +80,20 @@ fn get_os_username() -> String {
     "Guest".to_string()
 }
 
+// Returns the current platform as one of: "win", "mac", "linux"
+#[tauri::command]
+fn get_platform() -> &'static str {
+    if cfg!(target_os = "windows") {
+        "win"
+    } else if cfg!(target_os = "macos") {
+        "mac"
+    } else if cfg!(target_os = "linux") {
+        "linux"
+    } else {
+        "unknown"
+    }
+}
+
 #[tauri::command]
 async fn get_varo_nodes() -> Result<NodeLoadResult, String> {
     let mut warnings = Vec::new();
@@ -372,6 +386,7 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             greet, 
+            get_platform,
             get_os_username,
             get_varo_nodes,
         ])

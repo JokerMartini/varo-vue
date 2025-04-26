@@ -32,13 +32,17 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
     const result = await invoke<string>('get_varo_nodes')
     console.log(result.nodes)
     console.log(result.warnings)
+  } 
+  
+  async function fetchPlatform() {
+    const platform = await invoke<string>('get_platform')
+    console.log("Running on:", platform);
   }
 
   async function loadFiles() {
     fetchUsername();
     fetchVaroNodes();
-
-
+    fetchPlatform();
 
     // loading.value = true
     // // error.value = null
