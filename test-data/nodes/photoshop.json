@@ -4,6 +4,11 @@
   "groupId": "photoshop",
   "category": "Design",
   "icon": "${VARO_PATH}/icons/mari.svg",
+  "access": {
+    "platforms": ["win", "mac"],
+    "allow": ["john", "jane"],
+    "deny": ["doe"]
+  },
   "commands": [
     {
       "path": "${ProgramFiles}/Adobe/Photoshop.exe",

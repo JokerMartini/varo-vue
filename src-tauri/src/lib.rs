@@ -21,8 +21,8 @@ struct ResolvedVaroNode {
     defaultForGroup: Option<bool>,
     description: Option<String>,
     status: Option<ResolvedStatus>,
-    // access: Option<ResolvedAccess>,
-    // commands: Vec<ResolvedCommand>,
+    access: Option<ResolvedAccess>,
+    commands: Vec<ResolvedCommand>,
     // env: Vec<ResolvedEnvVar>,
     dateModified: u64, // milliseconds since epoch
 }
@@ -236,10 +236,43 @@ fn parse_varo_node_file(path: &Path) -> Result<(ResolvedVaroNode, Vec<String>), 
         warnings.push(format!("Node '{}' missing optional 'status' block", id));
     }
     
-    // Mocked placeholder icon for now (we'll replace this later)
     let icon_path = obj.get("icon").and_then(|v| v.as_str()).unwrap_or("").to_string();
     let icon = resolve_icon_path(&icon_path, &mut warnings, &id);
 
+    let commands = obj.get("commands")
+        .ok_or_else(|| format!("Missing required 'commands' array in {}", path.display()))?
+        .as_array()
+        .ok_or_else(|| format!("'commands' field must be an array in {}", path.display()))?
+        .iter()
+        .filter_map(|item| {
+            item.as_object().map(|cmd| ResolvedCommand {
+                path: cmd.get("path").and_then(|v| v.as_str()).unwrap_or("").to_string(),
+                cmd_type: cmd.get("type").and_then(|v| v.as_str()).map(|s| s.to_string()),
+                args: Some(cmd.get("args").and_then(|v| v.as_str()).unwrap_or("").to_string()),
+                non_blocking: Some(cmd.get("nonBlocking").and_then(|v| v.as_bool()).unwrap_or(false)),
+            })
+        })
+        .collect();
+
+    let access = obj.get("access")
+        .and_then(|v| v.as_object())
+        .map(|acc| ResolvedAccess {
+            platforms: acc.get("platforms")
+                .and_then(|v| v.as_array())
+                .map(|arr| arr.iter().filter_map(|v| v.as_str().map(|s| s.to_string())).collect())
+                .unwrap_or_default(),
+    
+            allow: acc.get("allow")
+                .and_then(|v| v.as_array())
+                .map(|arr| arr.iter().filter_map(|v| v.as_str().map(|s| s.to_string())).collect())
+                .unwrap_or_default(),
+    
+            deny: acc.get("deny")
+                .and_then(|v| v.as_array())
+                .map(|arr| arr.iter().filter_map(|v| v.as_str().map(|s| s.to_string())).collect())
+                .unwrap_or_default(),
+        });
+        
     // Step 4: Get the last modified time
     let modified = fs::metadata(path)
         .and_then(|meta| meta.modified())
@@ -261,6 +294,8 @@ fn parse_varo_node_file(path: &Path) -> Result<(ResolvedVaroNode, Vec<String>), 
             description,
             status,
             dateModified,
+            commands,
+            access,
         },
         warnings,
     ))

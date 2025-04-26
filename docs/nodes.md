@@ -1,6 +1,6 @@
 # 📦 Varo Node JSON Specification
 
-This document defines the structure and available properties of a `node` JSON used by the Varo application.
+This document defines the structure and available properties of a `node` JSON file used by the Varo application.
 
 Varo loads all node definitions from `.json` files located in the `VARO_PATH/nodes/` directory. Each JSON file defines an application/tool and how it is launched and categorized in the app.
 
@@ -18,25 +18,35 @@ Each node is represented as a single `.json` file with this shape:
   "category": "Design",
   "icon": "icons/ps2018.svg",
   "visible": true,
-  "defaultForGroup": false
+  "defaultForGroup": false,
+  "commands": [ ... ]
 }
 ```
 
-You may also include optional fields like `description`, `status`, `commands`, `access`, and `env`.
+You may also include optional fields like `description`, `status`, `access`, and `env`.
+
+**Note:**  
+- `commands` is **required**.
+- `access` is **optional**.
 
 ---
 
 ## 🧩 Node Properties
 
-| Property         | Type      | Required | Description |
-|------------------|-----------|----------|-------------|
-| `id`            | `string`  | ✅       | A unique ID for the node. Used internally. |
-| `name`           | `string`  | ✅       | Display name of the node. |
-| `groupId`        | `string`  | ⬜       | Optional group to associate multiple nodes (e.g., versions). |
-| `category`       | `string`  | ✅       | Logical category used for filtering or sorting (e.g., "Design", "Tech"). |
-| `icon`           | `string`  | ✅       | Path to an SVG/PNG icon. Can be **absolute** or **relative** to `VARO_PATH`. |
-| `visible`        | `boolean` | ⬜       | Whether the node should be visible by default. Defaults to `true`. |
-| `defaultForGroup`| `boolean` | ⬜       | If true, this node is considered the default selection within its group. |
+| Property          | Type      | Required | Description |
+|-------------------|-----------|----------|-------------|
+| `id`              | `string`  | ✅        | A unique ID for the node. Used internally. |
+| `name`            | `string`  | ✅        | Display name of the node. |
+| `groupId`         | `string`  | ⬜        | Optional group to associate multiple nodes (e.g., versions). |
+| `category`        | `string`  | ✅        | Logical category used for filtering or sorting (e.g., "Design", "Tech"). |
+| `icon`            | `string`  | ✅        | Path to an SVG/PNG icon. Can be **absolute** or **relative** to `VARO_PATH`. |
+| `visible`         | `boolean` | ⬜        | Whether the node should be visible by default. Defaults to `true`. |
+| `defaultForGroup` | `boolean` | ⬜        | If true, this node is considered the default selection within its group. |
+| `description`     | `string`  | ⬜        | User-facing description shown in the app. |
+| `status`          | `object`  | ⬜        | Optional status badge to show next to the node. |
+| `commands`        | `array`   | ✅        | One or more launch commands for this node. |
+| `access`          | `object`  | ⬜        | Platform and user access restrictions. |
+| `env`             | `array`   | ⬜        | Optional environment variables to inject at runtime. |
 
 ---
 
@@ -68,9 +78,9 @@ Displays a badge in the UI to indicate the status of the node:
 
 ---
 
-## 🔐 Access Control (`access`)
+## 🔐 Access Control (Optional)
 
-Control platform compatibility and user-level visibility.
+Control platform compatibility and user-level visibility:
 
 ```json
 "access": {
@@ -88,7 +98,7 @@ Control platform compatibility and user-level visibility.
 
 ---
 
-## ⚙️ Commands (`commands`)
+## ⚙️ Commands (Required)
 
 Defines one or more launch commands executed when the node is launched.
 
@@ -110,16 +120,16 @@ Defines one or more launch commands executed when the node is launched.
 ]
 ```
 
-| Property      | Type     | Required | Description |
-|---------------|----------|----------|-------------|
-| `path`        | string   | ✅       | The command path to execute. Can contain `${VARS}`. |
-| `type`        | `rel`/`abs`/`url` | ⬜ | Defines how to interpret the path. If omitted, auto-inferred. |
-| `args`        | string   | ⬜       | Optional arguments passed to the command. |
-| `nonBlocking` | boolean  | ⬜       | If `true`, the command will not block the next one from running. Default is `false`. |
+| Property      | Type                 | Required | Description |
+|---------------|----------------------|----------|-------------|
+| `path`        | string                | ✅        | The command path to execute. Can contain `${VARS}`. |
+| `type`        | `rel`/`abs`/`url`     | ⬜        | Defines how to interpret the path. If omitted, auto-inferred. |
+| `args`        | string                | ⬜        | Optional arguments passed to the command. |
+| `nonBlocking` | boolean               | ⬜        | If `true`, the command will not block the next one from running. Defaults to `false`. |
 
 ---
 
-## 🌱 Environment Variables (`env`)
+## 🌱 Environment Variables (Optional)
 
 Defines environment variables that are set when launching commands.
 
@@ -130,11 +140,11 @@ Defines environment variables that are set when launching commands.
 ]
 ```
 
-| Property | Type     | Required | Description |
-|----------|----------|----------|-------------|
-| `name`   | string   | ✅       | Environment variable name. |
-| `value`  | string   | ✅       | Value to set, can contain other `${VARS}`. |
-| `action` | `set` / `append` / `prepend` | ⬜ | How to apply the variable. Defaults to `set`. |
+| Property | Type                       | Required | Description |
+|----------|----------------------------|----------|-------------|
+| `name`   | string                      | ✅        | Environment variable name. |
+| `value`  | string                      | ✅        | Value to set, can contain other `${VARS}`. |
+| `action` | `set` / `append` / `prepend` | ⬜        | How to apply the variable. Defaults to `set`. |
 
 ---
 
@@ -159,7 +169,7 @@ Defines environment variables that are set when launching commands.
   "description": "This is a sample application",
   "status": {
     "name": "Beta",
-    "color": "#ffffff",
+    "color": "#ffffff"
   },
   "access": {
     "platforms": ["win", "mac"],
@@ -199,7 +209,7 @@ Defines environment variables that are set when launching commands.
 
 ## 🔄 Variable Substitution
 
-You can use `${VARIABLE}` inside paths, args, and environment values. These will be replaced at runtime using:
+You can use `${VARIABLE}` inside `icon`, `path`, `args`, and `env` `value` fields. These will be replaced at runtime based on:
 - App defaults
 - System/user environment
 - User-selected environment profiles (e.g., `dev.env.json`)
@@ -208,20 +218,8 @@ You can use `${VARIABLE}` inside paths, args, and environment values. These will
 
 ## 📌 File Placement Guidelines
 
-| File Type     | Folder              | Notes                            |
-|---------------|---------------------|----------------------------------|
-| JSON Node Files | `VARO_PATH/nodes/`  | One file per node (recommended) |
-| Icons         | `VARO_PATH/icons/`  | Use relative paths in `icon`    |
-| Env Profiles  | `VARO_PATH/envs/`   | Used to switch environments     |
-
----
-
-## Code Snippets
-
-```ts
-// icon parsing
-function resolveIconPath(iconAttr: string): string {
-  if (path.isAbsolute(iconAttr)) return iconAttr;
-  return path.resolve(VARO_PATH, iconAttr);
-}
-```
+| File Type        | Folder              | Notes                            |
+|------------------|---------------------|----------------------------------|
+| JSON Node Files   | `VARO_PATH/nodes/`  | One file per node (recommended). |
+| Icons            | `VARO_PATH/icons/`  | Use relative paths for `icon`.   |
+| Env Profiles     | `VARO_PATH/envs/`   | Used for switching environment settings. |
