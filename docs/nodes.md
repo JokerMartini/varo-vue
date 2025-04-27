@@ -12,7 +12,6 @@ Each node is represented as a single `.json` file with this shape:
 
 ```json
 {
-  "id": "ps-2018",
   "name": "Photoshop 2018",
   "groupId": "photoshop",
   "category": "Design",
@@ -35,7 +34,6 @@ You may also include optional fields like `description`, `status`, `access`, and
 
 | Property          | Type      | Required | Description |
 |-------------------|-----------|----------|-------------|
-| `id`              | `string`  | ✅        | A unique ID for the node. Used internally. |
 | `name`            | `string`  | ✅        | Display name of the node. |
 | `groupId`         | `string`  | ⬜        | Optional group to associate multiple nodes (e.g., versions). |
 | `category`        | `string`  | ✅        | Logical category used for filtering or sorting (e.g., "Design", "Tech"). |
@@ -159,7 +157,6 @@ Defines environment variables that are set when launching commands.
 
 ```json
 {
-  "id": "ps-2018",
   "name": "Photoshop 2018",
   "groupId": "photoshop",
   "category": "Design",

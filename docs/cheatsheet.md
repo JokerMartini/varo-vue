@@ -7,7 +7,6 @@ Perfect! Here's a **compact cheatsheet version** for you — designed for quick 
 ### Required Fields
 | Property          | Type       | Description |
 |-------------------|------------|-------------|
-| `id`              | string     | Unique internal ID. |
 | `name`            | string     | Display name. |
 | `category`        | string     | Node category (e.g., Design, Tech). |
 | `icon`            | string     | Path to SVG/PNG icon (relative or absolute). |
@@ -81,7 +80,6 @@ Perfect! Here's a **compact cheatsheet version** for you — designed for quick 
 
 ```json
 {
-  "id": "",
   "name": "",
   "category": "",
   "icon": "",

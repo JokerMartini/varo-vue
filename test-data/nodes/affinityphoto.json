@@ -1,5 +1,4 @@
 {
-  "id": "affinity-photo",
   "name": "Affinity Photo",
   "groupId": "affinity-photo",
   "category": "Design",
@@ -25,7 +24,7 @@
     },
     {
       "name": "AAA_2",
-      "value": "${ProgramFiles}/libs",
+      "value": "${VARO_PATH}/libs",
       "action": "append"
     }
   ]

@@ -45,7 +45,6 @@ VARO_PATH/
 | Property         | Type      | Description |
 |------------------|-----------|-------------|
 | `defaultEnv`     | `string`  | Specifies the default environment file to load on app start. Refers to a file in the `/envs` folder. |
-| `iconFallback`   | `string`  | A path (relative or absolute) to a default icon to use when a node is missing its icon. |
 
 ---
 
@@ -53,7 +52,6 @@ VARO_PATH/
 
 - Use `config.json` to simplify your XML definitions by offloading defaults here.
 - Keep user-specific or session-specific data (like last-selected node) outside this file — consider saving those in a user preferences file instead.
-- Always ensure paths (e.g., `iconFallback`) are valid and accessible within or outside the `VARO_PATH`.
 
 ---
 

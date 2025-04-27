@@ -7,6 +7,7 @@ use serde::{Serialize};
 use serde_json::Value;
 use base64::engine::general_purpose;
 use base64::Engine;
+use blake3;
 
 // --- Structs ---
 
@@ -186,6 +187,32 @@ fn is_valid_node_file(path: &Path) -> bool {
     }
 }
 
+
+pub struct PathHasher;
+
+impl PathHasher {
+    /// Normalize the path by extracting the filename and lowercasing it
+    pub fn normalize(path: &Path) -> String {
+        path.file_name()
+            .and_then(|s| s.to_str())
+            .map(|s| s.to_lowercase())
+            .unwrap_or_default()
+    }
+
+    /// Generate a stable ID from any input string
+    pub fn generate_id_from_str(input: &str) -> String {
+        let hash = blake3::hash(input.as_bytes());
+        let hex_string = hash.to_hex();
+        hex_string[..12.min(hex_string.len())].to_string()
+    }
+
+    /// Generate an ID directly from a Path (shortcut method)
+    pub fn generate_id_from_path(path: &Path) -> String {
+        let normalized = Self::normalize(path);
+        Self::generate_id_from_str(&normalized)
+    }
+}
+
 fn parse_varo_node_file(path: &Path) -> Result<(ResolvedVaroNode, Vec<String>), String> {
     let mut warnings = Vec::new();
 
@@ -200,10 +227,7 @@ fn parse_varo_node_file(path: &Path) -> Result<(ResolvedVaroNode, Vec<String>), 
     let obj = json.as_object().ok_or_else(|| format!("Root JSON is not an object in {}", path.display()))?;
 
     // Step 3: Extract fields safely
-    let id = match obj.get("id").and_then(|v| v.as_str()) {
-        Some(v) => v.to_string(),
-        None => return Err(format!("Missing or invalid 'id' field in {}", path.display())),
-    };
+    let id = PathHasher::generate_id_from_path(path);
 
     let name = match obj.get("name").and_then(|v| v.as_str()) {
         Some(v) => v.to_string(),
