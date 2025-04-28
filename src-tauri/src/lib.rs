@@ -7,63 +7,15 @@ use serde::{Serialize};
 use serde_json::Value;
 use base64::engine::general_purpose;
 use base64::Engine;
-use blake3;
 
-// --- Structs ---
+mod models;
+mod utils;
 
-#[derive(Serialize)]
-struct ResolvedVaroNode {
-    id: String,
-    name: String,
-    category: Option<String>,
-    groupId: Option<String>,
-    icon: String, // raw embedded SVG or base64 PNG, or placeholder
-    filepath: Option<String>,
-    defaultForGroup: Option<bool>,
-    description: Option<String>,
-    status: Option<ResolvedStatus>,
-    access: Option<ResolvedAccess>,
-    commands: Vec<ResolvedCommand>,
-    // env: Vec<ResolvedEnvVar>,
-    dateModified: u64, // milliseconds since epoch
-}
-
-#[derive(Serialize)]
-struct ResolvedStatus {
-    name: String,
-    color: String,
-}
-
-#[derive(Serialize)]
-struct ResolvedAccess {
-    platforms: Vec<String>,
-    allow: Vec<String>,
-    deny: Vec<String>,
-}
-
-#[derive(Serialize)]
-struct ResolvedCommand {
-    path: String,
-    #[serde(rename = "type")]
-    cmd_type: Option<String>,
-    args: Option<String>,
-    non_blocking: Option<bool>,
-}
-
-#[derive(Serialize)]
-struct ResolvedEnvVar {
-    name: String,
-    value: String,
-    action: Option<String>,
-}
-
-#[derive(Serialize)]
-struct NodeLoadResult {
-    nodes: Vec<ResolvedVaroNode>,
-    warnings: Vec<String>,
-}
+use models::varo_node::{VaroNode, Status, Access, Command, EnvVar, NodeLoadResult};
+use utils::hasher::Hasher;
 
 // --- Public Tauri Commands ---
+// Returns current username otherwise returns "Guest"
 #[tauri::command]
 fn get_os_username() -> String {
     // Try the most common environment variables
@@ -187,33 +139,7 @@ fn is_valid_node_file(path: &Path) -> bool {
     }
 }
 
-
-pub struct PathHasher;
-
-impl PathHasher {
-    /// Normalize the path by extracting the filename and lowercasing it
-    pub fn normalize(path: &Path) -> String {
-        path.file_name()
-            .and_then(|s| s.to_str())
-            .map(|s| s.to_lowercase())
-            .unwrap_or_default()
-    }
-
-    /// Generate a stable ID from any input string
-    pub fn generate_id_from_str(input: &str) -> String {
-        let hash = blake3::hash(input.as_bytes());
-        let hex_string = hash.to_hex();
-        hex_string[..12.min(hex_string.len())].to_string()
-    }
-
-    /// Generate an ID directly from a Path (shortcut method)
-    pub fn generate_id_from_path(path: &Path) -> String {
-        let normalized = Self::normalize(path);
-        Self::generate_id_from_str(&normalized)
-    }
-}
-
-fn parse_varo_node_file(path: &Path) -> Result<(ResolvedVaroNode, Vec<String>), String> {
+fn parse_varo_node_file(path: &Path) -> Result<(VaroNode, Vec<String>), String> {
     let mut warnings = Vec::new();
 
     // Step 1: Read the file content
@@ -227,7 +153,7 @@ fn parse_varo_node_file(path: &Path) -> Result<(ResolvedVaroNode, Vec<String>), 
     let obj = json.as_object().ok_or_else(|| format!("Root JSON is not an object in {}", path.display()))?;
 
     // Step 3: Extract fields safely
-    let id = PathHasher::generate_id_from_path(path);
+    let id = Hasher::generate_id_from_path(path);
 
     let name = match obj.get("name").and_then(|v| v.as_str()) {
         Some(v) => v.to_string(),
@@ -242,7 +168,7 @@ fn parse_varo_node_file(path: &Path) -> Result<(ResolvedVaroNode, Vec<String>), 
         }
     };
 
-    let groupId = match obj.get("groupId").and_then(|v| v.as_str()) {
+    let group_id = match obj.get("groupId").and_then(|v| v.as_str()) {
         Some(gid) => Some(gid.to_string()),
         None => {
             warnings.push(format!("Node '{}' missing optional 'groupId' field — defaulting to name '{}'", id, name));
@@ -252,7 +178,7 @@ fn parse_varo_node_file(path: &Path) -> Result<(ResolvedVaroNode, Vec<String>), 
 
     let filepath = Some(path.to_string_lossy().to_string());
 
-    let defaultForGroup = Some(
+    let default_for_group = Some(
         obj.get("defaultForGroup")
             .and_then(|v| v.as_bool())
             .unwrap_or(false)
@@ -264,7 +190,7 @@ fn parse_varo_node_file(path: &Path) -> Result<(ResolvedVaroNode, Vec<String>), 
     }
 
     let status = obj.get("status").and_then(|v| v.as_object()).map(|s| {
-        ResolvedStatus {
+        Status {
             name: s.get("name").and_then(|v| v.as_str()).unwrap_or("").to_string(),
             color: s.get("color").and_then(|v| v.as_str()).unwrap_or("").to_string(),
         }
@@ -283,9 +209,9 @@ fn parse_varo_node_file(path: &Path) -> Result<(ResolvedVaroNode, Vec<String>), 
         .ok_or_else(|| format!("'commands' field must be an array in {}", path.display()))?
         .iter()
         .filter_map(|item| {
-            item.as_object().map(|cmd| ResolvedCommand {
+            item.as_object().map(|cmd| Command {
                 path: cmd.get("path").and_then(|v| v.as_str()).unwrap_or("").to_string(),
-                cmd_type: cmd.get("type").and_then(|v| v.as_str()).map(|s| s.to_string()),
+                path_type: cmd.get("pathType").and_then(|v| v.as_str()).map(|s| s.to_string()),
                 args: Some(cmd.get("args").and_then(|v| v.as_str()).unwrap_or("").to_string()),
                 non_blocking: Some(cmd.get("nonBlocking").and_then(|v| v.as_bool()).unwrap_or(false)),
             })
@@ -294,7 +220,7 @@ fn parse_varo_node_file(path: &Path) -> Result<(ResolvedVaroNode, Vec<String>), 
 
     let access = obj.get("access")
         .and_then(|v| v.as_object())
-        .map(|acc| ResolvedAccess {
+        .map(|acc| Access {
             platforms: acc.get("platforms")
                 .and_then(|v| v.as_array())
                 .map(|arr| arr.iter().filter_map(|v| v.as_str().map(|s| s.to_string())).collect())
@@ -316,22 +242,22 @@ fn parse_varo_node_file(path: &Path) -> Result<(ResolvedVaroNode, Vec<String>), 
         .and_then(|meta| meta.modified())
         .unwrap_or(SystemTime::now());
 
-    let dateModified = modified.duration_since(UNIX_EPOCH)
+    let date_modified = modified.duration_since(UNIX_EPOCH)
         .map_err(|e| e.to_string())?
         .as_millis() as u64;
 
     Ok((
-        ResolvedVaroNode {
+        VaroNode {
             id,
             name,
             category,
-            groupId,
+            group_id,
             icon,
             filepath,
-            defaultForGroup,
+            default_for_group,
             description,
             status,
-            dateModified,
+            date_modified,
             commands,
             access,
         },

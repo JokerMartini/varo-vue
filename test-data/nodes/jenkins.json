@@ -5,7 +5,7 @@
   "commands": [
     {
       "path": "https://www.jenkins.io/",
-      "type": "url",
+      "pathType": "url",
       "nonBlocking": true
     }
   ]

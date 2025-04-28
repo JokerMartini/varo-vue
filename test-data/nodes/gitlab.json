@@ -5,7 +5,7 @@
   "commands": [
     {
       "path": "https://about.gitlab.com/",
-      "type": "url",
+      "pathType": "url",
       "nonBlocking": true
     }
   ]

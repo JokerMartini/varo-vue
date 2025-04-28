@@ -14,7 +14,7 @@
   "commands": [
     {
       "path": "${ProgramFiles}/Affinity/Photo/Photo.exe",
-      "type": "rel"
+      "pathType": "rel"
     }
   ],
   "env": [
@@ -25,7 +25,7 @@
     {
       "name": "AAA_2",
       "value": "${VARO_PATH}/libs",
-      "action": "append"
+      "operation": "append"
     }
   ]
 }

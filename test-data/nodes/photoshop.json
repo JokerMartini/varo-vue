@@ -11,7 +11,7 @@
   "commands": [
     {
       "path": "${ProgramFiles}/Adobe/Photoshop.exe",
-      "type": "rel"
+      "pathType": "rel"
     }
   ]
 }

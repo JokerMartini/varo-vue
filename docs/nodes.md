@@ -104,12 +104,12 @@ Defines one or more launch commands executed when the node is launched.
 "commands": [
   {
     "path": "https://www.google.com/",
-    "type": "url",
+    "pathType": "url",
     "nonBlocking": true
   },
   {
     "path": "./${HOME}/scripts/simplePrint.py",
-    "type": "rel"
+    "pathType": "rel"
   },
   {
     "path": "C:/Users/${USERNAME}/Desktop/helloWorld.py",
@@ -121,7 +121,7 @@ Defines one or more launch commands executed when the node is launched.
 | Property      | Type                 | Required | Description |
 |---------------|----------------------|----------|-------------|
 | `path`        | string                | ✅        | The command path to execute. Can contain `${VARS}`. |
-| `type`        | `rel`/`abs`/`url`     | ⬜        | Defines how to interpret the path. If omitted, auto-inferred. |
+| `pathType`        | `rel`/`abs`/`url`     | ⬜        | Defines how to interpret the path. If omitted, auto-inferred. |
 | `args`        | string                | ⬜        | Optional arguments passed to the command. |
 | `nonBlocking` | boolean               | ⬜        | If `true`, the command will not block the next one from running. Defaults to `false`. |
 
@@ -134,7 +134,7 @@ Defines environment variables that are set when launching commands.
 ```json
 "env": [
   { "name": "ROOT", "value": "//Network/Path" },
-  { "name": "LIB_PATH", "value": "${ROOT}/libs", "action": "append" }
+  { "name": "LIB_PATH", "value": "${ROOT}/libs", "operation": "append" }
 ]
 ```
 
@@ -142,7 +142,7 @@ Defines environment variables that are set when launching commands.
 |----------|----------------------------|----------|-------------|
 | `name`   | string                      | ✅        | Environment variable name. |
 | `value`  | string                      | ✅        | Value to set, can contain other `${VARS}`. |
-| `action` | `set` / `append` / `prepend` | ⬜        | How to apply the variable. Defaults to `set`. |
+| `operation` | `set` / `append` / `prepend` | ⬜        | How to apply the variable. Defaults to `set`. |
 
 ---
 
@@ -196,7 +196,7 @@ Defines environment variables that are set when launching commands.
     {
       "name": "LIB_PATH",
       "value": "${ROOT}/libs",
-      "action": "append"
+      "operation": "append"
     }
   ]
 }

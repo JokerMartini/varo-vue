@@ -33,7 +33,7 @@ Perfect! Here's a **compact cheatsheet version** for you — designed for quick 
 "commands": [
   {
     "path": "string",         // Required
-    "type": "rel" | "abs" | "url",  // Optional
+    "pathType": "rel" | "abs" | "url",  // Optional
     "args": "string",          // Optional
     "nonBlocking": true        // Optional
   }
@@ -41,7 +41,7 @@ Perfect! Here's a **compact cheatsheet version** for you — designed for quick 
 ```
 
 - `path`: Executable path or URL.
-- `type`: How to interpret the path (auto-inferred if missing).
+- `pathType`: How to interpret the path (auto-inferred if missing).
 - `args`: Arguments to pass.
 - `nonBlocking`: If true, don't wait for this command to finish.
 
@@ -68,11 +68,11 @@ Perfect! Here's a **compact cheatsheet version** for you — designed for quick 
 ```json
 "env": [
   { "name": "VAR", "value": "something" },
-  { "name": "OTHER_VAR", "value": "path", "action": "append" }
+  { "name": "OTHER_VAR", "value": "path", "operation": "append" }
 ]
 ```
 
-- `action`: `set` (default) | `append` | `prepend`
+- `operation`: `set` (default) | `append` | `prepend`
 
 ---
 

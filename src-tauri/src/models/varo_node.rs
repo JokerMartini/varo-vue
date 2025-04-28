@@ -1,0 +1,56 @@
+use serde::{Serialize};
+
+#[derive(Debug, Serialize)]
+pub struct VaroNode {
+    pub id: String,
+    pub name: String,
+    pub category: Option<String>,
+    #[serde(rename = "groupId")]
+    pub group_id: Option<String>,
+    pub icon: String, // raw embedded SVG or base64 PNG, or placeholder
+    pub filepath: Option<String>,
+    #[serde(rename = "defaultForGroup")]
+    pub default_for_group: Option<bool>,
+    pub description: Option<String>,
+    pub status: Option<Status>,
+    pub access: Option<Access>,
+    pub commands: Vec<Command>,
+    //pub env: Vec<EnvVar>,
+    #[serde(rename = "dateModified")]
+    pub date_modified: u64,
+}
+
+#[derive(Debug, Serialize)]
+pub struct Status {
+    pub name: String,
+    pub color: String,
+}
+
+#[derive(Debug, Serialize)]
+pub struct Access {
+    pub platforms: Vec<String>,
+    pub allow: Vec<String>,
+    pub deny: Vec<String>,
+}
+
+#[derive(Debug, Serialize)]
+pub struct Command {
+    pub path: String,
+    #[serde(rename = "pathType")]
+    pub path_type: Option<String>,
+    pub args: Option<String>,
+    pub non_blocking: Option<bool>,
+}
+
+#[derive(Debug, Serialize)]
+pub struct EnvVar {
+    pub name: String,
+    pub value: String,
+    pub operation: Option<String>,
+}
+
+#[derive(Debug, Serialize)]
+pub struct NodeLoadResult {
+    pub nodes: Vec<VaroNode>,
+    pub warnings: Vec<String>,
+}
