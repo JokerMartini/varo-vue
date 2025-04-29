@@ -39,6 +39,15 @@ const items = computed(() => [
     ]
 ])
 
+const doit = () => {
+    console.log('here');
+    nodeStore.launchSomething();
+}
+
+const openLogs = () => {
+    console.log("TODO: Open Log's folder/file")
+}
+
 </script>
 
 <template>
@@ -75,6 +84,8 @@ const items = computed(() => [
             </div>
             <!-- right -->
             <div class="flex items-center">
+                <UButton @click="doit">Click</UButton>
+                <UButton @click="openLogs">View Logs</UButton>
                 <UDropdownMenu :items="items" :ui="{ content: 'w-60' }">
                     <UButton icon="i-lucide-ellipsis-vertical" 
                     variant="ghost" 

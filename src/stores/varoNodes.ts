@@ -39,6 +39,28 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
     console.log("Running on:", platform);
   }
 
+  async function launchSomething() {
+    const result = await invoke('execute_program', {
+      path: 'C:/Windows/notepad.exe',
+      args: [],
+      wait: true
+    })
+    const result2 = await invoke('execute_program', {
+      path: 'C:/Program Files/Python310/python.exe',
+      args: ["C:/Users/joker/Documents/GitHub/varo-vue/test-data/nodes/scripts/simpleDialog.py"],
+      wait: true
+    })
+    const result3 = await invoke('execute_program', {
+      path: 'C:/Program Files/Python310/python.exe',
+      args: ["C:/Users/joker/Documents/GitHub/varo-vue/test-data/nodes/scripts/simpleDialog.py"],
+      wait: false,
+      envVars: {
+        AAAA: 'KEVIN',
+        AAZZ: '123'
+      }
+    })
+  }
+
   async function loadFiles() {
     fetchUsername();
     fetchVaroNodes();
@@ -77,5 +99,6 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
     // methods
     setNodes,
     loadFiles,
+    launchSomething
   }
 })

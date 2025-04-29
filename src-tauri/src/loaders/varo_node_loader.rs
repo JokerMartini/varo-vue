@@ -6,7 +6,12 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-pub fn load_all_varo_nodes() -> Result<NodeLoadResult, String> {
+#[tauri::command]
+pub async fn get_varo_nodes() -> Result<NodeLoadResult, String> {
+    load_varo_nodes()
+}
+
+pub fn load_varo_nodes() -> Result<NodeLoadResult, String> {
     let mut warnings = Vec::new();
     let mut nodes = Vec::new();
 

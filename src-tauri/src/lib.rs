@@ -5,8 +5,8 @@ mod models;
 mod loaders;
 mod utils;
 
-use crate::models::varo_node::{NodeLoadResult};
-use crate::loaders::varo_node_loader::load_all_varo_nodes;
+use crate::loaders::varo_node_loader::get_varo_nodes;
+use crate::utils::commands::execute_program;
 
 // --- Public Tauri Commands ---
 // Returns current username otherwise returns "Guest"
@@ -42,12 +42,6 @@ fn get_platform() -> &'static str {
 }
 
 #[tauri::command]
-async fn get_varo_nodes() -> Result<NodeLoadResult, String> {
-    // println!("HERE WE GO!!!!!!!!!!!!!!!!!!!");
-    load_all_varo_nodes()
-}
-
-#[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
@@ -61,6 +55,7 @@ pub fn run() {
             get_platform,
             get_os_username,
             get_varo_nodes,
+            execute_program,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
