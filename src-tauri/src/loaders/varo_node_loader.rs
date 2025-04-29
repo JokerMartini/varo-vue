@@ -160,15 +160,17 @@ fn parse_varo_node_file(path: &Path) -> Result<(VaroNode, Vec<String>), String> 
             arr.iter()
                 .filter_map(|item| item.as_object())
                 .map(|env_obj| {
+                    let name = env_obj.get("name").and_then(|v| v.as_str()).map(expand_env_vars).unwrap_or_default();
+                    let value = env_obj.get("value").and_then(|v| v.as_str()).map(expand_env_vars).unwrap_or_default();
+                    let operation = env_obj.get("operation")
+                        .and_then(|v| v.as_str())
+                        .map(expand_env_vars)
+                        .unwrap_or_else(|| "set".to_string());
+    
                     EnvVar {
-                        name: env_obj.get("name").and_then(|v| v.as_str()).map(expand_env_vars).unwrap_or_default(),
-                        value: env_obj.get("value").and_then(|v| v.as_str()).map(expand_env_vars).unwrap_or_default(),
-                        operation: Some(
-                            env_obj.get("operation")
-                                .and_then(|v| v.as_str())
-                                .map(expand_env_vars)
-                                .unwrap_or_else(|| "set".to_string())
-                        ),
+                        name,
+                        value,
+                        operation: Some(operation),
                     }
                 })
                 .collect::<Vec<_>>()
