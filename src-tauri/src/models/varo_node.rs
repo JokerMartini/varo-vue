@@ -15,7 +15,7 @@ pub struct VaroNode {
     pub status: Option<Status>,
     pub access: Option<Access>,
     pub commands: Vec<Command>,
-    //pub env: Vec<EnvVar>,
+    pub env: Vec<EnvVar>,
     #[serde(rename = "dateModified")]
     pub date_modified: u64,
 }

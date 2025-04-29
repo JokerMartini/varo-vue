@@ -1,5 +1,5 @@
-use crate::models::varo_node::{VaroNode, Status, Access, Command, NodeLoadResult};
-use crate::utils::{icon_resolver::resolve_icon_path};
+use crate::models::varo_node::{VaroNode, Status, Access, Command, EnvVar, NodeLoadResult};
+use crate::utils::{icon_resolver::resolve_icon_path, env::expand_env_vars};
 use crate::utils::hasher::Hasher;
 use serde_json::Value;
 use std::fs;
@@ -153,6 +153,27 @@ fn parse_varo_node_file(path: &Path) -> Result<(VaroNode, Vec<String>), String> 
                 .map(|arr| arr.iter().filter_map(|v| v.as_str().map(|s| s.to_string())).collect())
                 .unwrap_or_default(),
         });
+    
+    let env = obj.get("env")
+        .and_then(|v| v.as_array())
+        .map(|arr| {
+            arr.iter()
+                .filter_map(|item| item.as_object())
+                .map(|env_obj| {
+                    EnvVar {
+                        name: env_obj.get("name").and_then(|v| v.as_str()).map(expand_env_vars).unwrap_or_default(),
+                        value: env_obj.get("value").and_then(|v| v.as_str()).map(expand_env_vars).unwrap_or_default(),
+                        operation: Some(
+                            env_obj.get("operation")
+                                .and_then(|v| v.as_str())
+                                .map(expand_env_vars)
+                                .unwrap_or_else(|| "set".to_string())
+                        ),
+                    }
+                })
+                .collect::<Vec<_>>()
+        })
+        .unwrap_or_default();
         
     // Step 4: Get the last modified time
     let modified = fs::metadata(path)
@@ -176,6 +197,7 @@ fn parse_varo_node_file(path: &Path) -> Result<(VaroNode, Vec<String>), String> 
             status,
             date_modified,
             commands,
+            env,
             access,
         },
         warnings,
