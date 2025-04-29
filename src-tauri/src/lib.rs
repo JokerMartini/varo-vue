@@ -43,7 +43,7 @@ fn get_platform() -> &'static str {
 
 #[tauri::command]
 async fn get_varo_nodes() -> Result<NodeLoadResult, String> {
-    println!("HERE WE GO!!!!!!!!!!!!!!!!!!!");
+    // println!("HERE WE GO!!!!!!!!!!!!!!!!!!!");
     load_all_varo_nodes()
 }
 
