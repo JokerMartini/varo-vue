@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-6">VARO Text Files</h1>
+    <h1 class="text-2xl font-bold mb-6">Log Files</h1>
     
     <div class="flex justify-between mb-6">
       <UButton 
@@ -19,7 +19,7 @@
     </div>
     
     <div v-if="logs.length === 0 && !loading && !error" class="text-gray-500 italic">
-      No text files found or haven't refreshed yet.
+      No log files found or haven't refreshed yet.
     </div>
     
     <div v-if="logs.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
