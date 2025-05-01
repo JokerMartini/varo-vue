@@ -85,7 +85,9 @@ const openLogs = () => {
             <!-- right -->
             <div class="flex items-center">
                 <UButton @click="doit">Click</UButton>
-                <UButton @click="openLogs">View Logs</UButton>
+                <nuxt-link to="/LogFiles">
+                    <UButton>View Logs</UButton>
+                </nuxt-link>
                 <UDropdownMenu :items="items" :ui="{ content: 'w-60' }">
                     <UButton icon="i-lucide-ellipsis-vertical" 
                     variant="ghost" 
