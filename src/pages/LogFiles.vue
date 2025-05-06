@@ -43,15 +43,24 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import { invoke } from '@tauri-apps/api/core';
+import { useRouter } from 'vue-router'; // Importing router for navigation
 
-const logs = ref([]);
-const router = useRouter();
-const selectedFile = ref(null);
+interface LogFile {
+  path: string;
+  modified: string;
+  content: string;
+}
 
+const logs = ref<LogFile[]>([]);
+const loading = ref(false); // Add loading state
+const error = ref<string | null>(null); // Add error state
+const selectedFile = ref<LogFile | null>(null);
+const router = useRouter(); // Initialize the router instance
 
-const viewFileContent = async (log) => {
+console.log('✅ invoke loaded:', invoke);
+
+const viewFileContent = async (log: LogFile) => {
   selectedFile.value = { ...log };
 };
 
@@ -60,10 +69,21 @@ const closeFileContent = () => {
 };
 
 const fetchLogs = async () => {
+  loading.value = true;
+  error.value = null;
   try {
-    logs.value = await invoke('get_text_files'); // Call the Tauri command to get text files
-  } catch (error) {
-    console.error("Error fetching log files:", error);
+    console.log("Invoking Tauri command...");
+    if (typeof invoke !== 'function') {
+      console.error("invoke is undefined or not a function");
+    } else {
+      logs.value = await invoke('fetch_log_files'); 
+      console.log("Logs:", logs.value);
+    }
+  } catch (err) {
+    error.value = "Error fetching log files: " + err.message;
+    console.error("Error fetching log files:", err);
+  } finally {
+    loading.value = false;
   }
 };
 

@@ -1,5 +1,8 @@
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 use std::env;
+use std::fs;
+use std::path::{Path, PathBuf};
+use serde::{Serialize, Deserialize};
+use dirs;
 
 mod models;
 mod loaders;
@@ -8,53 +11,72 @@ mod utils;
 use crate::loaders::varo_node_loader::get_varo_nodes;
 use crate::utils::commands::execute_program;
 
-use std::fs;
-use std::path::Path;
-use chrono::{DateTime, Utc};
-use serde::{Serialize, Deserialize};
+use log::{info, warn, error, debug, trace};
+use tauri_plugin_log::{Builder as LogBuilder};
 
+// --- LogFile Struct ---
 #[derive(Serialize, Deserialize, Debug)]
-pub struct TextFile {
+pub struct LogFile {
     path: String,
     modified: String,
     content: String,
 }
 
-// change this path accoridng to what you want 
-const VARO_PATH: &str = "/Users/macbook/Desktop/Untitled/test-files";
-
 #[tauri::command]
-fn get_text_files() -> Result<Vec<TextFile>, String> {
-    let path = Path::new(VARO_PATH);
-    if !path.exists() || !path.is_dir() {
-        return Err(format!("VARO_PATH '{}' is not a valid directory", VARO_PATH));
-    }
+fn fetch_log_files() -> Result<Vec<LogFile>, String> {
+    info!("Fetching log files...");
 
-    let mut text_files = Vec::new();
+    // Use the correct path where Tauri logs are stored
+    let log_dir = get_log_dir().map_err(|e| format!("Failed to get log directory: {}", e))?;
+    log::info!("Log directory path: {:?}", log_dir);
 
-    for entry in fs::read_dir(path).map_err(|e| e.to_string())? {
+    let mut logs = Vec::new();
+
+    // Read the log directory for files
+    for entry in std::fs::read_dir(log_dir).map_err(|e| e.to_string())? {
         let entry = entry.map_err(|e| e.to_string())?;
-        let file_path = entry.path();
-
-        if file_path.is_file() && 
-           file_path.extension().map_or(false, |ext| ext == "txt") {
-
-            let metadata = fs::metadata(&file_path).map_err(|e| e.to_string())?;
+        let path = entry.path();
+        
+        if path.is_file() {
+            let metadata = entry.metadata().map_err(|e| e.to_string())?;
             let modified = metadata.modified().map_err(|e| e.to_string())?;
-            let datetime: DateTime<Utc> = modified.into();
-            let modified_str = datetime.format("%Y-%m-%d %H:%M:%S").to_string();
+            let modified_time = chrono::DateTime::<chrono::Local>::from(modified);
+            let content = std::fs::read_to_string(&path).unwrap_or_default();
 
-            let content = fs::read_to_string(&file_path).map_err(|e| e.to_string())?;
-
-            text_files.push(TextFile {
-                path: file_path.to_string_lossy().to_string(),
-                modified: modified_str,
+            logs.push(LogFile {
+                path: path.display().to_string(),
+                modified: modified_time.to_string(),
                 content,
             });
         }
     }
 
-    Ok(text_files)
+    Ok(logs)
+}
+
+fn get_log_dir() -> Result<PathBuf, String> {
+    match dirs::home_dir() {
+        Some(home) => {
+            let app_name = "com.varo.app";
+            let log_dir = match std::env::consts::OS {
+                "macos" => home.join(format!("Library/Logs/{}", app_name)),
+                "windows" => {
+                    let local_app_data = std::env::var("LOCALAPPDATA")
+                        .map_err(|e| e.to_string())?;
+                    Path::new(&local_app_data)
+                        .join(format!("{}/logs", app_name))
+                }
+                _ => return Err("Unsupported operating system".to_string()),
+            };
+
+            if !log_dir.exists() {
+                fs::create_dir_all(&log_dir).map_err(|e| e.to_string())?;
+            }
+
+            Ok(log_dir)
+        }
+        None => Err("Could not determine home directory".to_string()),
+    }
 }
 
 // --- Public Tauri Commands ---
@@ -98,14 +120,19 @@ fn greet(name: &str) -> String {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .plugin(tauri_plugin_opener::init())
+        .plugin(
+            LogBuilder::default()
+                .level(log::LevelFilter::Info) // Adjust log level as needed
+                .build(),
+        )
+        .plugin(tauri_plugin_opener::init()) // Other plugin setup
         .invoke_handler(tauri::generate_handler![
-            greet, 
+            greet,
             get_platform,
             get_os_username,
             get_varo_nodes,
-            execute_program,
-            get_text_files
+            fetch_log_files,
+            execute_program
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
