@@ -38,7 +38,7 @@ const items = ref<AccordionItem[]>([
        <p class="mb-2 font-bold">Ungrouped</p>
        <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]" >
          <VaroNodeCard
-         v-for="node in nodeStore.nodes"
+         v-for="node in nodeStore.filteredNodes"
          :key="node.id"
          :node="node"
          />

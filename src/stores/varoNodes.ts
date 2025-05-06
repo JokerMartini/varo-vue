@@ -9,24 +9,58 @@ import { invoke } from '@tauri-apps/api/core';
 
 
 export const useVaroNodeStore = defineStore('varoNodes', () => {
+  const showHiddenNodes = ref(false)
+  const searchQuery = ref('')
   const nodes = ref<VaroNode[]>([])
   const nodeGroups = ref<VaroNodeGroup[]>([])
   const displayMode = ref<DisplayMode>('ungrouped');
   const loading = ref(false)
+  const username = ref<string | null>(null)
+  const platform = ref<string | null>(null)
 
+  // METHODS
   function setNodes(newNodes: VaroNode[]) {
     nodes.value = newNodes
     nodeGroups.value = getVaroNodeGroups(newNodes)
   }
+  
+  function toggleHiddenNodeVisibility() {
+    showHiddenNodes.value = !showHiddenNodes.value
+  }
 
+  async function fetchUsername() {
+    username.value = await invoke<string>('get_os_username')
+    console.log(username.value);
+  }
+
+  async function fetchPlatform() {
+    platform.value = await invoke<string>('get_platform')
+    console.log(platform.value);
+  }
+
+  // COMPUTED PROPERTIES
   const categories = computed<VaroCategory[]>(() =>
     getVaroCategories(nodes.value)
   );
 
-  async function fetchUsername() {
-    const username = await invoke<string>('get_os_username')
-    console.log(`Welcome ${username}!`)
-  }
+  const filteredNodes = computed(() => {
+    const query = searchQuery.value.trim().toLowerCase()
+  
+    return nodes.value.filter(node => {
+      const matchesSearch = !query || 
+        node.name.toLowerCase().includes(query) ||
+        node.description?.toLowerCase().includes(query)
+  
+      const isVisible = showHiddenNodes.value || node.visible
+  
+      return matchesSearch && isVisible
+    })
+  })
+
+
+
+
+
 
   async function fetchVaroNodes() {
     const result = await invoke<string>('get_varo_nodes')
@@ -34,10 +68,7 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
     console.log(result.warnings)
   } 
   
-  async function fetchPlatform() {
-    const platform = await invoke<string>('get_platform')
-    console.log("Running on:", platform);
-  }
+ 
 
   async function launchSomething() {
     const result = await invoke('execute_program', {
@@ -62,9 +93,9 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
   }
 
   async function loadFiles() {
-    fetchUsername();
+    await fetchUsername()
+    await fetchPlatform()
     fetchVaroNodes();
-    fetchPlatform();
 
     // loading.value = true
     // // error.value = null
@@ -89,9 +120,14 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
   return {
     // properties
     nodes,
+    filteredNodes,
     nodeGroups,
     displayMode,
     loading,
+    showHiddenNodes,
+    searchQuery,
+    username,
+    platform,
 
     // derived
     categories,
@@ -99,6 +135,7 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
     // methods
     setNodes,
     loadFiles,
-    launchSomething
+    launchSomething,
+    toggleHiddenNodeVisibility,
   }
 })

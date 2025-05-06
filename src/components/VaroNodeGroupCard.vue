@@ -58,14 +58,18 @@ function handleExecuteClick() {
 </script>
 
 <template>
-    <div class="bg-(--ui-bg-elevated)/50 p-2.5 rounded-[calc(var(--ui-radius)*2)] relative overflow-hidden">
+    <div class="bg-(--ui-bg-elevated)/50 p-2.5 rounded-[calc(var(--ui-radius)*2)] relative overflow-hidden"
+        :class="{
+            'outline-dashed outline-(--ui-text-dimmed) outline-2': !group.visible
+        }"
+    >
 
         <!-- hidden -->
-        <div v-if="group.visible === false"
+        <!-- <div v-if="group.visible === false"
             class="-z-100 absolute top-0 left-0 w-full h-full text-(--ui-text-dimmed)/50
             bg-[size:10px_10px] 
             bg-fixed bg-[image:repeating-linear-gradient(315deg,currentColor_0,currentColor_1px,_transparent_0,_transparent_50%)]">
-        </div>
+        </div> -->
 
         <!-- content -->
         <div v-if="group.selectedNode" class="flex gap-2 items-start w-full flex-nowrap">
