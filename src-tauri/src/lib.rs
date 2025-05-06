@@ -1,18 +1,18 @@
+use dirs;
+use serde::{Deserialize, Serialize};
 use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
-use serde::{Serialize, Deserialize};
-use dirs;
 
-mod models;
 mod loaders;
+mod models;
 mod utils;
 
 use crate::loaders::varo_node_loader::get_varo_nodes;
 use crate::utils::commands::execute_program;
 
-use log::{info, warn, error, debug, trace};
-use tauri_plugin_log::{Builder as LogBuilder};
+use log::{debug, error, info, trace, warn};
+use tauri_plugin_log::{Builder as LogBuilder, Target, TargetKind};
 
 // --- LogFile Struct ---
 #[derive(Serialize, Deserialize, Debug)]
@@ -36,7 +36,7 @@ fn fetch_log_files() -> Result<Vec<LogFile>, String> {
     for entry in std::fs::read_dir(log_dir).map_err(|e| e.to_string())? {
         let entry = entry.map_err(|e| e.to_string())?;
         let path = entry.path();
-        
+
         if path.is_file() {
             let metadata = entry.metadata().map_err(|e| e.to_string())?;
             let modified = metadata.modified().map_err(|e| e.to_string())?;
@@ -61,10 +61,9 @@ fn get_log_dir() -> Result<PathBuf, String> {
             let log_dir = match std::env::consts::OS {
                 "macos" => home.join(format!("Library/Logs/{}", app_name)),
                 "windows" => {
-                    let local_app_data = std::env::var("LOCALAPPDATA")
-                        .map_err(|e| e.to_string())?;
-                    Path::new(&local_app_data)
-                        .join(format!("{}/logs", app_name))
+                    let local_app_data =
+                        std::env::var("LOCALAPPDATA").map_err(|e| e.to_string())?;
+                    Path::new(&local_app_data).join(format!("{}/logs", app_name))
                 }
                 _ => return Err("Unsupported operating system".to_string()),
             };
@@ -120,9 +119,11 @@ fn greet(name: &str) -> String {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_log::Builder::new().build())
         .plugin(
             LogBuilder::default()
                 .level(log::LevelFilter::Info) // Adjust log level as needed
+                .target(Target::new(TargetKind::Webview)) // Log to webview as well
                 .build(),
         )
         .plugin(tauri_plugin_opener::init()) // Other plugin setup

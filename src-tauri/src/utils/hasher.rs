@@ -1,5 +1,5 @@
 use blake3;
-use std::path::{Path};
+use std::path::Path;
 
 pub struct Hasher;
 

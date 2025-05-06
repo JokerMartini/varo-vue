@@ -1,4 +1,4 @@
-pub mod hasher;
-pub mod env;
-pub mod icon_resolver;
 pub mod commands;
+pub mod env;
+pub mod hasher;
+pub mod icon_resolver;

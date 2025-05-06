@@ -1,15 +1,15 @@
-use std::process::{Command};
 use std::collections::HashMap;
+use std::process::Command;
 
 #[tauri::command]
 pub fn execute_program(
-    path: String, 
-    args: Option<Vec<String>>, 
+    path: String,
+    args: Option<Vec<String>>,
     env_vars: Option<HashMap<String, String>>,
-    wait: bool
+    wait: bool,
 ) -> Result<(), String> {
     let mut cmd = Command::new(path);
-    
+
     if let Some(arguments) = args {
         cmd.args(arguments);
     }

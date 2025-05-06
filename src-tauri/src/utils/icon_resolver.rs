@@ -1,7 +1,7 @@
-use std::path::PathBuf;
-use std::fs;
 use base64::engine::general_purpose;
 use base64::Engine;
+use std::fs;
+use std::path::PathBuf;
 
 pub fn resolve_icon_path(raw_icon_path: &str, warnings: &mut Vec<String>, node_id: &str) -> String {
     if raw_icon_path.is_empty() {
@@ -26,17 +26,24 @@ pub fn resolve_icon_path(raw_icon_path: &str, warnings: &mut Vec<String>, node_i
     };
 
     if !full_icon_path.exists() {
-        warnings.push(format!("Node '{}' icon file missing: {}", node_id, full_icon_path.display()));
+        warnings.push(format!(
+            "Node '{}' icon file missing: {}",
+            node_id,
+            full_icon_path.display()
+        ));
         return "".to_string();
     }
 
     match full_icon_path.extension().and_then(|ext| ext.to_str()) {
-        Some("svg") => fs::read_to_string(&full_icon_path)
-            .unwrap_or_else(|_| "".to_string()),
+        Some("svg") => fs::read_to_string(&full_icon_path).unwrap_or_else(|_| "".to_string()),
         Some(ext) => {
             let mime = format!("image/{}", ext);
             match fs::read(&full_icon_path) {
-                Ok(bytes) => format!("data:{};base64,{}", mime, general_purpose::STANDARD.encode(bytes)),
+                Ok(bytes) => format!(
+                    "data:{};base64,{}",
+                    mime,
+                    general_purpose::STANDARD.encode(bytes)
+                ),
                 Err(_) => "".to_string(),
             }
         }

@@ -45,6 +45,9 @@
 import { ref, onMounted } from 'vue';
 import { invoke } from '@tauri-apps/api/core';
 import { useRouter } from 'vue-router'; // Importing router for navigation
+import { attachConsole } from '@tauri-apps/plugin-log';
+
+const detach = await attachConsole();
 
 interface LogFile {
   path: string;
