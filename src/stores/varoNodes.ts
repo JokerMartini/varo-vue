@@ -11,8 +11,8 @@ import { invoke } from '@tauri-apps/api/core';
 export const useVaroNodeStore = defineStore('varoNodes', () => {
   const showHiddenNodes = ref(false)
   const searchQuery = ref('')
-  const nodes = ref<VaroNode[]>([])
-  const nodeGroups = ref<VaroNodeGroup[]>([])
+  const allNodes = ref<VaroNode[]>([])
+  const allNodeGroups = ref<VaroNodeGroup[]>([])
   const displayMode = ref<DisplayMode>('ungrouped');
   const loading = ref(false)
   const username = ref<string | null>(null)
@@ -20,8 +20,11 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
 
   // METHODS
   function setNodes(newNodes: VaroNode[]) {
-    nodes.value = newNodes
-    nodeGroups.value = getVaroNodeGroups(newNodes)
+    allNodes.value = newNodes
+    allNodeGroups.value = getVaroNodeGroups(newNodes)
+
+    // for testing
+    allNodeGroups.value[1].visible = false;
   }
   
   function toggleHiddenNodeVisibility() {
@@ -46,16 +49,29 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
   const filteredNodes = computed(() => {
     const query = searchQuery.value.trim().toLowerCase()
   
-    return nodes.value.filter(node => {
+    return allNodes.value.filter(node => {
       const matchesSearch = !query || 
         node.name.toLowerCase().includes(query) ||
         node.description?.toLowerCase().includes(query)
-  
       const isVisible = showHiddenNodes.value || node.visible
-  
       return matchesSearch && isVisible
     })
   })
+
+  const filteredNodeGroups = computed(() => {
+    const query = searchQuery.value.trim().toLowerCase()
+
+    return allNodeGroups.value.filter(group => {
+      // Check if the group contains at least one matching and visible node
+      return group.nodes.some(node => {
+        const matchesSearch = !query || node.name.toLowerCase().includes(query)
+        const isVisible = showHiddenNodes.value || group.visible
+        return matchesSearch && isVisible
+      })
+    })
+  })
+
+
 
 
 
@@ -119,9 +135,10 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
 
   return {
     // properties
-    nodes,
+    allNodes,
     filteredNodes,
-    nodeGroups,
+    filteredNodeGroups,
+    allNodeGroups,
     displayMode,
     loading,
     showHiddenNodes,
@@ -139,3 +156,8 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
     toggleHiddenNodeVisibility,
   }
 })
+
+
+// View
+//   - Toggle Groups: i-lucide-layout-list
+//   - Toggle Categories: i-lucide-shapes

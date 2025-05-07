@@ -60,7 +60,7 @@ onMounted(async () => {
                     icon="i-lucide-search"
                     placeholder="Search..." 
                     class="w-full" 
-                    variant="outline"
+                    variant="soft"
                     :ui="{ trailing: 'pe-1' }"
                     >
                     <template v-if="nodeStore.searchQuery?.length" #trailing>
