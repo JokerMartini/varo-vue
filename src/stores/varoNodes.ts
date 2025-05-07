@@ -175,8 +175,3 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
     toggleCategories
   }
 })
-
-
-// View
-//   - Toggle Groups: i-lucide-layout-list
-//   - Toggle Categories: i-lucide-shapes
