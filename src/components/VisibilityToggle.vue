@@ -11,7 +11,12 @@ const nodeStore = useVaroNodeStore();
             :aria-pressed="nodeStore.showHiddenNodes.toString()"
             :icon="nodeStore.showHiddenNodes ? 'i-lucide-eye' : 'i-lucide-eye-off'"
         >
-            10/31 {{ nodeStore.showHiddenNodes }}
+        <span v-if="nodeStore.showGroups">
+            {{ nodeStore.filteredNodeGroups.length }} / {{ nodeStore.allNodeGroups.length }}
+        </span>
+        <span v-else>
+            {{ nodeStore.filteredNodes.length }} / {{ nodeStore.allNodes.length }}
+        </span>
         </UButton>
     </UTooltip>
 </template>

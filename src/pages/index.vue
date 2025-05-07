@@ -89,5 +89,10 @@ const items = ref<AccordionItem[]>([
 
     </div>
     <AppFooter/>
+
+    <!-- Dialogs -->
+    <AboutModal v-model="nodeStore.showAboutDialog" />
+    <EnvModal v-model="nodeStore.showEnvDialog" />
+    
   </div>
 </template>

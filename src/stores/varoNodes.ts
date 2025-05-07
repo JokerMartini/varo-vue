@@ -10,6 +10,10 @@ import { invoke } from '@tauri-apps/api/core';
 
 export const useVaroNodeStore = defineStore('varoNodes', () => {
   const showHiddenNodes = ref(false)
+  const showGroups = ref(false)
+  const showCategories = ref(false)
+  const showAboutDialog = ref(false)
+  const showEnvDialog = ref(false)
   const searchQuery = ref('')
   const allNodes = ref<VaroNode[]>([])
   const allNodeGroups = ref<VaroNodeGroup[]>([])
@@ -29,6 +33,14 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
   
   function toggleHiddenNodeVisibility() {
     showHiddenNodes.value = !showHiddenNodes.value
+  }
+  
+  function toggleGroups() {
+    showGroups.value = !showGroups.value
+  }
+  
+  function toggleCategories() {
+    showCategories.value = !showCategories.value
   }
 
   async function fetchUsername() {
@@ -70,6 +82,7 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
       })
     })
   })
+
 
 
 
@@ -142,18 +155,24 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
     displayMode,
     loading,
     showHiddenNodes,
+    showGroups,
+    showCategories,
+    showAboutDialog,
+    showEnvDialog,
     searchQuery,
     username,
     platform,
 
     // derived
     categories,
-
+    
     // methods
     setNodes,
     loadFiles,
     launchSomething,
     toggleHiddenNodeVisibility,
+    toggleGroups,
+    toggleCategories
   }
 })
 
