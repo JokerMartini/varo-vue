@@ -4,16 +4,13 @@ import type { VaroNode } from '@/models/VaroNode';
 const toast = useToast()
 
 const props = defineProps<{ node: VaroNode }>();
+const emit = defineEmits<{
+  (e: 'execute', node: VaroNode): void
+}>()
 
 function handleExecuteClick(event: Event) {
   event.stopImmediatePropagation();
-  console.log('Button clicked!');
-  toast.add({
-    title: `Launching ${props.node.name}`,
-    description: 'Your wish is my command...',
-    icon: "i-lucide-rocket",
-    color: "success"
-  })
+  emit('execute', props.node)
 }
 
 </script>
