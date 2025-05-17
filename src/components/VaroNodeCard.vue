@@ -6,6 +6,8 @@ const toast = useToast()
 
 const props = defineProps<{ node: VaroNode }>();
 
+const nodeCard = useTemplateRef('nodeCard')
+
 const menuItems = computed<DropdownMenuItem[][]>(() => [
   [
     {
@@ -37,13 +39,17 @@ const menuItems = computed<DropdownMenuItem[][]>(() => [
 ]);
 
 function handleExecuteClick() {
-  console.log('Button clicked!');
-  toast.add({
-    title: `Launching ${props.node.name}`,
-    description: 'Your wish is my command...',
-    icon: "i-lucide-rocket",
-    color: "success"
-  })
+  nodeCard.value?.classList.add('animate-scale-bounce')
+  setTimeout(() => {
+    nodeCard.value?.classList.remove('animate-scale-bounce')
+  }, 300)
+
+  // toast.add({
+  //   title: `Launching ${props.node.name}`,
+  //   description: 'Your wish is my command...',
+  //   icon: "i-lucide-rocket",
+  //   color: "success"
+  // })
 }
 
 </script>
@@ -53,6 +59,7 @@ function handleExecuteClick() {
         :items="menuItems"
     >
         <div 
+          ref="nodeCard"
           @click="handleExecuteClick"
           class="
           bg-(--ui-bg-elevated)/75 p-2.5 rounded-[calc(var(--ui-radius)*2)] relative overflow-hidden

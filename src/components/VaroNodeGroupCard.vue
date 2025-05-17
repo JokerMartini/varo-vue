@@ -6,7 +6,7 @@ import type { DropdownMenuItem } from '@nuxt/ui';
 const toast = useToast()
 
 const props = defineProps<{ group: VaroNodeGroup }>();
-
+const nodeCard = useTemplateRef('nodeCard')
 const nodesMenuOpen = ref(false)
 const menuItems = computed<DropdownMenuItem[][]>(() => [
   [
@@ -53,15 +53,20 @@ function onExecuteNode(node: VaroNode) {
   console.log("Node executed:", node)
   nodesMenuOpen.value = false;
   
-  toast.add({
-    title: `Launching ${node?.name}`,
-    description: 'Your wish is my command...',
-    icon: "i-lucide-rocket",
-    color: "success"
-  })
+  // toast.add({
+  //   title: `Launching ${node?.name}`,
+  //   description: 'Your wish is my command...',
+  //   icon: "i-lucide-rocket",
+  //   color: "success"
+  // })
 }
 
 function handleExecuteClick() {
+  nodeCard.value?.classList.add('animate-scale-bounce')
+  setTimeout(() => {
+    nodeCard.value?.classList.remove('animate-scale-bounce')
+  }, 300)
+
   const selected = props.group.selectedNode
   if (selected) {
     onExecuteNode(selected)
@@ -74,6 +79,7 @@ function handleExecuteClick() {
         :items="menuItems"
     >
         <div 
+          ref="nodeCard"
           @click="handleExecuteClick"
           class="
             bg-(--ui-bg-elevated)/75 p-2.5 rounded-[calc(var(--ui-radius)*2)] relative overflow-hidden
