@@ -2,7 +2,7 @@
 import type { VaroNode } from '@/models/VaroNode';
 
 const toast = useToast()
-
+const nodeStore = useVaroNodeStore()
 const props = defineProps<{ node: VaroNode }>();
 const emit = defineEmits<{
   (e: 'execute', node: VaroNode): void
@@ -10,6 +10,8 @@ const emit = defineEmits<{
 
 function handleExecuteClick(event: Event) {
   event.stopImmediatePropagation();
+  
+  nodeStore.executeVaroNode(props.node)
   emit('execute', props.node)
 }
 

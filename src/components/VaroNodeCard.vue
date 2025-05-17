@@ -2,10 +2,8 @@
 import type { VaroNode } from '@/models/VaroNode';
 import type { DropdownMenuItem } from '@nuxt/ui';
 
-const toast = useToast()
-
 const props = defineProps<{ node: VaroNode }>();
-
+const nodeStore = useVaroNodeStore()
 const nodeCard = useTemplateRef('nodeCard')
 
 const menuItems = computed<DropdownMenuItem[][]>(() => [
@@ -44,12 +42,7 @@ function handleExecuteClick() {
     nodeCard.value?.classList.remove('animate-scale-bounce')
   }, 300)
 
-  // toast.add({
-  //   title: `Launching ${props.node.name}`,
-  //   description: 'Your wish is my command...',
-  //   icon: "i-lucide-rocket",
-  //   color: "success"
-  // })
+  nodeStore.executeVaroNode(props.node)
 }
 
 </script>

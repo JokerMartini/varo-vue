@@ -85,11 +85,12 @@ const selectedEnv = ref('Default')
 <template>
     <div class="bg-(--ui-bg)/75 backdrop-blur border-b border-(--ui-border) h-14 sticky top-0 z-50 shrink-0">
         <div class="flex items-center justify-between gap-3 h-full px-4">
+            
             <!-- left -->
             <div class="flex items-center gap-2">
-                <UTooltip :text="`${appName} - ${appVersion}`">
+                <!-- <UTooltip :text="`${appName} - ${appVersion}`">
                     <UIcon name="i-lucide-box" class="shrink-0 size-8" />
-                </UTooltip>
+                </UTooltip> -->
                 <UContextMenu :items="envMenuItems">
                     <USelect 
                         variant="soft" 
@@ -100,28 +101,38 @@ const selectedEnv = ref('Default')
                     </USelect>
                 </UContextMenu>
             </div>
+
             <!-- center -->
             <div class="grow">
-                <UInput
-                    v-model="nodeStore.searchQuery"
-                    icon="i-lucide-search"
-                    placeholder="Search..."
-                    class="w-full"
-                    variant="soft"
-                    :ui="{ trailing: 'pe-1' }"
-                >
-                    <template v-if="nodeStore.searchQuery?.length" #trailing>
-                        <UButton
-                            color="neutral"
-                            variant="link"
-                            size="sm"
-                            icon="i-lucide-circle-x"
-                            aria-label="Clear input"
-                            @click="nodeStore.searchQuery = ''"
-                        />
-                    </template>
-                </UInput>
+                <UButtonGroup class="w-full">
+                    <UInput
+                        v-model="nodeStore.searchQuery"
+                        icon="i-lucide-search"
+                        placeholder="Search..."
+                        class="w-full"
+                        variant="soft"
+                        :ui="{ trailing: 'pe-1' }"
+                    >
+                        <template v-if="nodeStore.searchQuery?.length" #trailing>
+                            <UButton
+                                color="neutral"
+                                variant="link"
+                                size="sm"
+                                icon="i-lucide-circle-x"
+                                aria-label="Clear input"
+                                @click="nodeStore.searchQuery = ''"
+                            />
+                        </template>
+                    </UInput>
+
+                    <!-- <UTooltip>
+                        <UDropdownMenu :items="viewMenuItems" :ui="{ content: 'w-60' }">
+                            <UButton icon="i-lucide-settings-2" variant="soft" color="neutral" class="shrink-0"> </UButton>
+                        </UDropdownMenu>
+                    </UTooltip> -->
+                </UButtonGroup>
             </div>
+
             <!-- right -->
             <div class="flex items-center gap-2">
                 <UTooltip>

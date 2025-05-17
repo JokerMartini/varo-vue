@@ -4,7 +4,7 @@ import type { VaroNode } from '@/models/VaroNode';
 import type { DropdownMenuItem } from '@nuxt/ui';
 
 const toast = useToast()
-
+const nodeStore = useVaroNodeStore()
 const props = defineProps<{ group: VaroNodeGroup }>();
 const nodeCard = useTemplateRef('nodeCard')
 const nodesMenuOpen = ref(false)
@@ -49,27 +49,15 @@ const groupNodeItems = computed<DropdownMenuItem[]>(() => {
   }));
 });
 
-function onExecuteNode(node: VaroNode) {
-  console.log("Node executed:", node)
-  nodesMenuOpen.value = false;
-  
-  // toast.add({
-  //   title: `Launching ${node?.name}`,
-  //   description: 'Your wish is my command...',
-  //   icon: "i-lucide-rocket",
-  //   color: "success"
-  // })
-}
-
 function handleExecuteClick() {
   nodeCard.value?.classList.add('animate-scale-bounce')
   setTimeout(() => {
     nodeCard.value?.classList.remove('animate-scale-bounce')
   }, 300)
 
-  const selected = props.group.selectedNode
-  if (selected) {
-    onExecuteNode(selected)
+  const node = props.group.selectedNode
+  if (node) {
+    nodeStore.executeVaroNode(node)
   }
 }
 </script>
@@ -131,7 +119,7 @@ function handleExecuteClick() {
                             </UButton>
 
                             <template #item="{ item }">
-                                <VaroNodeGroupOption :node="item.item" @execute="onExecuteNode"/>
+                                <VaroNodeGroupOption :node="item.item" @execute="nodesMenuOpen = false"/>
                             </template>
 
                         </UDropdownMenu>

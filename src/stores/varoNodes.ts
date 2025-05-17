@@ -53,6 +53,10 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
     console.log(platform.value);
   }
 
+  function executeVaroNode(node: VaroNode) {
+    console.log("Node executing: >>>", node)
+  }
+
   // COMPUTED PROPERTIES
   const categories = computed<VaroCategory[]>(() =>
     getVaroCategories(nodes.value)
@@ -172,6 +176,7 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
     launchSomething,
     toggleHiddenNodeVisibility,
     toggleGroups,
-    toggleCategories
+    toggleCategories,
+    executeVaroNode
   }
 })
