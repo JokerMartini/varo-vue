@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getVersion, getName } from '@tauri-apps/api/app'
+import { getVersion, getName } from "@tauri-apps/api/app";
 
 const props = defineProps({
     modelValue: {
@@ -15,34 +15,36 @@ const isOpen = computed({
     set: (val) => emit("update:modelValue", val),
 });
 
-const nodeStore = useVaroNodeStore()
-const appName = ref('');
-const appVersion = ref('');
+const nodeStore = useVaroNodeStore();
+const appName = ref("");
+const appVersion = ref("");
 
 onMounted(async () => {
-  appName.value = await getName()
-  appVersion.value = await getVersion()
-})
-
+    appName.value = await getName();
+    appVersion.value = await getVersion();
+});
 </script>
 
 <template>
-    <UModal v-model:open="isOpen" :title="`About ${appName}`" description="Your playful productivity launcher.">
+    <UModal v-model:open="isOpen" :title="`About ${appName}`" description="A stylish command center for all your digital missions.
+Click, launch, conquer.">
         <template #body>
             <div class="space-y-4">
-                <div class="text-sm">
-                    <p>
-                        <span class="text-(--ui-text-muted)">Version:</span> {{ appVersion }}</p>
-                    <p>
-                        <span class="text-(--ui-text-muted)">Author:</span> 
-                        <a href="https://jokermartini.com" target="_blank" class="text-primary hover:underline">
-                            JokerMartini
-                        </a>
-                    </p>
-                    <p>
-                        <span class="text-(--ui-text-muted)">Platform:</span> {{ nodeStore.platform }}</p>
-                    <p>
-                        <span class="text-(--ui-text-muted)">Username:</span> {{ nodeStore.username }}</p>
+                <div class="text-sm flex flex-col gap-6">
+                    <section>
+                        <h4 class="text-(--ui-text-primary) leading-none font-semibold mb-2 uppercase">Application</h4>
+                        <p><span class="text-(--ui-text-muted)">Version:</span> {{ appVersion }}</p>
+                        <p>
+                            <span class="text-(--ui-text-muted)">Website:</span>
+                            <a href="https://jokermartini.com" target="_blank" class="text-secondary hover:underline hover:text-(--ui-primary)"> www.JokerMartini.com</a>
+                        </p>
+                    </section>
+
+                    <section>
+                        <h4 class="text-(--ui-text-primary) leading-none font-semibold mb-2 uppercase">Workstation</h4>
+                        <p><span class="text-(--ui-text-muted)">Platform:</span> {{ nodeStore.platform }}</p>
+                        <p><span class="text-(--ui-text-muted)">Username:</span> {{ nodeStore.username }}</p>
+                    </section>
                 </div>
             </div>
         </template>

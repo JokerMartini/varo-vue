@@ -26,9 +26,6 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
   function setNodes(newNodes: VaroNode[]) {
     allNodes.value = newNodes
     allNodeGroups.value = getVaroNodeGroups(newNodes)
-
-    // for testing
-    allNodeGroups.value[1].visible = false;
   }
   
   function toggleHiddenNodeVisibility() {
@@ -85,6 +82,11 @@ export const useVaroNodeStore = defineStore('varoNodes', () => {
         return matchesSearch && isVisible
       })
     })
+  })
+
+  const filteredCategories = computed(() => {
+
+    return [];
   })
 
 
