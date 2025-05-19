@@ -16,11 +16,10 @@ onMounted(() => {
     <div class="p-4 grow">
 
       <!-- list -->
-      <NodeListView v-if="nodeStore.showGroups" v-model="nodeStore.filteredNodeGroups"/>
-      <NodeListView v-else v-model="nodeStore.filteredNodes"/>
-      
-      <!-- <CategorizedNodeListView/> -->
+      <!-- <NodeListView v-if="nodeStore.showGroups" v-model="nodeStore.filteredNodeGroups"/>
+      <NodeListView v-else v-model="nodeStore.filteredNodes"/> -->
 
+      <CategorizedNodeListView/>
     </div>
     <AppFooter/>
 

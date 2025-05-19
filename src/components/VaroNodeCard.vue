@@ -96,6 +96,9 @@ function handleExecuteClick() {
                         <UBadge v-if="node.status" class="rounded-sm" size="sm" :color="node.status.color" variant="subtle">
                             {{ node.status.name }}
                         </UBadge>
+                        <UBadge v-if="node.category" class="rounded-sm" size="lg" color="neutral" variant="subtle">
+                            {{ node.category }}
+                        </UBadge>
                     </div>
                 </div>
             </div>

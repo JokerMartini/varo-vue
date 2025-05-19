@@ -1,25 +1,48 @@
 import { VaroNode } from '~/models/VaroNode';
 import { VaroCategory } from '~/models/VaroCategory';
-import { getVaroNodeGroups } from './groupVaroNodes';
+import { VaroNodeGroup } from '~/models/VaroNodeGroup';
 
 export function getVaroCategories(nodes: VaroNode[]): VaroCategory[] {
-  const categoryMap = new Map<string, VaroCategory>();
-
-  const nodeGroups = getVaroNodeGroups(nodes);
+  const seen = new Set<string>()
+  const categories: VaroCategory[] = []
 
   for (const node of nodes) {
-    if (!categoryMap.has(node.category)) {
-      categoryMap.set(node.category, new VaroCategory({ name: node.category }));
+    const categoryName = node.category?.trim() || 'Uncategorized'
+
+    if (!seen.has(categoryName)) {
+      seen.add(categoryName)
+      categories.push(new VaroCategory({ name: categoryName }))
     }
-    categoryMap.get(node.category)!.addNode(node);
   }
 
-  for (const group of nodeGroups) {
-    const cat = categoryMap.get(group.category);
-    cat?.addGroup(group);
+  return categories
+}
+
+export function getNodeGroupsByCategory(nodes: VaroNode[]): Map<string, VaroNodeGroup[]> {
+  const result = new Map<string, VaroNodeGroup[]>()
+
+  for (const node of nodes) {
+    const category = node.category ?? 'Uncategorized'
+    const groupId = node.groupId ?? 'Ungrouped'
+
+    if (!result.has(category)) {
+      result.set(category, [])
+    }
+
+    const groups = result.get(category)!
+
+    let group = groups.find(g => g.name === groupId)
+    if (!group) {
+      group = new VaroNodeGroup({
+        id: `${category}::${groupId}`,
+        name: groupId,
+        category: node.category,
+      })
+      groups.push(group)
+    }
+
+    group.nodes.push(node)
   }
 
-  return Array
-    .from(categoryMap.values())
-    .sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+  return result
 }
