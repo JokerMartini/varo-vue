@@ -2,10 +2,20 @@
 
 const nodeStore = useVaroNodeStore();
 
+const filteredDisplayCategories = computed(() => {
+  return nodeStore.filteredCategories.filter(category => {
+    if (nodeStore.showGroups) {
+      return category.groups.some(group => group.nodes.length > 0)
+    } else {
+      return category.nodes.length > 0
+    }
+  })
+})
+
 </script>
 <template>
     <div>
-        <UAccordion :items="nodeStore.filteredCategories" type="multiple">
+        <UAccordion :items="filteredDisplayCategories" type="multiple">
             <!-- title -->
             <template #leading="{ item }">
                 <div class="flex items-center flex-1 w-full  gap-1.5 font-medium text-sm">

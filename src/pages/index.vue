@@ -13,14 +13,15 @@ onMounted(() => {
 <template>
   <div class="h-dvh flex flex-col">
     <AppHeader/>
-    <div class="p-4 grow">
 
-      <!-- list -->
-      <!-- <NodeListView v-if="nodeStore.showGroups" v-model="nodeStore.filteredNodeGroups"/>
-      <NodeListView v-else v-model="nodeStore.filteredNodes"/> -->
-
-      <CategorizedNodeListView/>
+    <div class="p-3 grow">
+      <CategorizedNodeListView v-if="nodeStore.showCategories"/>
+      <template v-else>
+        <NodeListView v-if="nodeStore.showGroups" v-model="nodeStore.filteredNodeGroups"/>
+        <NodeListView v-else v-model="nodeStore.filteredNodes"/>
+      </template>
     </div>
+
     <AppFooter/>
 
     <!-- Dialogs -->

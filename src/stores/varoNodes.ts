@@ -2,9 +2,7 @@ import { defineStore } from "pinia";
 import { VaroNode } from "~/models/VaroNode";
 import { VaroNodeGroup } from "~/models/VaroNodeGroup";
 import { VaroCategory } from "~/models/VaroCategory";
-import { getVaroNodeGroups } from "~/utils/groupVaroNodes";
-import { getVaroCategories, getNodeGroupsByCategory } from "~/utils/groupVaroCategories";
-import type { DisplayMode } from "~/types/DisplayMode";
+import { getNodeGroupsByCategory, getCategoriesFromNodes } from "~/utils/nodeGrouping";
 import { invoke } from "@tauri-apps/api/core";
 
 export const useVaroNodeStore = defineStore("varoNodes", () => {
@@ -17,7 +15,6 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
     const allNodes = ref<VaroNode[]>([]);
     const allNodeGroups = ref<VaroNodeGroup[]>([]);
     const allCategories = ref<VaroCategory[]>([]);
-    const displayMode = ref<DisplayMode>("ungrouped");
     const loading = ref(false);
     const username = ref<string | null>(null);
     const platform = ref<string | null>(null);
@@ -25,8 +22,8 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
     // METHODS
     function setNodes(newNodes: VaroNode[]) {
         allNodes.value = newNodes;
-        allNodeGroups.value = getVaroNodeGroups(newNodes);
-        allCategories.value = getVaroCategories(newNodes);
+        allNodeGroups.value = getNodeGroupsByCategory(newNodes);
+        allCategories.value = getCategoriesFromNodes(newNodes);
     }
 
     function toggleHiddenNodeVisibility() {
@@ -55,6 +52,18 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
         console.log("Node executing: >>>", node);
     }
 
+    function unhideAllNodes() {
+        allNodes.value.forEach((node) => {
+            node.visible = true;
+        });
+    }
+
+    function unhideAllNodeGroups() {
+        allNodeGroups.value.forEach((node) => {
+            node.visible = true;
+        });
+    }
+
     // COMPUTED PROPERTIES
     const filteredNodes = computed(() => {
         const query = searchQuery.value.trim().toLowerCase();
@@ -81,22 +90,18 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
     });
 
     const filteredCategories = computed(() => {
-        // Clear previous entries
         for (const category of allCategories.value) {
             category.nodes = [];
             category.groups = [];
         }
 
-        const groupMap = getNodeGroupsByCategory(filteredNodes.value)
-
         for (const category of allCategories.value) {
-          const categoryName = category.name
-          category.nodes = filteredNodes.value.filter(n => n.category === categoryName)
-          category.groups = groupMap.get(categoryName) ?? []
+            const categoryName = category.name;
+            category.nodes = filteredNodes.value.filter((n) => n.category === categoryName);
+            category.groups = filteredNodeGroups.value.filter((n) => n.category === categoryName);
         }
 
-        // Return filtered categories (only ones with content)
-        return allCategories.value.filter((cat) => cat.nodes.length || cat.groups.length);
+        return allCategories.value;
     });
 
     async function fetchVaroNodes() {
@@ -160,7 +165,6 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
         filteredNodes,
         filteredNodeGroups,
         filteredCategories,
-        displayMode,
         loading,
         showHiddenNodes,
         showGroups,
@@ -179,5 +183,7 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
         toggleGroups,
         toggleCategories,
         executeVaroNode,
+        unhideAllNodes,
+        unhideAllNodeGroups,
     };
 });

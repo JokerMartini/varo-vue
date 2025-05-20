@@ -25,6 +25,13 @@ const menuItems = computed<DropdownMenuItem[][]>(() => [
       onSelect(e: Event) {
         props.group.visible = true;
       }
+    },
+    {
+      label: 'Unhide All',
+      icon: 'i-lucide-eye',
+      onSelect(e: Event) {
+        nodeStore.unhideAllNodeGroups()
+      }
     }
   ],
   [
@@ -79,27 +86,11 @@ function handleExecuteClick() {
               'outline-dashed outline-(--ui-text-dimmed) outline-2': !group.visible
           }"
         >
-
-            <!-- hidden -->
-            <!-- <div v-if="group.visible === false"
-                class="-z-100 absolute top-0 left-0 w-full h-full text-(--ui-text-dimmed)/50
-                bg-[size:10px_10px] 
-                bg-fixed bg-[image:repeating-linear-gradient(315deg,currentColor_0,currentColor_1px,_transparent_0,_transparent_50%)]">
-            </div> -->
-
             <!-- content -->
-            <div v-if="group.selectedNode" class="flex gap-2 items-start w-full flex-nowrap">
+            <div v-if="group.selectedNode" class="flex gap-3 items-start w-full flex-nowrap">
                 <!-- Action Button/Icon -->
                 <div>
-                  <UIcon name="i-lucide-box" class="shrink-0 size-8"/>
-                    <!-- <UButton 
-                        @click="handleExecuteClick"
-                        icon="i-lucide-box" 
-                        variant="ghost" 
-                        size="2xl" 
-                        color="neutral" 
-                        class="shrink-0 cursor-pointer transition transform hover:scale-105 active:scale-90 duration-100 ease-out">
-                    </UButton> -->
+                  <UIcon name="i-lucide-box" class="shrink-0 size-12"/>
                 </div>
 
                 <!-- Title -->
@@ -143,6 +134,3 @@ function handleExecuteClick() {
         </div>
     </UContextMenu>
 </template>
-
-
-<!-- card horizontal / vertical -->

@@ -23,6 +23,13 @@ const menuItems = computed<DropdownMenuItem[][]>(() => [
       onSelect(e: Event) {
         props.node.visible = true;
       }
+    },
+    {
+      label: 'Unhide All',
+      icon: 'i-lucide-eye',
+      onSelect(e: Event) {
+        nodeStore.unhideAllNodes()
+      }
     }
   ],
   [
@@ -64,25 +71,11 @@ function handleExecuteClick() {
               'outline-dashed outline-(--ui-text-dimmed) outline-2': !node.visible
           }"
             >
-            
-            <!-- hidden -->
-            <!-- <div v-if="node.visible === false"
-                class="-z-100 absolute top-0 left-0 w-full h-full text-(--ui-text-dimmed)/50
-                bg-[size:10px_10px] 
-                bg-fixed bg-[image:repeating-linear-gradient(315deg,currentColor_0,currentColor_1px,_transparent_0,_transparent_50%)]">
-            </div> -->
 
-            <div class="flex gap-2 items-stretch justify-stretch w-full flex-nowrap ">
+            <div class="flex gap-3 items-stretch justify-stretch w-full flex-nowrap ">
                 <!-- Action Button/Icon -->
                 <div class="shrink-0">
-                  <UIcon name="i-lucide-box" class="shrink-0 size-8"/>
-                    <!-- <UButton 
-                        icon="i-lucide-box"
-                        variant="ghost" 
-                        size="2xl" 
-                        color="neutral" 
-                        class="shrink-0 cursor-pointer transition transform hover:scale-105 active:scale-90 duration-100 ease-out">
-                      </UButton> -->
+                  <UIcon name="i-lucide-box" class="shrink-0 size-12"/>
                 </div>
 
                 <!-- Title -->
@@ -96,15 +89,9 @@ function handleExecuteClick() {
                         <UBadge v-if="node.status" class="rounded-sm" size="sm" :color="node.status.color" variant="subtle">
                             {{ node.status.name }}
                         </UBadge>
-                        <UBadge v-if="node.category" class="rounded-sm" size="lg" color="neutral" variant="subtle">
-                            {{ node.category }}
-                        </UBadge>
                     </div>
                 </div>
             </div>
         </div>
     </UContextMenu>
 </template>
-
-
-<!-- card horizontal / vertical -->

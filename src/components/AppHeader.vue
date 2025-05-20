@@ -111,6 +111,7 @@ const selectedEnv = ref('Default')
                         placeholder="Search..."
                         class="w-full"
                         variant="soft"
+                        @keydown.esc="nodeStore.searchQuery = ''"
                         :ui="{ trailing: 'pe-1' }"
                     >
                         <template v-if="nodeStore.searchQuery?.length" #trailing>
