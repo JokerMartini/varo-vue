@@ -24,7 +24,7 @@ export const dummyVaroNodes: VaroNode[] = [
   new VaroNode({
     id: "uuid-3dsmax-2024",
     groupId: "3dsmax",
-    name: "3ds Max 2024",
+    name: "3ds Max 2024 latest build for",
     category: "Beta",
     icon: "https://tmpfiles.org/dl/25729121/max.svg",
     defaultForGroup: true,

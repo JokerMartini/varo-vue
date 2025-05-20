@@ -7,7 +7,7 @@ import { invoke } from "@tauri-apps/api/core";
 
 export const useVaroNodeStore = defineStore("varoNodes", () => {
     const showHiddenNodes = ref(false);
-    const showGroups = ref(false);
+    const showGroups = ref(true);
     const showCategories = ref(false);
     const showAboutDialog = ref(false);
     const showEnvDialog = ref(false);
