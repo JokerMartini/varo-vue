@@ -4,8 +4,29 @@ import { getVersion, getName } from "@tauri-apps/api/app";
 const nodeStore = useVaroNodeStore();
 const appName = ref("");
 const appVersion = ref("");
+const colorMode = useColorMode()
+
+const isDark = computed({
+  get() {
+    return colorMode.value === 'dark'
+  },
+  set(_isDark) {
+    colorMode.preference = _isDark ? 'dark' : 'light'
+  }
+})
 
 const mainMenuItems = computed(() => [
+    [
+       {
+            label: "Dark/Light Theme",
+            icon: isDark.value ? 'i-lucide-moon' : 'i-lucide-sun',
+            // icon: `isDark ? 'i-lucide-moon' : 'i-lucide-sun'" class="shrink-0 size-5"`,
+            slot: 'theme' as const, 
+            onSelect(e: Event) {
+                isDark.value = !isDark.value;
+            },
+        }, 
+    ],
     [
         {
             label: "About",
@@ -39,6 +60,14 @@ const viewMenuItems = computed(() => [
         },
     ],
     [
+        {
+            label: "Unhide All Nodes",
+            icon: "i-lucide-scan-eye",
+            onSelect(e: Event) {
+                nodeStore.unhideAllNodes();
+                nodeStore.unhideAllNodeGroups();
+            },
+        },
         {
             label: "Toggle Hidden Nodes",
             type: 'checkbox' as const,
