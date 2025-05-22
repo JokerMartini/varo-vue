@@ -8,6 +8,7 @@ export const dummyVaroNodes: VaroNode[] = [
     name: "3ds Max 2022",
     category: "3D",
     icon: "https://tmpfiles.org/dl/25729121/max.svg",
+    description: "This only has VRay Next Nightly builds.",
     status: {
       name: "Deprecated",
       color: "error",
@@ -118,6 +119,7 @@ export const dummyVaroNodes: VaroNode[] = [
     groupId: "blender",
     name: "Blender 2022",
     category: "3D",
+    description: "Latest stable version for all artists to use for production this includes the latest vray, tyflow, fumefx and phoenix",
     icon: "./icons/blender.svg"
   }),
   new VaroNode({

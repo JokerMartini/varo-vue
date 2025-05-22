@@ -64,7 +64,7 @@ function handleExecuteClick() {
             }"
         >
             <div class="flex gap-3 items-stretch justify-stretch w-full flex-nowrap">
-                <!-- Action Button/Icon -->
+                <!-- Icon -->
                 <div class="shrink-0">
                     <UIcon name="i-lucide-box" class="shrink-0 size-12" />
                 </div>
