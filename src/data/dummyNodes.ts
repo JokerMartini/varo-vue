@@ -24,8 +24,8 @@ export const dummyVaroNodes: VaroNode[] = [
   new VaroNode({
     id: "uuid-3dsmax-2024",
     groupId: "3dsmax",
-    name: "3ds Max 2024",
-    category: "3D",
+    name: "3ds Max 2024 latest build for",
+    category: "Beta",
     icon: "https://tmpfiles.org/dl/25729121/max.svg",
     defaultForGroup: true,
     description: "Latest stable version for all artists to use for production this includes the latest vray, tyflow, fumefx and phoenix",

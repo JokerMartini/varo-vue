@@ -19,11 +19,11 @@ export class VaroCategory {
     this.groups = data.groups ?? [];
   }
 
-  addGroup(group: VaroNodeGroup) {
-    this.groups.push(group);
+  get hasVisibleNodes(): boolean {
+    return this.nodes.some(node => node.visible);
   }
 
-  addNode(node: VaroNode) {
-    this.nodes.push(node);
+  get hasVisibleGroupNodes(): boolean {
+    return this.groups.some(group => group.visible);
   }
 }
