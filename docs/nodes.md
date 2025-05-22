@@ -72,7 +72,7 @@ Displays a badge in the UI to indicate the status of the node:
 | Property     | Type   | Description |
 |--------------|--------|-------------|
 | `name`       | string | Label shown in the UI (e.g., "Beta", "Live"). |
-| `color`      | hex | rgb | name    | Text color (e.g., `#01B0D1`, `rgb(1,176,209)`, `blue`, `hsl(9, 100%, 64%)`). |
+| `color`      | hex | rgb | name    | Text color (e.g., `#01B0D1`, `rgb(1,176,209)`, `blue`). |
 
 ---
 
