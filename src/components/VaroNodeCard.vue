@@ -51,6 +51,7 @@ function handleExecuteClick() {
 
     nodeStore.executeVaroNode(props.node);
 }
+
 </script>
 
 <template>
@@ -91,14 +92,20 @@ function handleExecuteClick() {
 
                     <!-- Badges -->
                     <div class="flex gap-1">
+
+                        <UBadge v-if="node.status" size="sm"
+                            class="bg-[#ff6467]/10 text-[#ff6467] ring ring-inset ring-[#ff6467]/25">
+                            {{ node.status.name }}
+                            {{ node.status.color }}
+                        </UBadge>
+
                         <UBadge
                             v-if="node.status"
-                            class="rounded-sm"
                             size="sm"
-                            :color="node.status.color"
                             variant="subtle"
+                            class="bg-[#01B0D1]/10 text-[#01B0D1] ring ring-inset ring-[#01B0D1]/25"
                         >
-                            {{ node.status.name }}
+                           {{ node.status.name }}
                         </UBadge>
                     </div>
                 </div>

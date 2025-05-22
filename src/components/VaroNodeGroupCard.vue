@@ -119,7 +119,6 @@ function handleExecuteClick() {
                     <!-- Badges -->
                     <div class="flex gap-1">
                         <UBadge v-if="group.selectedNode.status" 
-                            class="rounded-sm" 
                             size="sm" 
                             :color="group.selectedNode.status.color" 
                             variant="subtle">

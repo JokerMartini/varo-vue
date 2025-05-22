@@ -11,7 +11,7 @@ export const dummyVaroNodes: VaroNode[] = [
     description: "This only has VRay Next Nightly builds.",
     status: {
       name: "Deprecated",
-      color: "error",
+      color: "#01B0D1",
     },
   }),
   new VaroNode({
@@ -32,7 +32,7 @@ export const dummyVaroNodes: VaroNode[] = [
     description: "Latest stable version for all artists to use for production this includes the latest vray, tyflow, fumefx and phoenix",
     status: {
       name: "Default",
-      color: "neutral",
+      color: "rgb(255,32,86)",
     },
   }),
   new VaroNode({
@@ -43,7 +43,7 @@ export const dummyVaroNodes: VaroNode[] = [
     icon: "https://tmpfiles.org/dl/25729121/max.svg",
     status: {
       name: "Beta",
-      color: "warning",
+      color: "rgb(255,155,0)",
     },
   }),
   new VaroNode({
@@ -78,7 +78,7 @@ export const dummyVaroNodes: VaroNode[] = [
     icon: "./icons/maya.svg",
     status: {
       name: "Beta",
-      color: "warning",
+      color: "rgb(255,155,0)",
     }
   }),
 
@@ -98,7 +98,7 @@ export const dummyVaroNodes: VaroNode[] = [
     icon: "./icons/designer.svg",
     status: {
       name: "Beta",
-      color: "warning",
+      color: "rgb(255,155,0)",
     }
   }),
   new VaroNode({
@@ -109,7 +109,7 @@ export const dummyVaroNodes: VaroNode[] = [
     icon: "./icons/designer.svg",
     status: {
       name: "Beta",
-      color: "error",
+      color: "#01B0D1",
     }
   }),
 
@@ -130,7 +130,7 @@ export const dummyVaroNodes: VaroNode[] = [
     icon: "./icons/blender.svg",
     status: {
       name: "Default",
-      color: "info",
+      color: "blue",
     }
   }),
 
@@ -150,7 +150,7 @@ export const dummyVaroNodes: VaroNode[] = [
     icon: "https://tmpfiles.org/dl/25729156/nuke.svg",
     status: {
       name: "Beta",
-      color: "warning",
+      color: "#ff9b00",
     }
   }),
 
