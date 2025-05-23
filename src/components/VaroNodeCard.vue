@@ -92,21 +92,7 @@ function handleExecuteClick() {
 
                     <!-- Badges -->
                     <div class="flex gap-1">
-
-                        <UBadge v-if="node.status" size="sm"
-                            class="bg-[#ff6467]/10 text-[#ff6467] ring ring-inset ring-[#ff6467]/25">
-                            {{ node.status.name }}
-                            {{ node.status.color }}
-                        </UBadge>
-
-                        <UBadge
-                            v-if="node.status"
-                            size="sm"
-                            variant="subtle"
-                            class="bg-[#01B0D1]/10 text-[#01B0D1] ring ring-inset ring-[#01B0D1]/25"
-                        >
-                           {{ node.status.name }}
-                        </UBadge>
+                        <StatusBadge :status="node.status ?? null" />
                     </div>
                 </div>
             </div>

@@ -43,9 +43,7 @@ function handleExecuteClick(event: Event) {
 
                 <!-- Badges -->
                 <div class="flex gap-1">
-                    <UBadge v-if="node.status" class="rounded-sm" size="sm" :color="node.status.color" variant="subtle">
-                        {{ node.status.name }}
-                    </UBadge>
+                    <StatusBadge :status="node.status ?? null" />
                 </div>
 
                 <!-- Description -->

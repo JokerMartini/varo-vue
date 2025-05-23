@@ -130,7 +130,7 @@ export const dummyVaroNodes: VaroNode[] = [
     icon: "./icons/blender.svg",
     status: {
       name: "Default",
-      color: "blue",
+      color: "rgb(100,120,255)",
     }
   }),
 
