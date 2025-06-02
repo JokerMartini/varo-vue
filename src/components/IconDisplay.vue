@@ -1,0 +1,50 @@
+<template>
+  <div>
+    <!-- If it's base64 image data -->
+    <img v-if="isBase64Image || isImageUrl" 
+        :src="imageData" 
+        class="max-w-full max-h-full" />
+
+    <!-- If it's raw SVG data -->
+    <div
+      v-else-if="isRawSvg"
+      class="max-w-full max-h-full"
+      v-html="imageData"
+    ></div>
+    
+    <!-- Fallback -->
+    <p v-else>
+        <svg class="fill-(--ui-text-highlighted)" width="100%" height="100%" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+            <path d="M116.233,48.607C116.905,47.573 116.956,46.256 116.368,45.174C115.781,44.092 114.648,43.418 113.417,43.418L95.041,43.418C93.904,43.418 92.843,43.994 92.224,44.948C87.081,52.868 63.494,89.188 57.91,97.787C57.188,98.899 57.188,100.333 57.91,101.446C59.967,104.612 64.245,111.2 67.098,115.593C67.717,116.548 68.777,117.123 69.915,117.123C71.052,117.123 72.112,116.548 72.731,115.593C81.292,102.412 106.98,62.856 116.233,48.607ZM47.691,85.709C48.31,86.662 49.37,87.238 50.507,87.238C51.644,87.238 52.705,86.662 53.323,85.709C60.953,73.961 81.765,41.914 86.557,34.534C87.176,33.581 88.237,33.005 89.374,33.005L122.721,33.005C124.576,33.005 126.079,31.502 126.079,29.647L126.079,14.235C126.079,12.38 124.576,10.877 122.721,10.877L77.359,10.877C76.221,10.877 75.162,11.452 74.542,12.406C69.894,19.564 50.507,49.417 50.507,49.417C50.507,49.417 31.121,19.564 26.472,12.406C25.853,11.452 24.794,10.877 23.656,10.877L5.279,10.877C4.048,10.877 2.916,11.551 2.328,12.633C1.741,13.715 1.793,15.031 2.463,16.064C11.972,30.706 38.897,72.168 47.691,85.709Z"/>
+        </svg>
+    </p>
+  </div>
+</template>
+
+<script setup>
+// Props
+const props = defineProps({
+  imageData: {
+    type: String,
+    required: true,
+  },
+})
+
+// Computed logic
+const isBase64Image = computed(() =>
+  props.imageData.startsWith('data:image/')
+)
+
+const isImageUrl = computed(() => {
+  try {
+    const url = new URL(props.imageData, window.location.origin)
+    return /\.(png|jpe?g|gif|bmp|webp|svg)$/i.test(url.pathname)
+  } catch {
+    return false
+  }
+})
+
+const isRawSvg = computed(() =>
+  props.imageData.trimStart().startsWith('<svg')
+)
+</script>

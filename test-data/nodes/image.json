@@ -1,0 +1,12 @@
+{
+  "name": "Image",
+  "category": "Tech",
+  "icon": "rocket.png",
+  "commands": [
+    {
+      "path": "https://about.gitlab.com/",
+      "pathType": "url",
+      "nonBlocking": true
+    }
+  ]
+}

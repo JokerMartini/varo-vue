@@ -31,6 +31,9 @@ function handleExecuteClick(event: Event) {
                         size="2xl" 
                         color="neutral" 
                         class="shrink-0 cursor-pointer transition transform hover:scale-105 active:scale-90 duration-100 ease-out">
+                        <template #leading>
+                            <IconDisplay :imageData="node.icon" class="shrink-0 size-12"/>
+                        </template>
                     </UButton>
                 </UTooltip>
             </div>

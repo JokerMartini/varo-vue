@@ -90,7 +90,8 @@ function handleExecuteClick() {
             <div v-if="group.selectedNode" class="flex gap-3 items-start w-full flex-nowrap">
                 <!-- Action Button/Icon -->
                 <div>
-                  <UIcon name="i-lucide-box" class="shrink-0 size-12"/>
+                  <!-- <UIcon name="i-lucide-box" class="shrink-0 size-12"/> -->
+                  <IconDisplay :imageData="group.selectedNode.icon" class="shrink-0 size-12"/>
                 </div>
 
                 <!-- Title -->
