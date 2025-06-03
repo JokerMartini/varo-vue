@@ -2,6 +2,10 @@
 
 This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
+## Developer Setup
+- Install node.js
+- Install Rust -> https://www.rust-lang.org/tools/install
+
 ## Recommended IDE Setup
 
 - [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
@@ -19,8 +23,3 @@ You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/
 `pnpm dev`
 `pnpm tauri dev`
 `pnpm tauri build`
-
-
-# TODO
-- sort nodes by category then group, clean up the group and category usage
-- console

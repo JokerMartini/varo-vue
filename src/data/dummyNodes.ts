@@ -339,7 +339,8 @@ export const dummyVaroNodes: VaroNode[] = [
     groupId: "nim",
     name: "NIM 5.0",
     category: "Pipeline",
-    icon: "./icons/nim.svg"
+    icon: "./icons/nim.svg",
+    description: "This is a newer project management software"
   }),
 
   // Documentation

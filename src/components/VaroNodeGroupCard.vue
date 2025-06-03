@@ -96,26 +96,44 @@ function handleExecuteClick() {
 
                 <!-- Title -->
                 <div class="flex-grow space-y-1 items-start">
-                    <UTooltip :text="group.selectedNode.description" :disabled="!group.selectedNode.description">
-                        <h3 v-if="group.nodes.length === 1" class="font-semibold text-xs">{{ group.selectedNode.name }}</h3>
-                        <UDropdownMenu v-else :items="groupNodeItems" v-model:open="nodesMenuOpen">
-                            <UButton  
-                                @click.stop
-                                trailing-icon="i-lucide-chevron-down" 
-                                variant="subtle" 
-                                color="neutral" 
-                                class="shrink-0 text-left w-full text-xs">
-                                <span class="w-full">
-                                    {{ group.selectedNode.name }}
-                                </span>
-                            </UButton>
 
-                            <template #item="{ item }">
-                                <VaroNodeGroupOption :node="item.item" @execute="nodesMenuOpen = false"/>
-                            </template>
+                    <div class="inline-flex gap-2 w-full justify-between items-start">
+                      <UTooltip :text="group.selectedNode.description" :disabled="!group.selectedNode.description">
+                          <h3 v-if="group.nodes.length === 1" class="font-semibold text-xs">{{ group.selectedNode.name }}</h3>
+                          <UDropdownMenu v-else :items="groupNodeItems" v-model:open="nodesMenuOpen">
+                              <UButton  
+                                  @click.stop
+                                  trailing-icon="i-lucide-chevron-down" 
+                                  variant="subtle" 
+                                  color="neutral" 
+                                  class="shrink-0 text-left flex-1 text-xs">
+                                  <span class="w-full">
+                                      {{ group.selectedNode.name }}
+                                  </span>
+                              </UButton>
 
-                        </UDropdownMenu>
-                    </UTooltip>
+                              <template #item="{ item }">
+                                  <VaroNodeGroupOption :node="item.item" @execute="nodesMenuOpen = false"/>
+                              </template>
+
+                          </UDropdownMenu>
+                      </UTooltip>
+
+                      <!-- Info -->
+                      <UPopover mode="hover">
+                          <UIcon
+                              name="i-lucide-info"
+                              class="size-4 text-(--ui-text-dimmed) shrink-0"
+                              v-show="group.selectedNode.description"
+                          />
+
+                          <template #content>
+                              <p class="px-2 py-1 text-xs select-none wrap max-w-64">
+                                  {{ group.selectedNode.description }}
+                              </p>
+                          </template>
+                      </UPopover>
+                    </div>
 
                     <!-- Badges -->
                     <div class="flex gap-1">

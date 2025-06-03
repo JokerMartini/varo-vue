@@ -202,6 +202,44 @@ Defines environment variables that are set when launching commands.
 }
 ```
 
+*future support...*
+
+```yaml
+name: Photoshop 2018
+groupId: photoshop
+category: Design
+icon: icons/ps2018.svg
+visible: true
+defaultForGroup: false
+description: This is a sample application
+status:
+  name: Beta
+  color: "#ffffff"
+access:
+  platforms:
+    - win
+    - mac
+  allow:
+    - john
+    - jane
+  deny:
+    - doe
+commands:
+  - path: https://www.google.com/
+    type: url
+    nonBlocking: true
+  - path: ./${HOME}/scripts/simplePrint.py
+    type: rel
+  - path: C:/Users/${USERNAME}/Desktop/helloWorld.py
+    args: "0 kevin"
+env:
+  - name: ROOT
+    value: //Network/Path
+  - name: LIB_PATH
+    value: ${ROOT}/libs
+    operation: append
+```
+
 ---
 
 ## 🔄 Variable Substitution
