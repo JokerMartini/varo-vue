@@ -1,0 +1,15 @@
+{
+  "name": "Production",
+  "description": "Production environment variables for live pipeline",
+  "env": [
+    {
+      "name": "AAA_LIVE",
+      "value": "//Dev/Network/Path"
+    },
+    {
+      "name": "AAA_LIVE",
+      "value": "${VARO_PATH}/dev/libs",
+      "operation": "append"
+    }
+  ]
+}

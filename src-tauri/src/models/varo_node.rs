@@ -50,6 +50,14 @@ pub struct EnvVar {
 }
 
 #[derive(Debug, Serialize)]
+pub struct EnvPreset {
+    pub name: String,
+    pub filepath: Option<String>,
+    pub description: Option<String>,
+    pub env: Vec<EnvVar>,
+}
+
+#[derive(Debug, Serialize)]
 pub struct NodeLoadResult {
     pub nodes: Vec<VaroNode>,
     pub warnings: Vec<String>,

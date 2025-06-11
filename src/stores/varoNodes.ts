@@ -6,6 +6,8 @@ import { getNodeGroupsByCategory, getCategoriesFromNodes } from "~/utils/nodeGro
 import { invoke } from "@tauri-apps/api/core";
 
 export const useVaroNodeStore = defineStore("varoNodes", () => {
+    // const toast = useToast()
+
     const showHiddenNodes = ref(false);
     const showGroups = ref(true);
     const showCategories = ref(false);
@@ -104,38 +106,47 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
         return allCategories.value;
     });
 
-    async function fetchVaroNodes() {
-        const result = await invoke<string>("get_varo_nodes");
-        console.log(result.nodes);
-        console.log(result.warnings);
+    // BACKEND Methods
+    async function fetchEnvPresets() {
+        try {
+            const result = await invoke("get_env_presets"); // must match the Rust command name
+            console.log("Success:", result); // result is your Vec<EnvPreset> (as JSON array)
+        } catch (error) {
+            // toast.add({ 
+            //     title: 'Error!', 
+            //     description: `Failed to fetch env presets: ${error}`, 
+            //     color: 'error' 
+            // });
+            console.error("Failed to fetch env presets:", error); // error is the String from Err(String)
+        }
     }
 
     async function launchSomething() {
-        const result = await invoke("execute_program", {
-            path: "C:/Windows/notepad.exe",
-            args: [],
-            wait: true,
-        });
-        const result2 = await invoke("execute_program", {
-            path: "C:/Program Files/Python310/python.exe",
-            args: ["C:/Users/joker/Documents/GitHub/varo-vue/test-data/nodes/scripts/simpleDialog.py"],
-            wait: true,
-        });
-        const result3 = await invoke("execute_program", {
-            path: "C:/Program Files/Python310/python.exe",
-            args: ["C:/Users/joker/Documents/GitHub/varo-vue/test-data/nodes/scripts/simpleDialog.py"],
-            wait: false,
-            envVars: {
-                AAAA: "KEVIN",
-                AAZZ: "123",
-            },
-        });
+        // const result = await invoke("execute_program", {
+        //     path: "C:/Windows/notepad.exe",
+        //     args: [],
+        //     wait: true,
+        // });
+        // const result2 = await invoke("execute_program", {
+        //     path: "C:/Program Files/Python310/python.exe",
+        //     args: ["C:/Users/joker/Documents/GitHub/varo-vue/test-data/nodes/scripts/simpleDialog.py"],
+        //     wait: true,
+        // });
+        // const result3 = await invoke("execute_program", {
+        //     path: "C:/Program Files/Python310/python.exe",
+        //     args: ["C:/Users/joker/Documents/GitHub/varo-vue/test-data/nodes/scripts/simpleDialog.py"],
+        //     wait: false,
+        //     envVars: {
+        //         AAAA: "KEVIN",
+        //         AAZZ: "123",
+        //     },
+        // });
     }
 
     async function loadFiles() {
         await fetchUsername();
         await fetchPlatform();
-        fetchVaroNodes();
+        await fetchEnvPresets();
 
         // loading.value = true
         // // error.value = null

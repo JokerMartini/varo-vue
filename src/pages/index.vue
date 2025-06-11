@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { dummyVaroNodes } from '@/data/dummyNodes';
-import type { ContextMenuItem } from '@nuxt/ui'
 
 const nodeStore = useVaroNodeStore()
 

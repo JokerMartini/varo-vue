@@ -5,6 +5,7 @@ This template should help get you started developing with Vue 3 and TypeScript i
 ## Developer Setup
 - Install node.js
 - Install Rust -> https://www.rust-lang.org/tools/install
+- Set env VARO_PATH to point to the local test-data folder
 
 ## Recommended IDE Setup
 

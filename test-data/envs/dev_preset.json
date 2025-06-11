@@ -1,0 +1,15 @@
+{
+  "name": "Development",
+  "description": "Development environment variables for testing",
+  "env": [
+    {
+      "name": "AAA_1",
+      "value": "//Dev/Network/Path"
+    },
+    {
+      "name": "AAA_2",
+      "value": "${VARO_PATH}/dev/libs",
+      "operation": "append"
+    }
+  ]
+}

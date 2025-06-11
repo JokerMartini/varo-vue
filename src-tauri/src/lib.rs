@@ -4,9 +4,12 @@ use std::env;
 mod models;
 mod loaders;
 mod utils;
+mod services;
 
 use crate::loaders::varo_node_loader::get_varo_nodes;
 use crate::utils::commands::execute_program;
+use crate::services::env_preset_service::get_env_presets_for_frontend;
+use crate::models::varo_node::EnvPreset;
 
 // --- Public Tauri Commands ---
 // Returns current username otherwise returns "Guest"
@@ -25,6 +28,11 @@ fn get_os_username() -> String {
 
     // If nothing was found, fallback
     "Guest".to_string()
+}
+
+#[tauri::command]
+fn get_env_presets() -> Result<Vec<EnvPreset>, String> {
+    get_env_presets_for_frontend()
 }
 
 // Returns the current platform as one of: "win", "mac", "linux"
@@ -56,6 +64,7 @@ pub fn run() {
             get_os_username,
             get_varo_nodes,
             execute_program,
+            get_env_presets,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
