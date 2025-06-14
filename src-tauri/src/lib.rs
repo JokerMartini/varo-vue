@@ -1,5 +1,6 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 use std::env;
+use std::sync::Mutex;
 
 mod models;
 mod loaders;
@@ -7,66 +8,53 @@ mod utils;
 mod services;
 
 use serde_json::Value;
+use tauri::{Builder, Manager};
 use crate::loaders::varo_node_loader::get_varo_nodes;
 use crate::utils::commands::execute_program;
 use crate::services::env_preset_service::get_env_presets_for_frontend;
 use crate::models::varo_node::EnvPreset;
 use crate::utils::config::load_config;
+use crate::services::system_service::{get_os_username, get_platform};
 
-// --- Public Tauri Commands ---
-// Returns current username otherwise returns "Guest"
-#[tauri::command]
-fn get_os_username() -> String {
-    // Try the most common environment variables
-    let candidates = ["USERNAME", "USER", "LOGNAME"];
 
-    for var in candidates.iter() {
-        if let Ok(val) = env::var(var) {
-            if !val.is_empty() {
-                return val;
-            }
-        }
-    }
-
-    // If nothing was found, fallback
-    "Guest".to_string()
+// MAIN APP STATE
+#[derive(Default)]
+struct AppState {
+    config: Value,
 }
 
+// --- Public Tauri Commands ---
 #[tauri::command]
 fn get_env_presets() -> Result<Vec<EnvPreset>, String> {
-    load_config();
     get_env_presets_for_frontend()
 }
 
-fn get_config() -> Value {
-    load_config()
-}
-
-// Returns the current platform as one of: "win", "mac", "linux"
 #[tauri::command]
-fn get_platform() -> &'static str {
-    if cfg!(target_os = "windows") {
-        "win"
-    } else if cfg!(target_os = "macos") {
-        "mac"
-    } else if cfg!(target_os = "linux") {
-        "linux"
-    } else {
-        "unknown"
-    }
+fn get_config(state: tauri::State<Mutex<AppState>>) -> Value {
+    let state = state.lock().unwrap();
+    state.config.clone()
 }
 
 #[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
+fn reload_config(state: tauri::State<Mutex<AppState>>) -> Result<(), String> {
+    let new_config = load_config();
+    let mut state = state.lock().map_err(|e| e.to_string())?;
+    state.config = new_config;
+    Ok(())
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .setup(|app| {
+            let config = load_config();
+            app.manage(Mutex::new(AppState {
+                config: config,
+            }));
+            Ok(())
+        })
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
-            greet, 
             get_platform,
             get_os_username,
             get_varo_nodes,
