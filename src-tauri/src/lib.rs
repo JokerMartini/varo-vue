@@ -38,7 +38,7 @@ fn get_env_presets() -> Result<Vec<EnvPreset>, String> {
     get_env_presets_for_frontend()
 }
 
-fn get_merged_config() -> Value {
+fn get_config() -> Value {
     load_config()
 }
 
