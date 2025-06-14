@@ -3,7 +3,7 @@ use crate::utils::env::load_env_presets_in_dir;
 use crate::models::varo_node::EnvPreset;
 
 pub fn get_env_presets_for_frontend() -> Result<Vec<EnvPreset>, String> {
-    let dir = PathBuf::from("C:/Users/jmartini/Documents/GitHub/varo-vue/test-data/envs");
+    let dir = PathBuf::from("C:/Users/joker/Documents/GitHub/varo-vue/test-data/envs");
 
     // Propagate the error if loading fails
     load_env_presets_in_dir(

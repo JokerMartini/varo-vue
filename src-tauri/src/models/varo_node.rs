@@ -51,6 +51,7 @@ pub struct EnvVar {
 
 #[derive(Debug, Serialize)]
 pub struct EnvPreset {
+    pub id: String,
     pub name: String,
     pub filepath: Option<String>,
     pub description: Option<String>,

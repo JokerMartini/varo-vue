@@ -3,7 +3,10 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use serde_json::Value;
 use crate::models::varo_node::{EnvVar, EnvPreset};
+use crate::utils::hasher::Hasher;
 
+/// Expands environment variables in a string using the current process environment.
+/// Replaces placeholders like `${VAR_NAME}` with their actual values.
 pub fn expand_env_vars(input: &str) -> String {
     let mut output = input.to_string();
     for (key, value) in env::vars() {
@@ -12,6 +15,8 @@ pub fn expand_env_vars(input: &str) -> String {
     output
 }
 
+/// Parses a JSON array into a list of EnvVar objects.
+/// Applies environment variable expansion to each field and uses "set" as the default operation.
 pub fn parse_env_vars_from_json(env_array: &serde_json::Value) -> Vec<EnvVar> {
     env_array
         .as_array()
@@ -37,6 +42,9 @@ pub fn parse_env_vars_from_json(env_array: &serde_json::Value) -> Vec<EnvVar> {
         .unwrap_or_default()
 }
 
+/// Loads a single EnvPreset from a JSON file.
+/// Parses fields like name, description, and env variables.
+/// If "id" is missing from the file, a fallback ID is generated from the file path.
 pub fn load_env_preset_from_file(path: &PathBuf) -> Option<EnvPreset> {
     let content = fs::read_to_string(path).ok()?;
     let json: Value = serde_json::from_str(&content).ok()?;
@@ -45,8 +53,13 @@ pub fn load_env_preset_from_file(path: &PathBuf) -> Option<EnvPreset> {
     let description = json.get("description").and_then(|v| v.as_str()).map(|s| s.to_string());
     let env = json.get("env").map(parse_env_vars_from_json).unwrap_or_default();
     let filepath = path.to_str().map(|s| s.to_string());
+    let id = json.get("id")
+        .and_then(|v| v.as_str())
+        .map(|s| s.to_string())
+        .unwrap_or_else(|| Hasher::generate_id_from_path(path));
 
     Some(EnvPreset {
+        id,
         name,
         filepath,
         description,
@@ -54,6 +67,8 @@ pub fn load_env_preset_from_file(path: &PathBuf) -> Option<EnvPreset> {
     })
 }
 
+/// Loads all valid EnvPreset JSON files in the specified directory.
+/// Only files with a `.json` extension are considered.
 pub fn load_env_presets_in_dir(dir_path: &str) -> Result<Vec<EnvPreset>, String> {
     let mut presets = Vec::new();
     let dir = Path::new(dir_path);
