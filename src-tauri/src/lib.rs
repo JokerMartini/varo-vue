@@ -12,26 +12,21 @@ use serde_json::Value;
 use tauri::{Builder, Manager};
 use crate::loaders::varo_node_loader::get_varo_nodes;
 use crate::utils::commands::execute_program;
-use crate::services::env_preset_service::get_env_presets_for_frontend;
+use crate::services::env_preset_service::load_env_presets_from_config;
 use crate::models::varo_node::EnvPreset;
 use crate::utils::config::load_config;
 use crate::services::system_service::{get_os_username, get_platform};
 use crate::utils::env::get_current_env_vars;
-
 
 // MAIN APP STATE
 #[derive(Default)]
 struct AppState {
     config: Value,
     env_vars: HashMap<String, String>,
+    env_presets: Vec<EnvPreset>,
 }
 
 // --- Public Tauri Commands ---
-#[tauri::command]
-fn get_env_presets() -> Result<Vec<EnvPreset>, String> {
-    get_env_presets_for_frontend()
-}
-
 #[tauri::command]
 fn get_config(state: tauri::State<Mutex<AppState>>) -> Value {
     let state = state.lock().unwrap();
@@ -46,17 +41,26 @@ fn reload_config(state: tauri::State<Mutex<AppState>>) -> Result<(), String> {
     Ok(())
 }
 
+#[tauri::command]
+fn get_env_presets(state: tauri::State<'_, Mutex<AppState>>) -> Vec<EnvPreset> {
+    let state = state.lock().unwrap();
+    state.env_presets.clone()
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .setup(|app| {
             let config = load_config();
             let env_vars = get_current_env_vars();
+            let env_presets = load_env_presets_from_config(&config);
 
             app.manage(Mutex::new(AppState {
-                config: config,
-                env_vars: env_vars,
+                config,
+                env_vars,
+                env_presets,
             }));
+
             Ok(())
         })
         .plugin(tauri_plugin_opener::init())

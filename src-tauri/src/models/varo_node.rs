@@ -42,14 +42,14 @@ pub struct Command {
     pub non_blocking: Option<bool>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Clone)]
 pub struct EnvVar {
     pub name: String,
     pub value: String,
     pub operation: Option<String>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Clone)]
 pub struct EnvPreset {
     pub id: String,
     pub name: String,

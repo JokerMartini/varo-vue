@@ -1,6 +1,6 @@
 {
   "name": "Development",
-  "description": "Development environment variables for testing",
+  "description": "Dev environment, use with caution",
   "env": [
     {
       "name": "AAA_1",

@@ -106,7 +106,6 @@ onMounted(async () => {
     appVersion.value = await getVersion();
 });
 
-const envItems = ref(['Default', 'Beta', 'Dev'])
 const selectedEnv = ref('Default')
 
 </script>
@@ -124,7 +123,7 @@ const selectedEnv = ref('Default')
                     <USelect 
                         variant="soft" 
                         v-model="selectedEnv" 
-                        :items="envItems"
+                        :items="nodeStore.envPresets"
                         icon="i-lucide-git-branch" 
                         class="w-36" >
                     </USelect>

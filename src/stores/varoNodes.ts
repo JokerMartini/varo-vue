@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { VaroNode } from "~/models/VaroNode";
 import { VaroNodeGroup } from "~/models/VaroNodeGroup";
 import { VaroCategory } from "~/models/VaroCategory";
+import { EnvPreset } from "~/models/EnvPreset";
 import { getNodeGroupsByCategory, getCategoriesFromNodes } from "~/utils/nodeGrouping";
 import { invoke } from "@tauri-apps/api/core";
 
@@ -20,6 +21,7 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
     const loading = ref(false);
     const username = ref<string | null>(null);
     const platform = ref<string | null>(null);
+    const envPresets = ref<EnvPreset[]>([]);
 
     // METHODS
     function setNodes(newNodes: VaroNode[]) {
@@ -110,7 +112,12 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
     async function fetchEnvPresets() {
         try {
             const result = await invoke("get_env_presets"); // must match the Rust command name
-            console.log("Success:", result); // result is your Vec<EnvPreset> (as JSON array)
+            if (Array.isArray(result)) {
+                envPresets.value = result.map((preset: any) => new EnvPreset(preset));
+                console.log("Loaded Env Presets:", envPresets.value);
+            } else {
+                console.warn("Unexpected env presets response format:", result);
+            }
         } catch (error) {
             // toast.add({ 
             //     title: 'Error!', 
@@ -168,6 +175,11 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
         // }
     }
 
+    // optional helper method
+    function getEnvPresetByName(name: string): EnvPreset | undefined {
+        return envPresets.value.find(preset => preset.name === name);
+    }
+
     return {
         // properties
         allNodes,
@@ -185,6 +197,7 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
         searchQuery,
         username,
         platform,
+        envPresets,
 
         // methods
         setNodes,
