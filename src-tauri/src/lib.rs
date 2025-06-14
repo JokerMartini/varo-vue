@@ -1,6 +1,7 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 use std::env;
 use std::sync::Mutex;
+use std::collections::HashMap;
 
 mod models;
 mod loaders;
@@ -15,12 +16,14 @@ use crate::services::env_preset_service::get_env_presets_for_frontend;
 use crate::models::varo_node::EnvPreset;
 use crate::utils::config::load_config;
 use crate::services::system_service::{get_os_username, get_platform};
+use crate::utils::env::get_current_env_vars;
 
 
 // MAIN APP STATE
 #[derive(Default)]
 struct AppState {
     config: Value,
+    env_vars: HashMap<String, String>,
 }
 
 // --- Public Tauri Commands ---
@@ -48,8 +51,11 @@ pub fn run() {
     tauri::Builder::default()
         .setup(|app| {
             let config = load_config();
+            let env_vars = get_current_env_vars();
+
             app.manage(Mutex::new(AppState {
                 config: config,
+                env_vars: env_vars,
             }));
             Ok(())
         })

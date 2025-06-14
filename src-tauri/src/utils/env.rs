@@ -1,9 +1,15 @@
 use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::collections::HashMap;
 use serde_json::Value;
 use crate::models::varo_node::{EnvVar, EnvPreset};
 use crate::utils::hasher::Hasher;
+
+/// Returns current list of environment variables
+pub fn get_current_env_vars() -> HashMap<String, String> {
+    env::vars().collect()
+}
 
 /// Expands environment variables in a string using the current process environment.
 /// Replaces placeholders like `${VAR_NAME}` with their actual values.
