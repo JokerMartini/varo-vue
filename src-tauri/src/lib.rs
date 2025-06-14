@@ -6,10 +6,12 @@ mod loaders;
 mod utils;
 mod services;
 
+use serde_json::Value;
 use crate::loaders::varo_node_loader::get_varo_nodes;
 use crate::utils::commands::execute_program;
 use crate::services::env_preset_service::get_env_presets_for_frontend;
 use crate::models::varo_node::EnvPreset;
+use crate::utils::config::load_config;
 
 // --- Public Tauri Commands ---
 // Returns current username otherwise returns "Guest"
@@ -32,7 +34,12 @@ fn get_os_username() -> String {
 
 #[tauri::command]
 fn get_env_presets() -> Result<Vec<EnvPreset>, String> {
+    load_config();
     get_env_presets_for_frontend()
+}
+
+fn get_merged_config() -> Value {
+    load_config()
 }
 
 // Returns the current platform as one of: "win", "mac", "linux"
