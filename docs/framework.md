@@ -26,4 +26,5 @@ pub struct AppState {
     pub config: Value,
     pub env_vars: HashMap<String, String>,
     pub env_presets: Vec<EnvPreset>,
+    ...
 }

@@ -4,11 +4,10 @@ The config.json file provides a way to customize Varo's behavior without modifyi
 
 1. **Built-in defaults** – compiled into the app
 2. **Global config** – defined via the `VARO_CONFIG_PATH` environment variable
-3. **User config** – located at `~/Documents/Varo/config.json`
+3. **User config** – located at `~/AppData/Local/varo/config.json`
 4. **Command-line config** – (planned) passed using `--config /path/to/file.json`
 
 > 🔁 Each config layer overrides the values from lower-priority layers using deep merging. Missing values are filled in by the layer below.
-
 
 ## 🔧 Example `config.json`
 
@@ -52,7 +51,7 @@ Set an environment variable before launching Varo:
 
 ```bash
 # Windows
-set VARO_CONFIG_PATH=C:\Studio\Configs\varo.config.json
+set VARO_CONFIG_PATH=C:/Studio/Configs/varo.config.json
 
 # macOS/Linux
 export VARO_CONFIG_PATH=/Users/shared/varo/config.json
@@ -63,7 +62,7 @@ export VARO_CONFIG_PATH=/Users/shared/varo/config.json
 Place a config file at:
 
 ```bash
-~/Documents/Varo/config.json
+~/AppData/Local/varo/config.json
 ```
 This file overrides any settings defined globally.
 

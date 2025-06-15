@@ -21,7 +21,9 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
     const loading = ref(false);
     const username = ref<string | null>(null);
     const platform = ref<string | null>(null);
+
     const envPresets = ref<EnvPreset[]>([]);
+    const selectedEnvPreset = ref<string | null>(null);
 
     // METHODS
     function setNodes(newNodes: VaroNode[]) {
@@ -198,6 +200,7 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
         username,
         platform,
         envPresets,
+        selectedEnvPreset,
 
         // methods
         setNodes,

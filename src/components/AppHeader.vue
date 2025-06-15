@@ -80,18 +80,6 @@ const viewMenuItems = computed(() => [
     ],
 ]);
 
-const envMenuItems = computed(() => [
-    [
-        {
-            label: "View Preset",
-            icon: "i-lucide-external-link",
-            onSelect(e: Event) {
-                nodeStore.showEnvDialog = true;
-            },
-        },
-    ]
-])
-
 const doit = () => {
     console.log("here");
     nodeStore.launchSomething();
@@ -119,15 +107,7 @@ const selectedEnv = ref('Default')
                 <!-- <UTooltip :text="`${appName} - ${appVersion}`">
                     <UIcon name="i-lucide-box" class="shrink-0 size-8" />
                 </UTooltip> -->
-                <UContextMenu :items="envMenuItems">
-                    <USelect 
-                        variant="soft" 
-                        v-model="selectedEnv" 
-                        :items="nodeStore.envPresets"
-                        icon="i-lucide-git-branch" 
-                        class="w-36" >
-                    </USelect>
-                </UContextMenu>
+                <EnvPresetSelect/>
             </div>
 
             <!-- center -->

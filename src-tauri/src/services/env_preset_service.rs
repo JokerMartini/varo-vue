@@ -3,15 +3,6 @@ use crate::utils::env::load_env_presets_in_dir;
 use crate::models::varo_node::EnvPreset;
 use serde_json::Value;
 
-pub fn get_env_presets_for_frontend() -> Result<Vec<EnvPreset>, String> {
-    let dir = PathBuf::from("C:/Users/joker/Documents/GitHub/varo-vue/test-data/envs");
-
-    // Propagate the error if loading fails
-    load_env_presets_in_dir(
-        dir.to_str().ok_or_else(|| "Invalid preset directory path".to_string())?
-    )
-}
-
 pub fn load_env_presets_from_config(config: &Value) -> Vec<EnvPreset> {
     let dirs = config.pointer("/envPresets/directories")
         .and_then(|v| v.as_array())

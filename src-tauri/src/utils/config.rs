@@ -33,7 +33,7 @@ fn get_env_config_path() -> Option<PathBuf> {
 }
 
 fn get_user_config_path() -> Option<PathBuf> {
-    if let Some(mut doc_path) = dirs::document_dir() {
+    if let Some(mut doc_path) = dirs::config_local_dir() {
         doc_path.push("Varo");
         
         // Ensure the Varo/ folder exists
