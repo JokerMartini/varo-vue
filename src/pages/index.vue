@@ -74,7 +74,7 @@ const mainMenuItems = computed(() => [
 
     <!-- Dialogs -->
     <AboutModal v-model="nodeStore.showAboutDialog" />
-    <EnvModal v-model="nodeStore.showEnvDialog" />
+    <DeveloperModal v-model="nodeStore.showDeveloperDialog" />
     
   </div>
 </template>

@@ -13,7 +13,7 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
     const showGroups = ref(true);
     const showCategories = ref(false);
     const showAboutDialog = ref(false);
-    const showEnvDialog = ref(false);
+    const showDeveloperDialog = ref(false);
     const searchQuery = ref("");
     const allNodes = ref<VaroNode[]>([]);
     const allNodeGroups = ref<VaroNodeGroup[]>([]);
@@ -23,7 +23,7 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
     const platform = ref<string | null>(null);
 
     const envPresets = ref<EnvPreset[]>([]);
-    const selectedEnvPreset = ref<string | null>(null);
+    const selectedEnvPresetId = ref<string | null>(null);
 
     // METHODS
     function setNodes(newNodes: VaroNode[]) {
@@ -110,6 +110,10 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
         return allCategories.value;
     });
 
+    const selectedEnvPreset = computed(() => {
+        return envPresets.value.find(preset => preset.id === selectedEnvPresetId?.value);
+    })
+
     // BACKEND Methods
     async function fetchEnvPresets() {
         try {
@@ -177,11 +181,6 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
         // }
     }
 
-    // optional helper method
-    function getEnvPresetByName(name: string): EnvPreset | undefined {
-        return envPresets.value.find(preset => preset.name === name);
-    }
-
     return {
         // properties
         allNodes,
@@ -195,11 +194,12 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
         showGroups,
         showCategories,
         showAboutDialog,
-        showEnvDialog,
+        showDeveloperDialog,
         searchQuery,
         username,
         platform,
         envPresets,
+        selectedEnvPresetId,
         selectedEnvPreset,
 
         // methods

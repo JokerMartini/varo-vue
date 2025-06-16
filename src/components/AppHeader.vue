@@ -28,6 +28,15 @@ const mainMenuItems = computed(() => [
         }, 
     ],
     [
+       {
+            label: "Developer Debug",
+            icon: 'i-lucide-bug',
+            onSelect(e: Event) {
+              nodeStore.showDeveloperDialog = true;  
+            },
+        }, 
+    ],
+    [
         {
             label: "About",
             icon: "i-lucide-info",
