@@ -88,7 +88,11 @@ pub fn load_env_presets_in_dir(dir_path: &str) -> Result<Vec<EnvPreset>, String>
 
     for entry in entries.flatten() {
         let path = entry.path();
-        if path.extension().map(|e| e == "json").unwrap_or(false) {
+        if path.extension()
+            .and_then(|e| e.to_str())
+            .map(|ext| ext.eq_ignore_ascii_case("json"))
+            .unwrap_or(false)
+        {
             if let Some(preset) = load_env_preset_from_file(&path) {
                 presets.push(preset);
             }

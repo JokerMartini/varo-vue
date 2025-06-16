@@ -37,9 +37,9 @@ pub struct Access {
 pub struct Command {
     pub path: String,
     #[serde(rename = "pathType")]
-    pub path_type: Option<String>,
-    pub args: Option<String>,
-    pub non_blocking: Option<bool>,
+    pub path_type: String,
+    pub args: String,
+    pub non_blocking: bool,
 }
 
 #[derive(Debug, Serialize, Clone)]

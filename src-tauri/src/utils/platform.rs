@@ -1,5 +1,6 @@
 use std::env;
 
+/// Returns os username or Guest
 pub fn get_os_username() -> String {
     let candidates = ["USERNAME", "USER", "LOGNAME"];
     for var in candidates.iter() {
@@ -12,6 +13,7 @@ pub fn get_os_username() -> String {
     "Guest".to_string()
 }
 
+/// Returns os name (win, mac, linux, or unknown)
 pub fn get_platform() -> &'static str {
     if cfg!(target_os = "windows") {
         "win"

@@ -13,6 +13,7 @@ use tauri::{Builder, Manager};
 use crate::loaders::varo_node_loader::get_varo_nodes;
 use crate::utils::commands::execute_program;
 use crate::services::env_preset_service::load_env_presets_from_config;
+use crate::services::node_service::test;
 use crate::models::varo_node::EnvPreset;
 use crate::utils::config::load_config;
 use crate::services::system_service::{get_os_username, get_platform};
@@ -54,6 +55,8 @@ pub fn run() {
             let config = load_config();
             let env_vars = get_current_env_vars();
             let env_presets = load_env_presets_from_config(&config);
+
+            test();
 
             app.manage(Mutex::new(AppState {
                 config,

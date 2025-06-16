@@ -1,4 +1,5 @@
 {
+  "id": "jenkins-id",
   "name": "Jenkins",
   "category": "Tech",
   "icon": "jenkins.png",

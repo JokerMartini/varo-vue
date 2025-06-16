@@ -1,5 +1,5 @@
 use crate::models::varo_node::{VaroNode, Status, Access, Command, NodeLoadResult};
-use crate::utils::{icon_resolver::resolve_icon_path, env::parse_env_vars_from_json};
+use crate::utils::{env::parse_env_vars_from_json};
 use crate::utils::hasher::Hasher;
 use serde_json::Value;
 use std::fs;
@@ -124,7 +124,7 @@ fn parse_varo_node_file(path: &Path) -> Result<(VaroNode, Vec<String>), String> 
     }
     
     let icon_path = obj.get("icon").and_then(|v| v.as_str()).unwrap_or("").to_string();
-    let icon = resolve_icon_path(&icon_path, &mut warnings, &id);
+    let icon = "".to_string();
 
     let commands = obj.get("commands")
         .ok_or_else(|| format!("Missing required 'commands' array in {}", path.display()))?
@@ -134,9 +134,9 @@ fn parse_varo_node_file(path: &Path) -> Result<(VaroNode, Vec<String>), String> 
         .filter_map(|item| {
             item.as_object().map(|cmd| Command {
                 path: cmd.get("path").and_then(|v| v.as_str()).unwrap_or("").to_string(),
-                path_type: cmd.get("pathType").and_then(|v| v.as_str()).map(|s| s.to_string()),
-                args: Some(cmd.get("args").and_then(|v| v.as_str()).unwrap_or("").to_string()),
-                non_blocking: Some(cmd.get("nonBlocking").and_then(|v| v.as_bool()).unwrap_or(false)),
+                path_type: cmd.get("pathType").and_then(|v| v.as_str()).unwrap_or("").to_string(),
+                args: cmd.get("args").and_then(|v| v.as_str()).unwrap_or("").to_string(),
+                non_blocking: cmd.get("nonBlocking").and_then(|v| v.as_bool()).unwrap_or(false)
             })
         })
         .collect();
