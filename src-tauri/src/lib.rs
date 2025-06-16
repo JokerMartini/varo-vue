@@ -70,6 +70,7 @@ pub fn run() {
             get_varo_nodes,
             execute_program,
             get_env_presets,
+            get_config,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

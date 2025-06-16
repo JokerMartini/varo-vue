@@ -32,18 +32,12 @@ Click, launch, conquer.">
             <div class="space-y-4">
                 <div class="text-sm flex flex-col gap-6">
                     <section>
-                        <h4 class="text-(--ui-text-primary) leading-none font-semibold mb-2 uppercase">Application</h4>
+                        <h4 class="text-(--ui-text-primary) leading-none font-semibold mb-2">Application</h4>
                         <p><span class="text-(--ui-text-muted)">Version:</span> {{ appVersion }}</p>
                         <p>
                             <span class="text-(--ui-text-muted)">Website:</span>
                             <a href="https://jokermartini.com" target="_blank" class="text-secondary hover:underline hover:text-(--ui-primary)"> www.JokerMartini.com</a>
                         </p>
-                    </section>
-
-                    <section>
-                        <h4 class="text-(--ui-text-primary) leading-none font-semibold mb-2 uppercase">Workstation</h4>
-                        <p><span class="text-(--ui-text-muted)">Platform:</span> {{ nodeStore.platform }}</p>
-                        <p><span class="text-(--ui-text-muted)">Username:</span> {{ nodeStore.username }}</p>
                     </section>
                 </div>
             </div>

@@ -13,17 +13,20 @@ export class EnvVar {
 export class EnvPreset {
   id: string;
   name: string;
+  filepath: string;
   description: string;
   env: EnvVar[];
 
   constructor(data: {
     id: string;
     name: string;
+    filepath: string;
     description?: string;
     env?: { name: string; value: string; operation?: string }[];
   }) {
     this.id = data.id;
     this.name = data.name;
+    this.filepath = data.filepath;
     this.description = data.description ?? '';
     this.env = (data.env ?? []).map(e => new EnvVar(e));
   }

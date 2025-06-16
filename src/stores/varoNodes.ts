@@ -24,6 +24,7 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
 
     const envPresets = ref<EnvPreset[]>([]);
     const selectedEnvPresetId = ref<string | null>(null);
+    const appConfig = ref<any>(null);
 
     // METHODS
     function setNodes(newNodes: VaroNode[]) {
@@ -134,6 +135,16 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
         }
     }
 
+    async function fetchAppConfig() {
+        try {
+            const result = await invoke("get_config");
+            appConfig.value = result;
+            console.log("App config loaded:", result);
+        } catch (error) {
+            console.error("Failed to fetch app config:", error);
+        }
+    }
+
     async function launchSomething() {
         // const result = await invoke("execute_program", {
         //     path: "C:/Windows/notepad.exe",
@@ -160,6 +171,7 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
         await fetchUsername();
         await fetchPlatform();
         await fetchEnvPresets();
+        await fetchAppConfig();
 
         // loading.value = true
         // // error.value = null
@@ -201,6 +213,7 @@ export const useVaroNodeStore = defineStore("varoNodes", () => {
         envPresets,
         selectedEnvPresetId,
         selectedEnvPreset,
+        appConfig,
 
         // methods
         setNodes,
