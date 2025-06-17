@@ -28,3 +28,8 @@ pub struct AppState {
     pub env_presets: Vec<EnvPreset>,
     ...
 }
+
+
+
+## Env Preset
+- can have tokens that will get resolved

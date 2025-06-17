@@ -11,9 +11,9 @@
       "value": "//Dev/Network/Path"
     },
     {
-      "name": "AAA_2",
-      "value": "${VARO_PATH}/dev/libs",
-      "operation": "append"
+      "name": "VARO_PATH",
+      "value": "${GITHUB_ROOT}/varo-vue/test-data",
+      "operation": "set"
     }
   ]
 }

@@ -9,8 +9,13 @@
     },
     {
       "name": "AAA_LIVE",
-      "value": "${VARO_PATH}/dev/libs",
+      "value": "${HOME}/dev/libs",
       "operation": "append"
+    },
+    {
+      "name": "VARO_PATH",
+      "value": "${GITHUB_ROOT}/varo-vue/test-data-2",
+      "operation": "set"
     }
   ]
 }
