@@ -17,9 +17,9 @@ Perfect! Here's a **compact cheatsheet version** for you — designed for quick 
 ### Optional Fields
 | Property          | Type         | Description |
 |-------------------|--------------|-------------|
-| `groupId`         | string       | Optional grouping ID for versions. |
+| `group_id`         | string       | Optional grouping ID for versions. |
 | `visible`         | boolean      | Defaults to `true`. |
-| `defaultForGroup` | boolean      | Defaults to `false`. |
+| `default_for_group` | boolean      | Defaults to `false`. |
 | `description`     | string       | App description. |
 | `status`          | object       | Status badge (`name`, `color`). |
 | `access`          | object       | Platform/user restrictions. |
@@ -33,7 +33,7 @@ Perfect! Here's a **compact cheatsheet version** for you — designed for quick 
 "commands": [
   {
     "path": "string",         // Required
-    "pathType": "rel" | "abs" | "url",  // Optional
+    "path_type": "rel" | "abs" | "url",  // Optional
     "args": "string",          // Optional
     "nonBlocking": true        // Optional
   }
@@ -41,7 +41,7 @@ Perfect! Here's a **compact cheatsheet version** for you — designed for quick 
 ```
 
 - `path`: Executable path or URL.
-- `pathType`: How to interpret the path (auto-inferred if missing).
+- `path_type`: How to interpret the path (auto-inferred if missing).
 - `args`: Arguments to pass.
 - `nonBlocking`: If true, don't wait for this command to finish.
 
@@ -84,9 +84,9 @@ Perfect! Here's a **compact cheatsheet version** for you — designed for quick 
   "category": "",
   "icon": "",
   "commands": [],
-  "groupId": "",
+  "group_id": "",
   "visible": true,
-  "defaultForGroup": false,
+  "default_for_group": false,
   "description": "",
   "status": { "name": "", "color": "" },
   "access": { "platforms": [], "allow": [], "deny": [] },

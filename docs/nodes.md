@@ -13,11 +13,11 @@ Each node is represented as a single `.json` file with this shape:
 ```json
 {
   "name": "Photoshop 2018",
-  "groupId": "photoshop",
+  "group_id": "photoshop",
   "category": "Design",
   "icon": "icons/ps2018.svg",
   "visible": true,
-  "defaultForGroup": false,
+  "default_for_group": false,
   "commands": [ ... ]
 }
 ```
@@ -35,11 +35,11 @@ You may also include optional fields like `description`, `status`, `access`, and
 | Property          | Type      | Required | Description |
 |-------------------|-----------|----------|-------------|
 | `name`            | `string`  | ✅        | Display name of the node. |
-| `groupId`         | `string`  | ⬜        | Optional group to associate multiple nodes (e.g., versions). |
+| `group_id`         | `string`  | ⬜        | Optional group to associate multiple nodes (e.g., versions). |
 | `category`        | `string`  | ✅        | Logical category used for filtering or sorting (e.g., "Design", "Tech"). |
 | `icon`            | `string`  | ✅        | Path to an SVG/PNG icon. Can be **absolute** or **relative** to `VARO_PATH`. |
 | `visible`         | `boolean` | ⬜        | Whether the node should be visible by default. Defaults to `true`. |
-| `defaultForGroup` | `boolean` | ⬜        | If true, this node is considered the default selection within its group. |
+| `default_for_group` | `boolean` | ⬜        | If true, this node is considered the default selection within its group. |
 | `description`     | `string`  | ⬜        | User-facing description shown in the app. |
 | `status`          | `object`  | ⬜        | Optional status badge to show next to the node. |
 | `commands`        | `array`   | ✅        | One or more launch commands for this node. |
@@ -104,12 +104,12 @@ Defines one or more launch commands executed when the node is launched.
 "commands": [
   {
     "path": "https://www.google.com/",
-    "pathType": "url",
+    "path_type": "url",
     "nonBlocking": true
   },
   {
     "path": "./${HOME}/scripts/simplePrint.py",
-    "pathType": "rel"
+    "path_type": "rel"
   },
   {
     "path": "C:/Users/${USERNAME}/Desktop/helloWorld.py",
@@ -121,7 +121,7 @@ Defines one or more launch commands executed when the node is launched.
 | Property      | Type                 | Required | Description |
 |---------------|----------------------|----------|-------------|
 | `path`        | string                | ✅        | The command path to execute. Can contain `${VARS}`. |
-| `pathType`        | `rel`/`abs`/`url`     | ⬜        | Defines how to interpret the path. If omitted, auto-inferred. |
+| `path_type`        | `rel`/`abs`/`url`     | ⬜        | Defines how to interpret the path. If omitted, auto-inferred. |
 | `args`        | string                | ⬜        | Optional arguments passed to the command. |
 | `nonBlocking` | boolean               | ⬜        | If `true`, the command will not block the next one from running. Defaults to `false`. |
 
@@ -158,11 +158,11 @@ Defines environment variables that are set when launching commands.
 ```json
 {
   "name": "Photoshop 2018",
-  "groupId": "photoshop",
+  "group_id": "photoshop",
   "category": "Design",
   "icon": "icons/ps2018.svg",
   "visible": true,
-  "defaultForGroup": false,
+  "default_for_group": false,
   "description": "This is a sample application",
   "status": {
     "name": "Beta",
@@ -206,11 +206,11 @@ Defines environment variables that are set when launching commands.
 
 ```yaml
 name: Photoshop 2018
-groupId: photoshop
+group_id: photoshop
 category: Design
 icon: icons/ps2018.svg
 visible: true
-defaultForGroup: false
+default_for_group: false
 description: This is a sample application
 status:
   name: Beta

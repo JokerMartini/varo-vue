@@ -22,24 +22,24 @@ export function getCategoriesFromNodes(nodes: VaroNode[]): VaroCategory[] {
 }
 
 /**
- * Groups nodes by only their groupId.
+ * Groups nodes by only their group_id.
  */
 export function getNodeGroups(nodes: VaroNode[]): VaroNodeGroup[] {
     const map = new Map<string, VaroNodeGroup>();
 
     for (const node of nodes) {
-        if (!map.has(node.groupId)) {
+        if (!map.has(node.group_id)) {
             map.set(
-                node.groupId,
+                node.group_id,
                 new VaroNodeGroup({
-                    id: node.groupId,
-                    name: node.groupId,
+                    id: node.group_id,
+                    name: node.group_id,
                     category: node.category,
                     nodes: [],
                 })
             );
         }
-        map.get(node.groupId)!.addNode(node);
+        map.get(node.group_id)!.addNode(node);
     }
 
     return Array.from(map.values());
@@ -47,24 +47,24 @@ export function getNodeGroups(nodes: VaroNode[]): VaroNodeGroup[] {
 
 
 /**
- * Groups nodes by their category and groupId.
+ * Groups nodes by their category and group_id.
  */
 export function getNodeGroupsByCategory(nodes: VaroNode[]): VaroNodeGroup[] {
     const map = new Map<string, VaroNodeGroup>();
 
     for (const node of nodes) {
         const category = node.category ?? "Uncategorized";
-        const groupId = node.groupId ?? "Ungrouped";
+        const group_id = node.group_id ?? "Ungrouped";
 
-        // Combine category and groupId to create a unique key
-        const key = `${category}::${groupId}`;
+        // Combine category and group_id to create a unique key
+        const key = `${category}::${group_id}`;
 
         if (!map.has(key)) {
             map.set(
                 key,
                 new VaroNodeGroup({
                     id: key,
-                    name: groupId,
+                    name: group_id,
                     category: category,
                     nodes: [],
                 })

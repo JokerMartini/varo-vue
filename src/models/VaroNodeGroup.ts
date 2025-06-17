@@ -32,10 +32,10 @@ export class VaroNodeGroup {
   }
 
   /**
-   * Returns the first node marked defaultForGroup, or fallback to first.
+   * Returns the first node marked default_for_group, or fallback to first.
    */
   private getDefaultNodeId(): string {
-    return this.nodes.find(n => n.defaultForGroup)?.id ?? this.nodes[0]?.id;
+    return this.nodes.find(n => n.default_for_group)?.id ?? this.nodes[0]?.id;
   }
 
   addNode(node: VaroNode) {

@@ -52,11 +52,11 @@ pub fn load_node_from_file(path: &PathBuf) -> Result<VaroNode, String> {
         }
     };
 
-    let group_id = match json.get("groupId").and_then(|v| v.as_str()) {
+    let group_id = match json.get("group_id").and_then(|v| v.as_str()) {
         Some(grp) => grp.to_string(),
         None => {
             eprintln!(
-                "Warning: Missing or invalid 'groupId' field in file '{}', using '{}'",
+                "Warning: Missing or invalid 'group_id' field in file '{}', using '{}'",
                 path.display(), name
             );
             name.to_string()
@@ -64,7 +64,7 @@ pub fn load_node_from_file(path: &PathBuf) -> Result<VaroNode, String> {
     };
 
     let default_for_group = json
-        .get("defaultForGroup")
+        .get("default_for_group")
         .and_then(|v| v.as_bool())
         .unwrap_or(false);
 
@@ -133,7 +133,7 @@ pub fn load_node_from_file(path: &PathBuf) -> Result<VaroNode, String> {
         .filter_map(|item| {
             item.as_object().map(|cmd| Command {
                 path: cmd.get("path").and_then(|v| v.as_str()).unwrap_or("").to_string(),
-                path_type: cmd.get("pathType").and_then(|v| v.as_str()).unwrap_or("").to_string(),
+                path_type: cmd.get("path_type").and_then(|v| v.as_str()).unwrap_or("").to_string(),
                 args: cmd.get("args").and_then(|v| v.as_str()).unwrap_or("").to_string(),
                 non_blocking: cmd.get("nonBlocking").and_then(|v| v.as_bool()).unwrap_or(false)
             })

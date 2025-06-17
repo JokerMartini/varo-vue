@@ -1,6 +1,6 @@
 {
   "name": "Affinity Photo",
-  "groupId": "affinity-photo",
+  "group_id": "affinity-photo",
   "category": "Design",
   "icon": "affinityphoto.svg",
   "description": "This is a sample application",
@@ -14,7 +14,7 @@
   "commands": [
     {
       "path": "${ProgramFiles}/Affinity/Photo/Photo.exe",
-      "pathType": "rel"
+      "path_type": "rel"
     }
   ],
   "env": [

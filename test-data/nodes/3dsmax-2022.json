@@ -1,0 +1,9 @@
+{
+    "id": "uuid-3dsmax-2022",
+    "group_id": "3dsmax",
+    "name": "3ds Max 2022 latest build for",
+    "icon": "max.svg",
+    "category": "3D",
+    "default_for_group": true,
+    "description": "This only has VRay Next Nightly builds."
+  }

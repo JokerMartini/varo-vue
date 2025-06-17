@@ -91,10 +91,10 @@ fn parse_varo_node_file(path: &Path) -> Result<(VaroNode, Vec<String>), String> 
         }
     };
 
-    let group_id = match obj.get("groupId").and_then(|v| v.as_str()) {
+    let group_id = match obj.get("group_id").and_then(|v| v.as_str()) {
         Some(gid) => Some(gid.to_string()),
         None => {
-            warnings.push(format!("Node '{}' missing optional 'groupId' field — defaulting to name '{}'", id, name));
+            warnings.push(format!("Node '{}' missing optional 'group_id' field — defaulting to name '{}'", id, name));
             Some(name.clone())
         }
     };
@@ -102,7 +102,7 @@ fn parse_varo_node_file(path: &Path) -> Result<(VaroNode, Vec<String>), String> 
     let filepath = Some(path.to_string_lossy().to_string());
 
     let default_for_group = Some(
-        obj.get("defaultForGroup")
+        obj.get("default_for_group")
             .and_then(|v| v.as_bool())
             .unwrap_or(false)
     );
@@ -134,7 +134,7 @@ fn parse_varo_node_file(path: &Path) -> Result<(VaroNode, Vec<String>), String> 
         .filter_map(|item| {
             item.as_object().map(|cmd| Command {
                 path: cmd.get("path").and_then(|v| v.as_str()).unwrap_or("").to_string(),
-                path_type: cmd.get("pathType").and_then(|v| v.as_str()).unwrap_or("").to_string(),
+                path_type: cmd.get("path_type").and_then(|v| v.as_str()).unwrap_or("").to_string(),
                 args: cmd.get("args").and_then(|v| v.as_str()).unwrap_or("").to_string(),
                 non_blocking: cmd.get("nonBlocking").and_then(|v| v.as_bool()).unwrap_or(false)
             })

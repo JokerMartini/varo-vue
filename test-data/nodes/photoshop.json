@@ -1,6 +1,6 @@
 {
   "name": "Photoshop",
-  "groupId": "photoshop",
+  "group_id": "photoshop",
   "category": "Design",
   "icon": "${VARO_PATH}/icons/mari.svg",
   "access": {
@@ -11,7 +11,7 @@
   "commands": [
     {
       "path": "${ProgramFiles}/Adobe/Photoshop.exe",
-      "pathType": "rel"
+      "path_type": "rel"
     }
   ]
 }

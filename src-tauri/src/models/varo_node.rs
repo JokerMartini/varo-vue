@@ -5,18 +5,15 @@ pub struct VaroNode {
     pub id: String,
     pub name: String,
     pub category: Option<String>,
-    #[serde(rename = "groupId")]
     pub group_id: Option<String>,
     pub icon: String, // raw embedded SVG or base64 PNG, or placeholder
     pub filepath: Option<String>,
-    #[serde(rename = "defaultForGroup")]
     pub default_for_group: Option<bool>,
     pub description: Option<String>,
     pub status: Option<Status>,
     pub access: Option<Access>,
     pub commands: Vec<Command>,
     pub env: Vec<EnvVar>,
-    #[serde(rename = "dateModified")]
     pub date_modified: u64,
 }
 
@@ -36,7 +33,6 @@ pub struct Access {
 #[derive(Debug, Serialize)]
 pub struct Command {
     pub path: String,
-    #[serde(rename = "pathType")]
     pub path_type: String,
     pub args: String,
     pub non_blocking: bool,

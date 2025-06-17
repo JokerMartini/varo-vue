@@ -1,11 +1,11 @@
 {
   "name": "Chaos Player",
-  "groupId": "chaosPlayer",
+  "group_id": "chaosPlayer",
   "icon": "${VARO_PATH}/icons/chaosPlayer.svg",
   "commands": [
     {
       "path": "${ProgramFiles}/Adobe/Photoshop.exe",
-      "pathType": "rel"
+      "path_type": "rel"
     }
   ]
 }

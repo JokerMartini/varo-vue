@@ -1,7 +1,8 @@
 {
-    "id": "uuid-3dsmax-2024",
+    "id": "uuid-3dsmax-2023",
     "group_id": "3dsmax",
-    "name": "3ds Max 2024 latest build for",
+    "name": "3ds Max 2023 latest build for",
+    "icon": "max2024.svg",
     "category": "Beta",
     "default_for_group": true,
     "description": "Latest stable version for all artists to use for production this includes the latest vray, tyflow, fumefx and phoenix",
