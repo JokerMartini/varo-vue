@@ -4,4 +4,4 @@ pub mod icon;
 pub mod commands;
 pub mod config;
 pub mod platform;
-pub mod varo_node;
+pub mod node;
