@@ -13,24 +13,24 @@ The config.json file provides a way to customize Varo's behavior without modifyi
 
 ```json
 {
-  "envPresets": {
+  "env_presets": {
     "directories": [
       "C:/Studio/VaroPresets",
-      "D:/Teams/EnvPresets"
+      "D:/Teams/Env_presets"
     ],
-    "defaultId": "studio-default"
+    "default_id": "studio-default"
   }
 }
 ```
 
 ## 🧩 Configuration Reference
-`envPresets`
+`env_presets`
 Settings related to environment variable presets shown in the Varo interface.
 
 | Key           | Type       | Description                                                                         |
 | ------------- | ---------- | ----------------------------------------------------------------------------------- |
 | `directories` | `string[]` | A list of absolute or relative paths to folders containing `.json` env preset files |
-| `defaultId`   | `string`   | The ID of the preset that should be loaded by default when Varo launches            |
+| `default_id`   | `string`   | The ID of the preset that should be loaded by default when Varo launches            |
 
 
 ## 📦 Planned/Optional Future Settings

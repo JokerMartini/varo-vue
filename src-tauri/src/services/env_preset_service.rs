@@ -4,7 +4,7 @@ use crate::models::entities::EnvPreset;
 use serde_json::Value;
 
 pub fn load_env_presets_from_config(config: &Value) -> Vec<EnvPreset> {
-    let dirs = config.pointer("/envPresets/directories")
+    let dirs = config.pointer("/env_presets/directories")
         .and_then(|v| v.as_array())
         .unwrap_or(&vec![])
         .iter()

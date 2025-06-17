@@ -3,6 +3,10 @@
   "description": "Dev environment, use with caution",
   "env": [
     {
+      "name": "AAA_0",
+      "value": "DONUTS"
+    },
+    {
       "name": "AAA_1",
       "value": "//Dev/Network/Path"
     },
