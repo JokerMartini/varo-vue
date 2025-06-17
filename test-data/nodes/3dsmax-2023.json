@@ -1,13 +1,19 @@
 {
-    "id": "uuid-3dsmax-2023",
-    "group_id": "3dsmax",
-    "name": "3ds Max 2023 latest build for",
-    "icon": "max2024.svg",
-    "category": "Beta",
-    "default_for_group": true,
-    "description": "Latest stable version for all artists to use for production this includes the latest vray, tyflow, fumefx and phoenix",
-    "status": {
-      "name": "Default",
-      "color": "rgb(255,32,86)"
+  "id": "uuid-3dsmax-2023",
+  "group_id": "3dsmax",
+  "name": "3ds Max 2023 latest build for",
+  "icon": "max2024.svg",
+  "category": "Beta",
+  "default_for_group": true,
+  "description": "Latest stable version for all artists to use for production this includes the latest vray, tyflow, fumefx and phoenix",
+  "status": {
+    "name": "Default",
+    "color": "rgb(255,32,86)"
+  },
+  "commands": [
+    {
+      "path": "${ProgramFiles}/Affinity/Photo/Photo.exe",
+      "path_type": "rel"
     }
-  }
+  ]
+}

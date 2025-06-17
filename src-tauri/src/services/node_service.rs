@@ -4,5 +4,5 @@ use crate::models::varo_node::EnvPreset;
 use serde_json::Value;
 
 pub fn test() {
-    load_nodes_in_dir("C:/Users/joker/Documents/GitHub/varo-vue/test-data/nodes");
+    load_nodes_in_dir("C:/Users/jmartini/Documents/GitHub/varo-vue/test-data/nodes");
 }

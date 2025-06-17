@@ -4,11 +4,11 @@ use serde::{Serialize};
 pub struct VaroNode {
     pub id: String,
     pub name: String,
-    pub category: Option<String>,
-    pub group_id: Option<String>,
+    pub category: String,
+    pub group_id: String,
     pub icon: String, // raw embedded SVG or base64 PNG, or placeholder
     pub filepath: Option<String>,
-    pub default_for_group: Option<bool>,
+    pub default_for_group: bool,
     pub description: Option<String>,
     pub status: Option<Status>,
     pub access: Option<Access>,

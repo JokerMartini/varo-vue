@@ -4,13 +4,11 @@ use std::sync::Mutex;
 use std::collections::HashMap;
 
 mod models;
-mod loaders;
 mod utils;
 mod services;
 
 use serde_json::Value;
 use tauri::{Builder, Manager};
-use crate::loaders::varo_node_loader::get_varo_nodes;
 use crate::utils::commands::execute_program;
 use crate::services::env_preset_service::load_env_presets_from_config;
 use crate::services::node_service::test;
@@ -70,7 +68,6 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             get_platform,
             get_os_username,
-            get_varo_nodes,
             execute_program,
             get_env_presets,
             get_config,

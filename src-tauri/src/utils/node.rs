@@ -7,6 +7,75 @@ use crate::utils::hasher::Hasher;
 use crate::utils::icon::{resolve_icon_file_path, load_icon_data_uri};
 use crate::utils::env::parse_env_vars_from_json;
 
+
+fn parse_commands_from_json(json: &Value, path: &PathBuf) -> Vec<Command> {
+    match json.get("commands") {
+        Some(commands_val) => {
+            if let Some(commands_arr) = commands_val.as_array() {
+                commands_arr.iter().filter_map(|item| {
+                    item.as_object().map(|cmd| Command {
+                        path: cmd.get("path").and_then(|v| v.as_str()).unwrap_or("").to_string(),
+                        path_type: cmd.get("path_type").and_then(|v| v.as_str()).unwrap_or("").to_string(),
+                        args: cmd.get("args").and_then(|v| v.as_str()).unwrap_or("").to_string(),
+                        non_blocking: cmd.get("nonBlocking").and_then(|v| v.as_bool()).unwrap_or(false),
+                    })
+                }).collect()
+            } else {
+                eprintln!("Error: 'commands' field must be an array in '{}'", path.display());
+                vec![]
+            }
+        }
+        None => {
+            eprintln!("Error: Missing 'commands' field in '{}'", path.display());
+            vec![]
+        }
+    }
+}
+
+fn parse_status_from_json(json: &Value, path: &PathBuf) -> Option<Status> {
+    match json.get("status").and_then(|v| v.as_object()) {
+        Some(s) => Some(Status {
+            name: s.get("name").and_then(|v| v.as_str()).unwrap_or("").to_string(),
+            color: s.get("color").and_then(|v| v.as_str()).unwrap_or("").to_string(),
+        }),
+        None => {
+            eprintln!(
+                "Warning: Missing or invalid 'status' block in file '{}', skipping status",
+                path.display()
+            );
+            None
+        }
+    }
+}
+
+fn parse_access_from_json(json: &Value, path: &PathBuf) -> Option<Access> {
+    match json.get("access").and_then(|v| v.as_object()) {
+        Some(acc) => Some(Access {
+            platforms: acc.get("platforms")
+                .and_then(|v| v.as_array())
+                .map(|arr| arr.iter().filter_map(|v| v.as_str().map(|s| s.to_string())).collect())
+                .unwrap_or_default(),
+
+            allow: acc.get("allow")
+                .and_then(|v| v.as_array())
+                .map(|arr| arr.iter().filter_map(|v| v.as_str().map(|s| s.to_string())).collect())
+                .unwrap_or_default(),
+
+            deny: acc.get("deny")
+                .and_then(|v| v.as_array())
+                .map(|arr| arr.iter().filter_map(|v| v.as_str().map(|s| s.to_string())).collect())
+                .unwrap_or_default(),
+        }),
+        None => {
+            eprintln!(
+                "Warning: Missing or invalid 'access' block in file '{}', skipping access",
+                path.display()
+            );
+            None
+        }
+    }
+}
+
 pub fn load_node_from_file(path: &PathBuf) -> Result<VaroNode, String> {
     let content = match fs::read_to_string(path) {
         Ok(c) => c,
@@ -67,39 +136,9 @@ pub fn load_node_from_file(path: &PathBuf) -> Result<VaroNode, String> {
         .get("default_for_group")
         .and_then(|v| v.as_bool())
         .unwrap_or(false);
-
-    let status = json.get("status")
-        .and_then(|v| v.as_object())
-        .map(|s| Status {
-            name: s.get("name").and_then(|v| v.as_str()).unwrap_or("").to_string(),
-            color: s.get("color").and_then(|v| v.as_str()).unwrap_or("").to_string(),
-        });
-
-    if status.is_none() {
-        eprintln!(
-            "Warning: Missing or invalid 'status' block in file '{}', skipping status",
-            path.display()
-        );
-    }
-
-    let access = json.get("access")
-        .and_then(|v| v.as_object())
-        .map(|acc| Access {
-            platforms: acc.get("platforms")
-                .and_then(|v| v.as_array())
-                .map(|arr| arr.iter().filter_map(|v| v.as_str().map(|s| s.to_string())).collect())
-                .unwrap_or_default(),
     
-            allow: acc.get("allow")
-                .and_then(|v| v.as_array())
-                .map(|arr| arr.iter().filter_map(|v| v.as_str().map(|s| s.to_string())).collect())
-                .unwrap_or_default(),
-    
-            deny: acc.get("deny")
-                .and_then(|v| v.as_array())
-                .map(|arr| arr.iter().filter_map(|v| v.as_str().map(|s| s.to_string())).collect())
-                .unwrap_or_default(),
-        });
+    let status = parse_status_from_json(&json, path);
+    let access = parse_access_from_json(&json, path);
 
     let icon_path = json.get("icon").and_then(|v| v.as_str()).unwrap_or("").to_string();
     let icon_file_path = resolve_icon_file_path(&icon_path);
@@ -125,20 +164,10 @@ pub fn load_node_from_file(path: &PathBuf) -> Result<VaroNode, String> {
         icon_data.clone()
     };
 
-    let commands: Vec<Command> = json.get("commands")
-        .ok_or_else(|| format!("Missing required 'commands' array in {}", path.display()))?
-        .as_array()
-        .ok_or_else(|| format!("'commands' field must be an array in {}", path.display()))?
-        .iter()
-        .filter_map(|item| {
-            item.as_object().map(|cmd| Command {
-                path: cmd.get("path").and_then(|v| v.as_str()).unwrap_or("").to_string(),
-                path_type: cmd.get("path_type").and_then(|v| v.as_str()).unwrap_or("").to_string(),
-                args: cmd.get("args").and_then(|v| v.as_str()).unwrap_or("").to_string(),
-                non_blocking: cmd.get("nonBlocking").and_then(|v| v.as_bool()).unwrap_or(false)
-            })
-        })
-        .collect();
+    let commands = parse_commands_from_json(&json, path);
+    if commands.is_empty() {
+        return Err(format!("No valid commands found in '{}'", path.display()));
+    }
 
     println!("Name: {}", name);
     println!("Description: {:?}", description);
@@ -155,13 +184,23 @@ pub fn load_node_from_file(path: &PathBuf) -> Result<VaroNode, String> {
     println!("Commands: {:?}", commands);
     println!("---");
 
-    return Err("Someting".into());
-    // let node = VaroNode {
-    //     id:"great".to_string(), 
-    //     name:"Great".to_string(),
-    // };
+    let node = VaroNode {
+        access,
+        category,
+        commands,
+        date_modified,
+        default_for_group,
+        description,
+        env,
+        filepath,
+        group_id,
+        icon: icon_data,
+        id,
+        name,
+        status,
+    };
 
-    // Ok(node)
+    Ok(node)
 }
 
 pub fn load_nodes_in_dir(dir_path: &str) -> Result<Vec<VaroNode>, String> {
@@ -188,5 +227,6 @@ pub fn load_nodes_in_dir(dir_path: &str) -> Result<Vec<VaroNode>, String> {
         }
     }
 
+    println!("Fetched {} nodes", nodes.len());
     Ok(nodes)
 }
