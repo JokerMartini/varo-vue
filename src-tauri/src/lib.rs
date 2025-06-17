@@ -12,7 +12,7 @@ use tauri::{Builder, Manager};
 use crate::utils::commands::execute_program;
 use crate::services::env_preset_service::load_env_presets_from_config;
 use crate::services::node_service::test;
-use crate::models::varo_node::EnvPreset;
+use crate::models::entities::EnvPreset;
 use crate::utils::config::load_config;
 use crate::services::system_service::{get_os_username, get_platform};
 use crate::utils::env::get_current_env_vars;

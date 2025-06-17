@@ -53,9 +53,3 @@ pub struct EnvPreset {
     pub description: Option<String>,
     pub env: Vec<EnvVar>,
 }
-
-#[derive(Debug, Serialize)]
-pub struct NodeLoadResult {
-    pub nodes: Vec<VaroNode>,
-    pub warnings: Vec<String>,
-}

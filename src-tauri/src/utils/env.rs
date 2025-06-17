@@ -3,7 +3,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::collections::HashMap;
 use serde_json::Value;
-use crate::models::varo_node::{EnvVar, EnvPreset};
+use crate::models::entities::{EnvVar, EnvPreset};
 use crate::utils::hasher::Hasher;
 
 /// Returns current list of environment variables

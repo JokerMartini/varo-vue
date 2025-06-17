@@ -1,1 +1,1 @@
-pub mod varo_node;
+pub mod entities;

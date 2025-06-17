@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 use crate::utils::env::load_env_presets_in_dir;
-use crate::models::varo_node::EnvPreset;
+use crate::models::entities::EnvPreset;
 use serde_json::Value;
 
 pub fn load_env_presets_from_config(config: &Value) -> Vec<EnvPreset> {

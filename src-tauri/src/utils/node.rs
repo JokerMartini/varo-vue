@@ -2,7 +2,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 use serde_json::Value;
-use crate::models::varo_node::{VaroNode, Status, Access, Command, EnvVar, EnvPreset};
+use crate::models::entities::{VaroNode, Status, Access, Command, EnvVar, EnvPreset};
 use crate::utils::hasher::Hasher;
 use crate::utils::icon::{resolve_icon_file_path, load_icon_data_uri};
 use crate::utils::env::parse_env_vars_from_json;
