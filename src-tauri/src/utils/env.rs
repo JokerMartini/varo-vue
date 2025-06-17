@@ -6,19 +6,33 @@ use serde_json::Value;
 use crate::models::entities::{EnvVar, EnvPreset};
 use crate::utils::hasher::Hasher;
 
+/// let mut vars = HashMap::new();
+/// vars.insert("USER".to_string(), "Alice".to_string());
+/// vars.insert("APP_DIR".to_string(), "/usr/local/myapp".to_string());
+/// let template = "Hello ${USER}, your app is located at ${APP_DIR}.";
+/// let result = expand_tokens_with_map(template, &vars);
+/// println!("{}", result); // Hello Alice, your app is located at /usr/local/myapp.
+
 /// Returns current list of environment variables
 pub fn get_current_env_vars() -> HashMap<String, String> {
     env::vars().collect()
 }
 
+/// Expands `${KEY}` placeholders in a string using values from the provided `vars` map.
+/// Returns the updated string with tokens replaced.
+pub fn expand_tokens_with_map(input: &str, vars: &HashMap<String, String>) -> String {
+    let mut output = input.to_string();
+    for (key, value) in vars {
+        output = output.replace(&format!("${{{}}}", key), value);
+    }
+    output
+}
+
 /// Expands environment variables in a string using the current process environment.
 /// Replaces placeholders like `${VAR_NAME}` with their actual values.
 pub fn expand_env_vars(input: &str) -> String {
-    let mut output = input.to_string();
-    for (key, value) in env::vars() {
-        output = output.replace(&format!("${{{}}}", key), &value);
-    }
-    output
+    let env_map: HashMap<String, String> = env::vars().collect();
+    expand_tokens_with_map(input, &env_map)
 }
 
 /// Parses a JSON array into a list of EnvVar objects.
