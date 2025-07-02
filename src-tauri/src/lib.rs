@@ -7,42 +7,50 @@ mod core;
 
 use crate::core::VaroCore;
 use crate::utils::commands::execute_program;
+use crate::models::errors::VaroError;
 
-// Keep your existing Tauri commands but update them to use VaroCore
-#[tauri::command]
-fn get_config(state: tauri::State<Mutex<VaroCore>>) -> serde_json::Value {
-    let state = state.lock().unwrap();
-    state.sync_get_config()
+// Helper function to convert VaroError to String for Tauri
+fn handle_error<T>(result: Result<T, VaroError>) -> Result<T, String> {
+    result.map_err(|e| {
+        eprintln!("Varo Error: {}", e);
+        e.to_string()
+    })
 }
 
 #[tauri::command]
-fn get_env_presets(state: tauri::State<Mutex<VaroCore>>) -> Vec<crate::models::entities::EnvPreset> {
-    let state = state.lock().unwrap();
-    state.sync_get_all_presets()
+fn get_config(state: tauri::State<Mutex<VaroCore>>) -> Result<serde_json::Value, String> {
+    let state = state.lock().map_err(|e| format!("Failed to acquire state lock: {}", e))?;
+    Ok(state.sync_get_config())
+}
+
+#[tauri::command]
+fn get_env_presets(state: tauri::State<Mutex<VaroCore>>) -> Result<Vec<crate::models::entities::EnvPreset>, String> {
+    let state = state.lock().map_err(|e| format!("Failed to acquire state lock: {}", e))?;
+    Ok(state.sync_get_all_presets())
 }
 
 #[tauri::command]
 fn select_env_preset(id: String, state: tauri::State<Mutex<VaroCore>>) -> Result<(), String> {
-    let state = state.lock().unwrap();
-    state.sync_select_preset(&id)
+    let state = state.lock().map_err(|e| format!("Failed to acquire state lock: {}", e))?;
+    handle_error(state.sync_select_preset(&id))
 }
 
 #[tauri::command]
-fn get_os_username(state: tauri::State<Mutex<VaroCore>>) -> String {
-    let state = state.lock().unwrap();
-    state.get_username().to_string()
+fn get_os_username(state: tauri::State<Mutex<VaroCore>>) -> Result<String, String> {
+    let state = state.lock().map_err(|e| format!("Failed to acquire state lock: {}", e))?;
+    Ok(state.get_username().to_string())
 }
 
 #[tauri::command]
-fn get_platform(state: tauri::State<Mutex<VaroCore>>) -> String {
-    let state = state.lock().unwrap();
-    state.get_platform().to_string()
+fn get_platform(state: tauri::State<Mutex<VaroCore>>) -> Result<String, String> {
+    let state = state.lock().map_err(|e| format!("Failed to acquire state lock: {}", e))?;
+    Ok(state.get_platform().to_string())
 }
 
 #[tauri::command]
 fn reload_config(state: tauri::State<Mutex<VaroCore>>) -> Result<(), String> {
-    let state = state.lock().unwrap();
-    state.sync_reload_config()
+    let state = state.lock().map_err(|e| format!("Failed to acquire state lock: {}", e))?;
+    handle_error(state.sync_reload_config())
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]

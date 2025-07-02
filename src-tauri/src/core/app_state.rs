@@ -1,9 +1,9 @@
 use std::sync::Arc;
 use tokio::sync::RwLock;
 use serde_json::Value;
-use std::collections::HashMap;
 
 use crate::models::entities::{EnvPreset, VaroNode};
+use crate::models::errors::{VaroError, VaroResult};
 use crate::core::config::ConfigManager;
 use crate::core::env_presets::PresetManager;
 use crate::core::nodes::NodeManager;
@@ -20,8 +20,23 @@ pub struct VaroCore {
 impl VaroCore {
     pub fn new() -> Self {
         let system_info = SystemInfo::collect();
-        let config_manager = ConfigManager::load();
-        let preset_manager = PresetManager::new(&config_manager.get_raw_config());
+        
+        let config_manager = match ConfigManager::load() {
+            Ok(manager) => manager,
+            Err(e) => {
+                eprintln!("Warning: Failed to load config: {}", e);
+                ConfigManager::empty()
+            }
+        };
+        
+        let preset_manager = match PresetManager::new(&config_manager.get_raw_config()) {
+            Ok(manager) => manager,
+            Err(e) => {
+                eprintln!("Warning: Failed to load presets: {}", e);
+                PresetManager::empty()
+            }
+        };
+        
         let mut node_manager = NodeManager::new();
         
         // Try to load nodes initially
@@ -38,7 +53,7 @@ impl VaroCore {
     }
 
     // Async methods for CLI/advanced usage
-    pub async fn refresh_env_preset(&self, preset_id: &str) -> Result<(), String> {
+    pub async fn refresh_env_preset(&self, preset_id: &str) -> VaroResult<()> {
         let mut preset_manager = self.preset_manager.write().await;
         preset_manager.select_preset(preset_id)?;
         
@@ -50,7 +65,7 @@ impl VaroCore {
         Ok(())
     }
 
-    pub async fn execute_node(&self, node_id: &str) -> Result<(), String> {
+    pub async fn execute_node(&self, node_id: &str) -> VaroResult<()> {
         let node_manager = self.node_manager.read().await;
         node_manager.execute_node(node_id)
     }
@@ -65,11 +80,10 @@ impl VaroCore {
 
     // Sync methods for Tauri compatibility (using blocking operations)
     pub fn sync_get_all_presets(&self) -> Vec<EnvPreset> {
-        // Use blocking_read in sync context since Tauri commands are sync
         self.preset_manager.blocking_read().get_all_presets()
     }
 
-    pub fn sync_select_preset(&self, preset_id: &str) -> Result<(), String> {
+    pub fn sync_select_preset(&self, preset_id: &str) -> VaroResult<()> {
         self.preset_manager.blocking_write().select_preset(preset_id)
     }
 
@@ -77,8 +91,17 @@ impl VaroCore {
         self.config_manager.blocking_read().get_raw_config()
     }
 
-    pub fn sync_reload_config(&self) -> Result<(), String> {
-        self.config_manager.blocking_write().reload();
+    pub fn sync_reload_config(&self) -> VaroResult<()> {
+        let mut config_manager = self.config_manager.blocking_write();
+        config_manager.reload()?;
+        
+        // Also reload presets with new config
+        let config = config_manager.get_raw_config();
+        drop(config_manager); // Release config lock
+        
+        let mut preset_manager = self.preset_manager.blocking_write();
+        preset_manager.reload(&config)?;
+        
         Ok(())
     }
 

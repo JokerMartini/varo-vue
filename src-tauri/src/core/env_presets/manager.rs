@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use serde_json::Value;
 use crate::models::entities::EnvPreset;
+use crate::models::errors::{VaroError, VaroResult};
 use crate::utils::env::{load_env_presets_in_dir, expand_env_vars};
 use std::path::PathBuf;
 
@@ -11,10 +12,17 @@ pub struct PresetManager {
 }
 
 impl PresetManager {
-    pub fn new(config: &Value) -> Self {
-        let presets = Self::load_presets_from_config(config);
-        Self {
+    pub fn new(config: &Value) -> VaroResult<Self> {
+        let presets = Self::load_presets_from_config(config)?;
+        Ok(Self {
             presets,
+            selected_preset: None,
+        })
+    }
+
+    pub fn empty() -> Self {
+        Self {
+            presets: Vec::new(),
             selected_preset: None,
         }
     }
@@ -27,12 +35,12 @@ impl PresetManager {
         self.presets.iter().find(|p| p.id == id)
     }
 
-    pub fn select_preset(&mut self, id: &str) -> Result<(), String> {
+    pub fn select_preset(&mut self, id: &str) -> VaroResult<()> {
         if let Some(preset) = self.presets.iter().find(|p| p.id == id).cloned() {
             self.selected_preset = Some(preset);
             Ok(())
         } else {
-            Err(format!("No EnvPreset found with id: {}", id))
+            Err(VaroError::env_preset(format!("No EnvPreset found with id: {}", id)))
         }
     }
 
@@ -40,7 +48,7 @@ impl PresetManager {
         self.selected_preset.as_ref()
     }
 
-    fn load_presets_from_config(config: &Value) -> Vec<EnvPreset> {
+    fn load_presets_from_config(config: &Value) -> VaroResult<Vec<EnvPreset>> {
         let dirs = config.pointer("/env_presets/directories")
             .and_then(|v| v.as_array())
             .unwrap_or(&vec![])
@@ -50,27 +58,40 @@ impl PresetManager {
             .map(PathBuf::from)
             .collect::<Vec<_>>();
 
+        if dirs.is_empty() {
+            return Ok(Vec::new());
+        }
+
         let mut all_presets = Vec::new();
+        let mut errors = Vec::new();
 
         for dir in dirs {
             match load_env_presets_in_dir(dir.to_str().unwrap_or_default()) {
                 Ok(presets) => all_presets.extend(presets),
                 Err(err) => {
-                    eprintln!("Failed to load presets from {:?}: {}", dir, err);
+                    errors.push(format!("Failed to load presets from {:?}: {}", dir, err));
                 }
             }
         }
 
-        all_presets
+        // Log warnings but don't fail completely
+        for error in errors {
+            eprintln!("Warning: {}", error);
+        }
+
+        Ok(all_presets)
     }
 
-    pub fn reload(&mut self, config: &Value) {
-        self.presets = Self::load_presets_from_config(config);
+    pub fn reload(&mut self, config: &Value) -> VaroResult<()> {
+        self.presets = Self::load_presets_from_config(config)?;
+        
         // Clear selected preset if it no longer exists
         if let Some(ref selected) = self.selected_preset {
             if !self.presets.iter().any(|p| p.id == selected.id) {
                 self.selected_preset = None;
             }
         }
+        
+        Ok(())
     }
 }

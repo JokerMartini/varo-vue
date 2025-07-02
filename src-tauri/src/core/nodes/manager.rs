@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use crate::models::entities::{VaroNode, EnvPreset};
+use crate::models::errors::{VaroError, VaroResult};
 use crate::utils::node::load_nodes_in_dir;
 use crate::utils::commands::execute_program;
 
@@ -15,25 +16,22 @@ impl NodeManager {
         }
     }
 
-    pub fn load_nodes_from_varo_path(&mut self) -> Result<(), String> {
+    pub fn load_nodes_from_varo_path(&mut self) -> VaroResult<()> {
         // test dir -> "C:/Users/jmartini/Documents/GitHub/varo-vue/test-data/nodes"
-        // For now, just call the existing test function
-        // TODO: Make this more robust when we improve error handling
-        if let Ok(varo_path) = std::env::var("VARO_PATH") {
-            let nodes_path = format!("{}/nodes", varo_path);
-            match load_nodes_in_dir(&nodes_path) {
-                Ok(nodes) => {
-                    self.nodes.clear();
-                    for node in nodes {
-                        self.nodes.insert(node.id.clone(), node);
-                    }
-                    Ok(())
-                }
-                Err(e) => Err(e),
-            }
-        } else {
-            Err("VARO_PATH environment variable not set".to_string())
+        let varo_path = std::env::var("VARO_PATH")
+            .map_err(|_| VaroError::node("VARO_PATH environment variable not set"))?;
+            
+        let nodes_path = format!("{}/nodes", varo_path);
+        
+        let nodes = load_nodes_in_dir(&nodes_path)
+            .map_err(|e| VaroError::node(format!("Failed to load nodes from {}: {}", nodes_path, e)))?;
+        
+        self.nodes.clear();
+        for node in nodes {
+            self.nodes.insert(node.id.clone(), node);
         }
+        
+        Ok(())
     }
 
     pub fn get_all_nodes(&self) -> Vec<&VaroNode> {
@@ -44,45 +42,49 @@ impl NodeManager {
         self.nodes.get(id)
     }
 
-    pub fn execute_node(&self, id: &str) -> Result<(), String> {
-        if let Some(node) = self.nodes.get(id) {
-            // For now, just execute the first command
-            // TODO: Handle multiple commands and different command types
-            if let Some(command) = node.commands.first() {
-                let args = if command.args.is_empty() {
-                    None
-                } else {
-                    Some(command.args.split_whitespace().map(|s| s.to_string()).collect())
-                };
+    pub fn execute_node(&self, id: &str) -> VaroResult<()> {
+        let node = self.nodes.get(id)
+            .ok_or_else(|| VaroError::node(format!("Node not found: {}", id)))?;
 
-                // Convert node env vars to HashMap
-                let env_vars = if node.env.is_empty() {
-                    None
-                } else {
-                    let mut env_map = HashMap::new();
-                    for env_var in &node.env {
-                        env_map.insert(env_var.name.clone(), env_var.value.clone());
-                    }
-                    Some(env_map)
-                };
-
-                execute_program(
-                    command.path.clone(),
-                    args,
-                    env_vars,
-                    !command.non_blocking
-                )
-            } else {
-                Err("Node has no commands to execute".to_string())
-            }
-        } else {
-            Err(format!("Node not found: {}", id))
+        if node.commands.is_empty() {
+            return Err(VaroError::execution("Node has no commands to execute"));
         }
+
+        // Execute the first command (for now)
+        let command = &node.commands[0];
+        
+        let args = if command.args.is_empty() {
+            None
+        } else {
+            Some(command.args.split_whitespace().map(|s| s.to_string()).collect())
+        };
+
+        // Convert node env vars to HashMap
+        let env_vars = if node.env.is_empty() {
+            None
+        } else {
+            let mut env_map = HashMap::new();
+            for env_var in &node.env {
+                env_map.insert(env_var.name.clone(), env_var.value.clone());
+            }
+            Some(env_map)
+        };
+
+        execute_program(
+            command.path.clone(),
+            args,
+            env_vars,
+            !command.non_blocking
+        ).map_err(|e| VaroError::execution(format!("Failed to execute command: {}", e)))
     }
 
-    pub fn refresh_with_preset(&mut self, _preset: &EnvPreset) -> Result<(), String> {
+    pub fn refresh_with_preset(&mut self, _preset: &EnvPreset) -> VaroResult<()> {
         // TODO: Implement preset-based node loading
         // For now, just reload all nodes
         self.load_nodes_from_varo_path()
+    }
+
+    pub fn get_node_count(&self) -> usize {
+        self.nodes.len()
     }
 }
