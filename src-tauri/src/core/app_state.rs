@@ -31,7 +31,8 @@ impl VaroCore {
         };
         
         // Load env presets based on config
-        let preset_manager = match PresetManager::new(&config_manager.get_config()) {
+        let env_presets_config = config_manager.get_section("env_presets");
+        let preset_manager = match PresetManager::new(&env_presets_config) {
             Ok(manager) => manager,
             Err(e) => {
                 eprintln!("Warning: Failed to load presets: {}", e);
@@ -98,11 +99,11 @@ impl VaroCore {
         config_manager.reload()?;
         
         // Also reload presets with new config
-        let config = config_manager.get_config();
+        let env_presets_config = config_manager.get_section("env_presets");
         drop(config_manager); // Release config lock
         
         let mut preset_manager = self.preset_manager.blocking_write();
-        preset_manager.reload(&config)?;
+        preset_manager.reload(&env_presets_config)?;
         
         Ok(())
     }

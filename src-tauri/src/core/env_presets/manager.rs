@@ -48,8 +48,14 @@ impl PresetManager {
     }
 
     fn load_presets_from_env_config(env_presets_config: &Value) -> VaroResult<Vec<EnvPreset>> {
+        println!("[Preset Manager] Starting preset loading process");
+        println!("[Preset Manager] Config received: {}", serde_json::to_string_pretty(env_presets_config).unwrap_or_else(|_| "Invalid JSON".to_string()));
+        
+        println!("HERE: {}", env_presets_config);
+
         // If config is empty or null, return empty list
         if env_presets_config.is_null() || env_presets_config.as_object().map_or(true, |o| o.is_empty()) {
+            println!("[Preset Manager] Config is null or empty, returning empty preset list");
             return Ok(Vec::new());
         }
 
@@ -63,7 +69,10 @@ impl PresetManager {
             .map(std::path::PathBuf::from)
             .collect::<Vec<_>>();
         
+        println!("[Preset Manager] Found {} directories to scan: {:?}", dirs.len(), dirs);
+        
         if dirs.is_empty() {
+            println!("[Preset Manager] No directories found in config, returning empty preset list");
             return Ok(Vec::new());
         }
 
@@ -71,10 +80,21 @@ impl PresetManager {
         let mut errors = Vec::new();
 
         for dir in dirs {
-            match load_env_presets_in_dir(dir.to_str().unwrap_or_default()) {
-                Ok(presets) => all_presets.extend(presets),
+            let dir_str = dir.to_str().unwrap_or_default();
+            println!("[Preset Manager] Scanning directory: {}", dir_str);
+            
+            match load_env_presets_in_dir(dir_str) {
+                Ok(presets) => {
+                    println!("[Preset Manager] Successfully loaded {} presets from {}", presets.len(), dir_str);
+                    for preset in &presets {
+                        println!("[Preset Manager]   - Found preset: '{}' (ID: {})", preset.name, preset.id);
+                    }
+                    all_presets.extend(presets);
+                },
                 Err(err) => {
-                    errors.push(format!("Failed to load presets from {:?}: {}", dir, err));
+                    let error_msg = format!("Failed to load presets from {:?}: {}", dir, err);
+                    println!("[Preset Manager] Error: {}", error_msg);
+                    errors.push(error_msg);
                 }
             }
         }
@@ -84,6 +104,8 @@ impl PresetManager {
             eprintln!("Warning: {}", error);
         }
 
+        println!("[Preset Manager] Preset loading complete. Total presets loaded: {}", all_presets.len());
+        
         Ok(all_presets)
     }
 

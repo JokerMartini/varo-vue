@@ -6,13 +6,6 @@ use serde_json::Value;
 use crate::models::entities::{EnvVar, EnvPreset};
 use crate::utils::hasher::Hasher;
 
-/// let mut vars = HashMap::new();
-/// vars.insert("USER".to_string(), "Alice".to_string());
-/// vars.insert("APP_DIR".to_string(), "/usr/local/myapp".to_string());
-/// let template = "Hello ${USER}, your app is located at ${APP_DIR}.";
-/// let result = expand_tokens_with_map(template, &vars);
-/// println!("{}", result); // Hello Alice, your app is located at /usr/local/myapp.
-
 /// Returns current list of environment variables
 pub fn get_current_env_vars() -> HashMap<String, String> {
     env::vars().collect()
