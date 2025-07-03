@@ -3,25 +3,13 @@ use std::path::PathBuf;
 use serde_json::{Value, json};
 use crate::utils::env::expand_env_vars;
 
-fn default_config() -> Value {
-    json!({
-        "env_presets": { 
-            "directories": [], 
-            "default_id": null 
-        },
-        "ui": { 
-            "dark_mode": true, 
-            "show_groups": false, 
-            "show_categories": true, 
-            "show_hidden_nodes": false 
-        }
-    })
-}
 
+/// Get the path to the environment-specified config file
 fn get_env_config_path() -> Option<PathBuf> {
     std::env::var("VARO_CONFIG_PATH").ok().map(PathBuf::from)
 }
 
+/// Get the path to the user-specific config file, creating directories as needed
 fn get_user_config_path() -> Option<PathBuf> {
     if let Some(mut doc_path) = dirs::config_local_dir() {
         doc_path.push("Varo");
@@ -33,17 +21,19 @@ fn get_user_config_path() -> Option<PathBuf> {
 
         let config_path = doc_path.join("config.json");
         
+        // Create empty config file if it doesn't exist
         if !config_path.exists() {
             let _ = std::fs::write(&config_path, "{}");
         }
         
-        println!("[Varo Config] User config folder: {}", doc_path.display());
+        println!("[Config Utils] User config folder: {}", doc_path.display());
         Some(config_path)
     } else {
         None
     }
 }
 
+/// Load and parse a JSON config file from the given path
 fn load_config_file(path: PathBuf) -> Value {
     fs::read_to_string(path)
         .ok()
@@ -51,7 +41,8 @@ fn load_config_file(path: PathBuf) -> Value {
         .unwrap_or_else(|| json!({}))
 }
 
-fn merge_configs(base: &mut Value, overrides: &Value) {
+/// Recursively merge two JSON configurations, with overrides taking precedence
+pub fn merge_configs(base: &mut Value, overrides: &Value) {
     match (base, overrides) {
         (Value::Object(base_map), Value::Object(override_map)) => {
             for (key, override_val) in override_map {
@@ -64,21 +55,12 @@ fn merge_configs(base: &mut Value, overrides: &Value) {
     }
 }
 
-pub fn load_config() -> Value {
-    let mut config = default_config();
+/// Load configuration from environment-specified path
+pub fn load_env_config() -> Option<Value> {
+    get_env_config_path().map(load_config_file)
+}
 
-    if let Some(global_path) = get_env_config_path() {
-        merge_configs(&mut config, &load_config_file(global_path));
-    }
-
-    if let Some(user_path) = get_user_config_path() {
-        merge_configs(&mut config, &load_config_file(user_path));
-    }
-
-    match serde_json::to_string_pretty(&config) {
-        Ok(pretty_json) => println!("[Varo Config] Merged config:\n{}", pretty_json),
-        Err(err) => eprintln!("[Varo Config] Failed to serialize config: {}", err),
-    }
-
-    config
+/// Load configuration from user-specific path
+pub fn load_user_config() -> Option<Value> {
+    get_user_config_path().map(load_config_file)
 }
