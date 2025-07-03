@@ -35,6 +35,33 @@ pub fn expand_env_vars(input: &str) -> String {
     expand_tokens_with_map(input, &env_map)
 }
 
+/// Recursively expands environment variables in JSON values in place with custom environment map
+pub fn resolve_env_vars_recursive_with_map(value: &mut Value, env_map: &HashMap<String, String>) {
+    match value {
+        Value::String(s) => {
+            *s = expand_tokens_with_map(s, env_map);
+        }
+        Value::Array(arr) => {
+            for item in arr.iter_mut() {
+                resolve_env_vars_recursive_with_map(item, env_map);
+            }
+        }
+        Value::Object(obj) => {
+            for (_, v) in obj.iter_mut() {
+                resolve_env_vars_recursive_with_map(v, env_map);
+            }
+        }
+        _ => {}
+    }
+}
+
+/// Recursively expands environment variables in JSON values in place
+/// Uses current process environment by default
+pub fn resolve_env_vars_recursive(value: &mut Value) {
+    let env_map: HashMap<String, String> = env::vars().collect();
+    resolve_env_vars_recursive_with_map(value, &env_map);
+}
+
 /// Parses a JSON array into a list of EnvVar objects.
 /// Applies environment variable expansion to each field and uses "set" as the default operation.
 pub fn parse_env_vars_from_json(env_array: &serde_json::Value) -> Vec<EnvVar> {

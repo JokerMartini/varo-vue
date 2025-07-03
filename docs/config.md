@@ -21,10 +21,10 @@ The config.json file provides a way to customize Varo's behavior without modifyi
     "default_id": "studio-default"
   },
   "ui": {
-    "darkMode": true,
-    "groups": false,
-    "categories": true,
-    "showHiddenNodes": false
+    "dark_mode": true,
+    "show_groups": false,
+    "show_categories": true,
+    "show_hidden_nodes": false
   }
 }
 ```
@@ -44,10 +44,10 @@ Settings that control the appearance and behavior of the Varo user interface.
 
 | Key          | Type      | Description                                                      |
 | ------------ | --------- | ---------------------------------------------------------------- |
-| `darkMode`   | `boolean` | When `true`, uses dark theme. When `false`, uses light theme    |
-| `groups`     | `boolean` | When `true`, nodes are grouped by their group-id                |
-| `categories` | `boolean` | When `true`, enables grouping nodes by categories               |
-| `showHiddenNodes` | `boolean` | When `true`, shows hidden nodes in the UI             |
+| `dark_mode`   | `boolean` | When `true`, uses dark theme. When `false`, uses light theme    |
+| `show_groups`     | `boolean` | When `true`, nodes are grouped by their group-id                |
+| `show_categories` | `boolean` | When `true`, enables grouping nodes by categories               |
+| `show_hidden_nodes` | `boolean` | When `true`, shows hidden nodes in the UI             |
 
 ## 📦 Planned/Optional Future Settings
 These settings are not yet supported but may be added in future versions:

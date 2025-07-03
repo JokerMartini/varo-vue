@@ -21,6 +21,7 @@ impl VaroCore {
     pub fn new() -> Self {
         let system_info = SystemInfo::collect();
         
+        // Load configuration file
         let config_manager = match ConfigManager::load() {
             Ok(manager) => manager,
             Err(e) => {
@@ -29,7 +30,8 @@ impl VaroCore {
             }
         };
         
-        let preset_manager = match PresetManager::new(&config_manager.get_raw_config()) {
+        // Load env presets based on config
+        let preset_manager = match PresetManager::new(&config_manager.get_config()) {
             Ok(manager) => manager,
             Err(e) => {
                 eprintln!("Warning: Failed to load presets: {}", e);
@@ -75,7 +77,7 @@ impl VaroCore {
     }
 
     pub async fn get_config(&self) -> Value {
-        self.config_manager.read().await.get_raw_config()
+        self.config_manager.read().await.get_config()
     }
 
     // Sync methods for Tauri compatibility (using blocking operations)
@@ -88,7 +90,7 @@ impl VaroCore {
     }
 
     pub fn sync_get_config(&self) -> Value {
-        self.config_manager.blocking_read().get_raw_config()
+        self.config_manager.blocking_read().get_config()
     }
 
     pub fn sync_reload_config(&self) -> VaroResult<()> {
@@ -96,7 +98,7 @@ impl VaroCore {
         config_manager.reload()?;
         
         // Also reload presets with new config
-        let config = config_manager.get_raw_config();
+        let config = config_manager.get_config();
         drop(config_manager); // Release config lock
         
         let mut preset_manager = self.preset_manager.blocking_write();

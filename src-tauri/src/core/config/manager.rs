@@ -19,22 +19,20 @@ impl ConfigManager {
         }
     }
 
-    pub fn get_raw_config(&self) -> Value {
+    /// Returns the resolved config
+    pub fn get_config(&self) -> Value {
         self.config.clone()
+    }
+
+    /// Get a specific section of the config
+    pub fn get_section(&self, section: &str) -> Value {
+        self.config.get(section)
+            .cloned()
+            .unwrap_or_else(|| serde_json::json!({}))
     }
 
     pub fn reload(&mut self) -> VaroResult<()> {
         self.config = config::load_config();
         Ok(())
-    }
-
-    pub fn get_env_preset_directories(&self) -> Vec<String> {
-        self.config.pointer("/env_presets/directories")
-            .and_then(|v| v.as_array())
-            .unwrap_or(&vec![])
-            .iter()
-            .filter_map(|v| v.as_str())
-            .map(|s| s.to_string())
-            .collect()
     }
 }

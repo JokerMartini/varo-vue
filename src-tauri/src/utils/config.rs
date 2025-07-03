@@ -1,30 +1,20 @@
 use std::fs;
 use std::path::PathBuf;
 use serde_json::{Value, json};
-
-pub fn load_config() -> Value {
-    let mut config = default_config();
-
-    if let Some(global_path) = get_env_config_path() {
-        merge_configs(&mut config, &load_config_file(global_path));
-    }
-
-    if let Some(user_path) = get_user_config_path() {
-        merge_configs(&mut config, &load_config_file(user_path));
-    }
-
-    match serde_json::to_string_pretty(&config) {
-        Ok(pretty_json) => println!("[Varo Config] Merged config:\n{}", pretty_json),
-        Err(err) => eprintln!("[Varo Config] Failed to serialize config: {}", err),
-    }
-
-    config
-}
+use crate::utils::env::expand_env_vars;
 
 fn default_config() -> Value {
     json!({
-        // "theme": "dark",
-        // "showHiddenApps": false
+        "env_presets": { 
+            "directories": [], 
+            "default_id": null 
+        },
+        "ui": { 
+            "dark_mode": true, 
+            "show_groups": false, 
+            "show_categories": true, 
+            "show_hidden_nodes": false 
+        }
     })
 }
 
@@ -72,4 +62,23 @@ fn merge_configs(base: &mut Value, overrides: &Value) {
             *base = override_val.clone();
         }
     }
+}
+
+pub fn load_config() -> Value {
+    let mut config = default_config();
+
+    if let Some(global_path) = get_env_config_path() {
+        merge_configs(&mut config, &load_config_file(global_path));
+    }
+
+    if let Some(user_path) = get_user_config_path() {
+        merge_configs(&mut config, &load_config_file(user_path));
+    }
+
+    match serde_json::to_string_pretty(&config) {
+        Ok(pretty_json) => println!("[Varo Config] Merged config:\n{}", pretty_json),
+        Err(err) => eprintln!("[Varo Config] Failed to serialize config: {}", err),
+    }
+
+    config
 }
