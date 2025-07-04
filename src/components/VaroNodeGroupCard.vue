@@ -36,10 +36,13 @@ const menuItems = computed<DropdownMenuItem[][]>(() => [
   ],
   [
     {
-      label: 'Show in Explorer...',
+      label: 'Show in Folder...',
       icon: 'i-lucide-folder',
       onSelect(e: Event) {
-        console.log('TODO');
+        // Show the first node's directory (since all nodes in a group should be in the same directory)
+        if (props.group.selectedNodeId) {
+          appStore.showNodeInFolder(props.group.selectedNodeId);
+        }
       }
     }
   ]

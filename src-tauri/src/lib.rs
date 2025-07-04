@@ -65,6 +65,12 @@ fn execute_node(id: String, state: tauri::State<Mutex<VaroCore>>) -> Result<(), 
     handle_error(state.sync_execute_node(&id))
 }
 
+#[tauri::command]
+fn show_node_in_folder(id: String, state: tauri::State<Mutex<VaroCore>>) -> Result<(), String> {
+    let state = state.lock().map_err(|e| format!("Failed to acquire state lock: {}", e))?;
+    handle_error(state.sync_show_node_in_folder(&id))
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -87,6 +93,7 @@ pub fn run() {
             reload_config,
             get_nodes,
             execute_node,
+            show_node_in_folder,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

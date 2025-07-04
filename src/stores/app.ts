@@ -175,6 +175,16 @@ export const useAppStore = defineStore("app", () => {
         }
     }
 
+    // NODE FOLDER
+    async function showNodeInFolder(nodeId: string) {
+        try {
+            await invoke("show_node_in_folder", { id: nodeId });
+            console.log(`Opened folder for node: ${nodeId}`);
+        } catch (error) {
+            console.error("Failed to show node in folder:", error);
+        }
+    }
+
     // DATA MANAGEMENT
     function setNodes(newNodes: VaroNode[]) {
         nodes.value = newNodes;
@@ -268,6 +278,7 @@ export const useAppStore = defineStore("app", () => {
         fetchAppConfig,
         selectEnvPreset,
         executeNode,
+        showNodeInFolder,
         setNodes,
     };
 });

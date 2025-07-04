@@ -126,4 +126,8 @@ impl VaroCore {
     pub fn sync_execute_node(&self, node_id: &str) -> VaroResult<()> {
         self.node_manager.blocking_read().execute_node(node_id)
     }
+
+    pub fn sync_show_node_in_folder(&self, node_id: &str) -> VaroResult<()> {
+        self.node_manager.blocking_read().show_node_in_folder(node_id)
+    }
 }

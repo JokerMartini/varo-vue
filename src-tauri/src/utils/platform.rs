@@ -1,4 +1,5 @@
 use std::env;
+use std::path::Path;
 
 /// Returns os username or Guest
 pub fn get_os_username() -> String {
@@ -23,5 +24,175 @@ pub fn get_platform() -> String {
         "linux".to_string()
     } else {
         "unknown".to_string()
+    }
+}
+
+/// Opens a directory in the system's default file manager
+pub fn open_directory_in_folder(dir: &Path) -> bool {
+    if !dir.exists() {
+        println!("[Platform] Directory does not exist: {}", dir.display());
+        return false;
+    }
+
+    println!("[Platform] Attempting to open directory: {}", dir.display());
+    println!("[Platform] Directory exists: {}", dir.exists());
+    println!("[Platform] Is directory: {}", dir.is_dir());
+
+    #[cfg(target_os = "windows")]
+    {
+        // Convert path to Windows format
+        let path_str = dir.to_string_lossy();
+        let windows_path = path_str.replace('/', "\\");
+        
+        println!("[Platform] Original path: {}", path_str);
+        println!("[Platform] Windows path: {}", windows_path);
+        
+        // Try different methods for Windows
+        let mut result = std::process::Command::new("explorer")
+            .arg(&windows_path)
+            .spawn();
+            
+        // If the first method fails, try with /e flag (opens in folder view)
+        if result.is_err() {
+            println!("[Platform] First attempt failed, trying with /e flag");
+            result = std::process::Command::new("explorer")
+                .arg("/e")
+                .arg(&windows_path)
+                .spawn();
+        }
+            
+        match result {
+            Ok(_) => {
+                println!("[Platform] Successfully launched explorer");
+                return true;
+            },
+            Err(e) => {
+                println!("[Platform] Failed to launch explorer: {}", e);
+                return false;
+            }
+        }
+    }
+
+    #[cfg(target_os = "macos")]
+    {
+        println!("[Platform] Opening with macOS 'open' command");
+        match std::process::Command::new("open")
+            .arg(dir)
+            .spawn() {
+            Ok(_) => {
+                println!("[Platform] Successfully opened finder");
+                return true;
+            },
+            Err(e) => {
+                println!("[Platform] Failed to open finder: {}", e);
+                return false;
+            }
+        }
+    }
+
+    #[cfg(target_os = "linux")]
+    {
+        // Try common Linux file managers
+        let file_managers = ["xdg-open", "nautilus", "dolphin", "thunar", "pcmanfm"];
+        
+        println!("[Platform] Trying Linux file managers: {:?}", file_managers);
+        
+        for manager in &file_managers {
+            println!("[Platform] Trying file manager: {}", manager);
+            if let Ok(_) = std::process::Command::new(manager)
+                .arg(dir)
+                .spawn() {
+                println!("[Platform] Successfully opened with: {}", manager);
+                return true;
+            }
+        }
+        
+        println!("[Platform] No suitable file manager found");
+        return false;
+    }
+
+    #[cfg(not(any(target_os = "windows", target_os = "macos", target_os = "linux")))]
+    {
+        println!("[Platform] Unsupported platform: {}", env::consts::OS);
+        return false;
+    }
+}
+
+/// Opens a file in the system's default file manager and selects/highlights it
+pub fn open_file_in_folder(file_path: &Path) -> bool {
+    if !file_path.exists() {
+        println!("[Platform] File does not exist: {}", file_path.display());
+        return false;
+    }
+
+    println!("[Platform] Attempting to select file in folder: {}", file_path.display());
+
+    #[cfg(target_os = "windows")]
+    {
+        // Use /select to highlight the specific file
+        let path_str = file_path.to_string_lossy();
+        let windows_path = path_str.replace('/', "\\");
+        
+        println!("[Platform] Windows file path: {}", windows_path);
+        
+        match std::process::Command::new("explorer")
+            .arg("/select,")
+            .arg(&windows_path)
+            .spawn() {
+            Ok(_) => {
+                println!("[Platform] Successfully opened explorer with file selected");
+                return true;
+            },
+            Err(e) => {
+                println!("[Platform] Failed to launch explorer with /select: {}", e);
+                // Fallback to opening the directory
+                if let Some(parent) = file_path.parent() {
+                    return open_directory_in_folder(parent);
+                }
+                return false;
+            }
+        }
+    }
+
+    #[cfg(target_os = "macos")]
+    {
+        // Use -R flag to reveal the file in Finder
+        println!("[Platform] Opening with macOS 'open -R' command");
+        match std::process::Command::new("open")
+            .arg("-R")
+            .arg(file_path)
+            .spawn() {
+            Ok(_) => {
+                println!("[Platform] Successfully revealed file in finder");
+                return true;
+            },
+            Err(e) => {
+                println!("[Platform] Failed to reveal file in finder: {}", e);
+                // Fallback to opening the directory
+                if let Some(parent) = file_path.parent() {
+                    return open_directory_in_folder(parent);
+                }
+                return false;
+            }
+        }
+    }
+
+    #[cfg(target_os = "linux")]
+    {
+        // Most Linux file managers don't have a "select file" equivalent
+        // Fall back to opening the parent directory
+        println!("[Platform] Linux: Opening parent directory (file selection not supported)");
+        if let Some(parent) = file_path.parent() {
+            return open_directory_in_folder(parent);
+        } else {
+            println!("[Platform] Unable to get parent directory");
+            return false;
+        }
+    }
+
+    #[cfg(not(any(target_os = "windows", target_os = "macos", target_os = "linux")))]
+    {
+        println!("[Platform] Unsupported platform: {}", env::consts::OS);
+        return false;
     }
 }

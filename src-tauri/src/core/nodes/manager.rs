@@ -3,6 +3,7 @@ use crate::models::entities::{VaroNode, EnvPreset};
 use crate::models::errors::{VaroError, VaroResult};
 use crate::utils::node::load_nodes_in_dir;
 use crate::utils::commands::execute_program;
+use crate::utils::platform;
 
 #[derive(Debug)]
 pub struct NodeManager {
@@ -86,5 +87,30 @@ impl NodeManager {
 
     pub fn get_node_count(&self) -> usize {
         self.nodes.len()
+    }
+
+    pub fn show_node_in_folder(&self, id: &str) -> VaroResult<()> {
+        // println!("[Node Manager] Attempting to show node in folder: {}", id);
+        
+        let node = self.nodes.get(id)
+            .ok_or_else(|| VaroError::node(format!("Node not found: {}", id)))?;
+
+        // println!("[Node Manager] Found node: {}", node.name);
+
+        if let Some(filepath) = &node.filepath {
+            // println!("[Node Manager] Node filepath: {}", filepath);
+            
+            let file_path = std::path::Path::new(filepath);
+
+            // Use platform utility to open file manager and select the specific file
+            if !platform::open_file_in_folder(file_path) {
+                return Err(VaroError::execution("Failed to open file in folder"));
+            }
+        } else {
+            // println!("[Node Manager] Node has no filepath specified");
+            return Err(VaroError::execution("Node has no filepath specified"));
+        }
+
+        Ok(())
     }
 }
