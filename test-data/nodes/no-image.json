@@ -1,0 +1,11 @@
+{
+  "name": "No Icon",
+  "category": "Tech",
+  "commands": [
+    {
+      "path": "https://google.com/",
+      "path_type": "url",
+      "nonBlocking": true
+    }
+  ]
+}
