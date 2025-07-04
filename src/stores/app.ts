@@ -165,6 +165,18 @@ export const useAppStore = defineStore("app", () => {
         }
     }
 
+    async function clearEnvPreset() {
+        try {
+            selectedEnvPresetId.value = null;
+            
+            // Reload nodes after clearing preset
+            await fetchNodes();
+            console.log("Cleared env preset");
+        } catch (error) {
+            console.error("Failed to clear env preset:", error);
+        }
+    }
+
     // NODE EXECUTION
     async function executeNode(nodeId: string) {
         console.log(`Executing node: ${nodeId}`);
@@ -278,6 +290,7 @@ export const useAppStore = defineStore("app", () => {
         fetchSystemInfo,
         fetchAppConfig,
         selectEnvPreset,
+        clearEnvPreset,
         executeNode,
         showNodeInFolder,
         setNodes,

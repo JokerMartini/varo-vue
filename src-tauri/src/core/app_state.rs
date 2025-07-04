@@ -70,7 +70,10 @@ impl VaroCore {
 
     pub async fn execute_node(&self, node_id: &str) -> VaroResult<()> {
         let node_manager = self.node_manager.read().await;
-        node_manager.execute_node(node_id)
+        let preset_manager = self.preset_manager.read().await;
+        let selected_preset = preset_manager.get_selected_preset();
+        
+        node_manager.execute_node_with_env_expansion(node_id, selected_preset)
     }
 
     pub async fn get_all_presets(&self) -> Vec<EnvPreset> {
@@ -124,7 +127,11 @@ impl VaroCore {
     }
 
     pub fn sync_execute_node(&self, node_id: &str) -> VaroResult<()> {
-        self.node_manager.blocking_read().execute_node(node_id)
+        let node_manager = self.node_manager.blocking_read();
+        let preset_manager = self.preset_manager.blocking_read();
+        let selected_preset = preset_manager.get_selected_preset();
+        
+        node_manager.execute_node_with_env_expansion(node_id, selected_preset)
     }
 
     pub fn sync_show_node_in_folder(&self, node_id: &str) -> VaroResult<()> {

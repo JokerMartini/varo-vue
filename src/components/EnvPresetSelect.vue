@@ -2,13 +2,22 @@
 
 const appStore = useAppStore()
 
+// Handle preset selection
+async function handlePresetChange(presetId: string | null) {
+    if (presetId && presetId !== appStore.selectedEnvPresetId) {
+        await appStore.selectEnvPreset(presetId)
+    } else if (!presetId || presetId === "") {
+        await appStore.clearEnvPreset()
+    }
+}
+
 const envMenuItems = computed(() => [
     [
         {
             label: "Clear",
             icon: "i-lucide-x",
-            onSelect(e: Event) {
-                appStore.selectedEnvPresetId = "";
+            async onSelect(e: Event) {
+                await appStore.clearEnvPreset()
             },
         },
     ]
@@ -20,7 +29,8 @@ const envMenuItems = computed(() => [
         <UContextMenu :items="envMenuItems">
             <UTooltip text="Environment selector">
                 <USelect
-                    v-model="appStore.selectedEnvPresetId"
+                    :model-value="appStore.selectedEnvPresetId"
+                    @update:model-value="handlePresetChange"
                     :items="appStore.envPresets"
                     label-key="name"
                     value-key="id"
