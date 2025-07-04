@@ -4,8 +4,8 @@
   "icon": "${VARO_PATH}/icons/chaosPlayer.svg",
   "commands": [
     {
-      "path": "${ProgramFiles}/Adobe/Photoshop.exe",
-      "path_type": "rel"
+      "path": "${ProgramFiles}/Chaos Group/Chaos Player/chaosplayer_qt5.exe",
+      "path_type": "abs"
     }
   ]
 }

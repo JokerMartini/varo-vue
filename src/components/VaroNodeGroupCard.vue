@@ -67,7 +67,7 @@ function handleExecuteClick() {
 
   const node = props.group.selectedNode
   if (node) {
-    appStore.executeVaroNode(node)
+    appStore.executeNode(node)
   }
 }
 </script>
