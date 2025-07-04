@@ -1,0 +1,19 @@
+{
+  "id": "uuid-3dsmax-2025",
+  "group_id": "3dsmax",
+  "name": "3ds Max 2025",
+  "icon": "max.svg",
+  "category": "3D",
+  "default_for_group": true,
+  "status": {
+    "name": "Beta",
+    "color": "rgb(255,155,0)"
+  },
+  "commands": [
+    {
+      "path": "https://about.gitlab.com/",
+      "path_type": "url",
+      "nonBlocking": true
+    }
+  ]
+}

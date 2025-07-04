@@ -1,0 +1,15 @@
+{
+  "id": "uuid-Maya-2020",
+  "group_id": "Maya",
+  "name": "Maya 2020",
+  "icon": "maya.svg",
+  "category": "3D",
+  "default_for_group": true,
+  "commands": [
+    {
+      "path": "https://about.gitlab.com/",
+      "path_type": "url",
+      "nonBlocking": true
+    }
+  ]
+}

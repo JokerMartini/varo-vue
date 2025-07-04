@@ -1,0 +1,14 @@
+{
+  "id": "uuid-Maya-2022",
+  "group_id": "Maya",
+  "name": "Maya 2022",
+  "icon": "maya.svg",
+  "category": "3D",
+  "commands": [
+    {
+      "path": "https://about.gitlab.com/",
+      "path_type": "url",
+      "nonBlocking": true
+    }
+  ]
+}

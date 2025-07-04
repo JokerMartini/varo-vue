@@ -51,8 +51,6 @@ impl PresetManager {
         println!("[Preset Manager] Starting preset loading process");
         println!("[Preset Manager] Config received: {}", serde_json::to_string_pretty(env_presets_config).unwrap_or_else(|_| "Invalid JSON".to_string()));
         
-        println!("HERE: {}", env_presets_config);
-
         // If config is empty or null, return empty list
         if env_presets_config.is_null() || env_presets_config.as_object().map_or(true, |o| o.is_empty()) {
             println!("[Preset Manager] Config is null or empty, returning empty preset list");

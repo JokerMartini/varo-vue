@@ -1,0 +1,18 @@
+{
+    "id": "uuid-Maya-2024",
+    "group_id": "Maya",
+    "name": "Maya 2024",
+    "icon": "maya.svg",
+    "category": "3D",
+    "status": {
+        "name": "Beta",
+        "color": "rgb(255,155,0)"
+    },
+    "commands": [
+    {
+      "path": "https://about.gitlab.com/",
+      "path_type": "url",
+      "nonBlocking": true
+    }
+  ]
+}

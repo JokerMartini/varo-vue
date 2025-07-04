@@ -1,7 +1,7 @@
 {
   "id": "uuid-3dsmax-2024",
   "group_id": "3dsmax",
-  "name": "3ds Max 2024 latest build for",
+  "name": "3ds Max 2024 latest build for for production",
   "icon": "max2024.svg",
   "category": "Beta",
   "default_for_group": true,
@@ -9,5 +9,12 @@
   "status": {
     "name": "Default",
     "color": "rgb(255,32,86)"
-  }
+  },
+  "commands": [
+    {
+      "path": "https://about.gitlab.com/",
+      "path_type": "url",
+      "nonBlocking": true
+    }
+  ]
 }

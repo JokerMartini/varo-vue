@@ -1,0 +1,14 @@
+{
+    "id": "uuid-affinity-designer-2024",
+    "group_id": "Affinity Designer",
+    "name": "Affinity Designer",
+    "icon": "affinitydesigner.svg",
+    "category": "2D",
+    "commands": [
+    {
+      "path": "https://about.gitlab.com/",
+      "path_type": "url",
+      "nonBlocking": true
+    }
+  ]
+}
