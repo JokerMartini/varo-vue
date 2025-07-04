@@ -167,6 +167,7 @@ export const useAppStore = defineStore("app", () => {
 
     // NODE EXECUTION
     async function executeNode(nodeId: string) {
+        console.log(`Executing node: ${nodeId}`);
         try {
             await invoke("execute_node", { id: nodeId });
             console.log(`Executed node: ${nodeId}`);

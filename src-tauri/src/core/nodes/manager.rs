@@ -44,39 +44,69 @@ impl NodeManager {
     }
 
     pub fn execute_node(&self, id: &str) -> VaroResult<()> {
+        println!("[Node Manager] Starting execution for node ID: {}", id);
+        
         let node = self.nodes.get(id)
             .ok_or_else(|| VaroError::node(format!("Node not found: {}", id)))?;
 
+        println!("[Node Manager] Found node: {}", node.name);
+        println!("[Node Manager] Node has {} commands", node.commands.len());
+
         if node.commands.is_empty() {
+            println!("[Node Manager] Error: Node has no commands to execute");
             return Err(VaroError::execution("Node has no commands to execute"));
         }
 
         // Execute the first command (for now)
         let command = &node.commands[0];
         
+        println!("[Node Manager] Executing command:");
+        println!("[Node Manager]   Path: {}", command.path);
+        println!("[Node Manager]   Args: '{}'", command.args);
+        println!("[Node Manager]   Path type: {}", command.path_type);
+        println!("[Node Manager]   Non-blocking: {}", command.non_blocking);
+        
         let args = if command.args.is_empty() {
+            println!("[Node Manager]   Parsed args: None (empty)");
             None
         } else {
-            Some(command.args.split_whitespace().map(|s| s.to_string()).collect())
+            let parsed_args: Vec<String> = command.args.split_whitespace().map(|s| s.to_string()).collect();
+            println!("[Node Manager]   Parsed args: {:?}", parsed_args);
+            Some(parsed_args)
         };
 
         // Convert node env vars to HashMap
         let env_vars = if node.env.is_empty() {
+            println!("[Node Manager]   Environment variables: None");
             None
         } else {
+            println!("[Node Manager]   Environment variables:");
             let mut env_map = HashMap::new();
             for env_var in &node.env {
+                println!("[Node Manager]     {}={}", env_var.name, env_var.value);
                 env_map.insert(env_var.name.clone(), env_var.value.clone());
             }
             Some(env_map)
         };
 
+        let wait_for_completion = !command.non_blocking;
+        println!("[Node Manager]   Wait for completion: {}", wait_for_completion);
+
+        println!("[Node Manager] Calling execute_program with:");
+        println!("[Node Manager]   path: {}", command.path);
+        println!("[Node Manager]   args: {:?}", args);
+        println!("[Node Manager]   env_vars: {:?}", env_vars);
+        println!("[Node Manager]   wait: {}", wait_for_completion);
+
         execute_program(
             command.path.clone(),
             args,
             env_vars,
-            !command.non_blocking
-        ).map_err(|e| VaroError::execution(format!("Failed to execute command: {}", e)))
+            wait_for_completion
+        ).map_err(|e| {
+            println!("[Node Manager] Error from execute_program: {}", e);
+            VaroError::execution(format!("Failed to execute command: {}", e))
+        })
     }
 
     pub fn refresh_with_preset(&mut self, _preset: &EnvPreset) -> VaroResult<()> {
