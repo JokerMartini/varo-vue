@@ -32,7 +32,7 @@ Varo is a Tauri-based desktop application that provides a launcher interface for
 - **State Management**: Pinia store (`src/stores/varoNodes.ts`)
 - **Key Models**: `VaroNode`, `VaroNodeGroup`, `VaroCategory`, `EnvPreset`
 - **Components**: Modular Vue components in `src/components/`
-- **Main Store**: `useVaroNodeStore` manages nodes, groups, categories, and environment presets
+- **Main Store**: `useAppStore` manages nodes, groups, categories, and environment presets
 
 ### Backend (Rust/Tauri)
 - **Core Module**: `src-tauri/src/core/` contains main business logic

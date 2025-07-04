@@ -1,6 +1,6 @@
 use serde::{Serialize};
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Clone)]
 pub struct VaroNode {
     pub id: String,
     pub name: String,
@@ -17,20 +17,20 @@ pub struct VaroNode {
     pub date_modified: u64,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Clone)]
 pub struct Status {
     pub name: String,
     pub color: String,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Clone)]
 pub struct Access {
     pub platforms: Vec<String>,
     pub allow: Vec<String>,
     pub deny: Vec<String>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Clone)]
 pub struct Command {
     pub path: String,
     pub path_type: String,

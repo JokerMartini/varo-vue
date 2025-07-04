@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getVersion, getName } from "@tauri-apps/api/app";
 
-const nodeStore = useVaroNodeStore();
+const appStore = useAppStore();
 const appName = ref("");
 const appVersion = ref("");
 const colorMode = useColorMode()
@@ -32,7 +32,7 @@ const mainMenuItems = computed(() => [
             label: "Developer Debug",
             icon: 'i-lucide-bug',
             onSelect(e: Event) {
-              nodeStore.showDeveloperDialog = true;  
+              appStore.showDeveloperDialog = true;  
             },
         }, 
     ],
@@ -41,7 +41,7 @@ const mainMenuItems = computed(() => [
             label: "About",
             icon: "i-lucide-info",
             onSelect(e: Event) {
-                nodeStore.showAboutDialog = true;
+                appStore.showAboutDialog = true;
             },
         },
     ],
@@ -53,18 +53,18 @@ const viewMenuItems = computed(() => [
             label: "Toggle Groups",
             type: 'checkbox' as const,
             icon: "i-lucide-layout-list",
-            checked: nodeStore.showGroups,
+            checked: appStore.showGroups,
             onSelect(e: Event) {
-                nodeStore.toggleGroups()
+                appStore.toggleGroups()
             },
         },
         {
             label: "Toggle Categories",
             type: 'checkbox' as const,
             icon: "i-lucide-shapes",
-            checked: nodeStore.showCategories,
+            checked: appStore.showCategories,
             onSelect(e: Event) {
-                nodeStore.toggleCategories()
+                appStore.toggleCategories()
             },
         },
     ],
@@ -73,17 +73,17 @@ const viewMenuItems = computed(() => [
             label: "Unhide All Nodes",
             icon: "i-lucide-scan-eye",
             onSelect(e: Event) {
-                nodeStore.unhideAllNodes();
-                nodeStore.unhideAllNodeGroups();
+                appStore.unhideAllNodes();
+                appStore.unhideAllNodeGroups();
             },
         },
         {
             label: "Toggle Hidden Nodes",
             type: 'checkbox' as const,
-            checked: nodeStore.showHiddenNodes,
-            icon: nodeStore.showHiddenNodes ? "i-lucide-eye" : "i-lucide-eye-off",
+            checked: appStore.showHiddenNodes,
+            icon: appStore.showHiddenNodes ? "i-lucide-eye" : "i-lucide-eye-off",
             onSelect(e: Event) {
-                nodeStore.toggleHiddenNodeVisibility();
+                appStore.toggleHiddenNodeVisibility();
             },
         },
     ],
@@ -91,7 +91,7 @@ const viewMenuItems = computed(() => [
 
 const doit = () => {
     console.log("here");
-    nodeStore.launchSomething();
+    // appStore.launchSomething();
 };
 
 const openLogs = () => {
@@ -123,22 +123,22 @@ const selectedEnv = ref('Default')
             <div class="grow">
                 <UButtonGroup class="w-full">
                     <UInput
-                        v-model="nodeStore.searchQuery"
+                        v-model="appStore.searchQuery"
                         icon="i-lucide-search"
                         placeholder="Search..."
                         class="w-full"
                         variant="soft"
-                        @keydown.esc="nodeStore.searchQuery = ''"
+                        @keydown.esc="appStore.searchQuery = ''"
                         :ui="{ trailing: 'pe-1' }"
                     >
-                        <template v-if="nodeStore.searchQuery?.length" #trailing>
+                        <template v-if="appStore.searchQuery?.length" #trailing>
                             <UButton
                                 color="neutral"
                                 variant="link"
                                 size="sm"
                                 icon="i-lucide-circle-x"
                                 aria-label="Clear input"
-                                @click="nodeStore.searchQuery = ''"
+                                @click="appStore.searchQuery = ''"
                             />
                         </template>
                     </UInput>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-const nodeStore = useVaroNodeStore();
+const appStore = useAppStore()
 
 const envMenuItems = computed(() => [
     [
@@ -8,7 +8,7 @@ const envMenuItems = computed(() => [
             label: "Clear",
             icon: "i-lucide-x",
             onSelect(e: Event) {
-                nodeStore.selectedEnvPresetId = "";
+                appStore.selectedEnvPresetId = "";
             },
         },
     ]
@@ -20,8 +20,8 @@ const envMenuItems = computed(() => [
         <UContextMenu :items="envMenuItems">
             <UTooltip text="Environment selector">
                 <USelect
-                    v-model="nodeStore.selectedEnvPresetId"
-                    :items="nodeStore.envPresets"
+                    v-model="appStore.selectedEnvPresetId"
+                    :items="appStore.envPresets"
                     label-key="name"
                     value-key="id"
                     variant="soft"

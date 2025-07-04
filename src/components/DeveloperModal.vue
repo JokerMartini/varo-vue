@@ -13,7 +13,7 @@ const isOpen = computed({
     set: (val) => emit("update:modelValue", val),
 });
 
-const nodeStore = useVaroNodeStore();
+const appStore = useAppStore()
 
 </script>
 
@@ -39,13 +39,13 @@ const nodeStore = useVaroNodeStore();
                             <tr>
                                 <td class="pr-4 py-0.5 text-(--ui-text-muted)">Platform:</td>
                                 <td class="px-4 py-0.5 break-all whitespace-normal max-w-xs w-full">
-                                    {{ nodeStore.platform }}
+                                    {{ appStore.platform }}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="pr-4 py-0.5 text-(--ui-text-muted)">Username:</td>
                                 <td class="px-4 py-0.5 break-all whitespace-normal max-w-xs w-full">
-                                    {{ nodeStore.username }}
+                                    {{ appStore.username }}
                                 </td>
                             </tr>
                         </tbody>
@@ -60,20 +60,20 @@ const nodeStore = useVaroNodeStore();
                         </div>
                     </template>
 
-                    <div v-if="nodeStore.selectedEnvPreset">
-                        <p class="font-semibold text-sm align-top">{{ nodeStore.selectedEnvPreset.name }}</p>
+                    <div v-if="appStore.selectedEnvPreset">
+                        <p class="font-semibold text-sm align-top">{{ appStore.selectedEnvPreset.name }}</p>
                         <p class="text-sm text-(--ui-text-muted)">
-                            {{ nodeStore.selectedEnvPreset.description }}
+                            {{ appStore.selectedEnvPreset.description }}
                         </p>
                         <p class="text-xs italic break-all text-(--ui-text-dimmed) mb-2">
-                            {{ nodeStore.selectedEnvPreset.filepath }}
+                            {{ appStore.selectedEnvPreset.filepath }}
                         </p>
 
                         <USeparator class="py-1"/>
 
                         <table class="text-sm">
                             <tbody>
-                                <tr v-for="env in nodeStore.selectedEnvPreset.env">
+                                <tr v-for="env in appStore.selectedEnvPreset.env">
                                     <td class="pr-4 py-0.5 text-(--ui-text-muted) align-top">{{ env.name }}:</td>
                                     <td class="px-4 py-0.5 break-all whitespace-normal max-w-xs w-full">
                                         {{ env.value }}
@@ -94,7 +94,7 @@ const nodeStore = useVaroNodeStore();
                         </div>
                     </template>
 
-                    <pre class="text-xs rounded p-3 overflow-auto">{{ JSON.stringify(nodeStore.appConfig, null, 2) }}</pre>
+                    <pre class="text-xs rounded p-3 overflow-auto">{{ JSON.stringify(appStore.appConfig, null, 2) }}</pre>
                 </UCard>
             </div>
         </template>

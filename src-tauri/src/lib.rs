@@ -53,6 +53,18 @@ fn reload_config(state: tauri::State<Mutex<VaroCore>>) -> Result<(), String> {
     handle_error(state.sync_reload_config())
 }
 
+#[tauri::command]
+fn get_nodes(state: tauri::State<Mutex<VaroCore>>) -> Result<Vec<crate::models::entities::VaroNode>, String> {
+    let state = state.lock().map_err(|e| format!("Failed to acquire state lock: {}", e))?;
+    Ok(state.sync_get_all_nodes())
+}
+
+#[tauri::command]
+fn execute_node(id: String, state: tauri::State<Mutex<VaroCore>>) -> Result<(), String> {
+    let state = state.lock().map_err(|e| format!("Failed to acquire state lock: {}", e))?;
+    handle_error(state.sync_execute_node(&id))
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -73,6 +85,8 @@ pub fn run() {
             select_env_preset,
             get_config,
             reload_config,
+            get_nodes,
+            execute_node,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -115,4 +115,15 @@ impl VaroCore {
     pub fn get_platform(&self) -> &str {
         self.system_info.get_platform()
     }
+
+    pub fn sync_get_all_nodes(&self) -> Vec<crate::models::entities::VaroNode> {
+        self.node_manager.blocking_read().get_all_nodes()
+            .into_iter()
+            .cloned()
+            .collect()
+    }
+
+    pub fn sync_execute_node(&self, node_id: &str) -> VaroResult<()> {
+        self.node_manager.blocking_read().execute_node(node_id)
+    }
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const nodeStore = useVaroNodeStore();
+const appStore = useAppStore()
 </script>
 
 <template>
@@ -7,15 +7,15 @@ const nodeStore = useVaroNodeStore();
         <UButton
             variant="ghost"
             color="neutral"
-            @click="nodeStore.toggleHiddenNodeVisibility"
-            :aria-pressed="nodeStore.showHiddenNodes.toString()"
-            :icon="nodeStore.showHiddenNodes ? 'i-lucide-eye' : 'i-lucide-eye-off'"
+            @click="appStore.toggleHiddenNodeVisibility"
+            :aria-pressed="appStore.showHiddenNodes.toString()"
+            :icon="appStore.showHiddenNodes ? 'i-lucide-eye' : 'i-lucide-eye-off'"
         >
-        <span v-if="nodeStore.showGroups">
-            {{ nodeStore.filteredNodeGroups.length }} / {{ nodeStore.allNodeGroups.length }}
+        <span v-if="appStore.showGroups">
+            {{ appStore.filteredNodeGroups.length }} / {{ appStore.nodeGroups.length }}
         </span>
         <span v-else>
-            {{ nodeStore.filteredNodes.length }} / {{ nodeStore.allNodes.length }}
+            {{ appStore.filteredNodes.length }} / {{ appStore.nodes.length }}
         </span>
         </UButton>
     </UTooltip>

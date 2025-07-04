@@ -4,7 +4,7 @@ import type { VaroNode } from '@/models/VaroNode';
 import type { DropdownMenuItem } from '@nuxt/ui';
 
 const toast = useToast()
-const nodeStore = useVaroNodeStore()
+const appStore = useAppStore()
 const props = defineProps<{ group: VaroNodeGroup }>();
 const nodeCard = useTemplateRef('nodeCard')
 const nodesMenuOpen = ref(false)
@@ -30,7 +30,7 @@ const menuItems = computed<DropdownMenuItem[][]>(() => [
       label: 'Unhide All',
       icon: 'i-lucide-eye',
       onSelect(e: Event) {
-        nodeStore.unhideAllNodeGroups()
+        appStore.unhideAllNodeGroups()
       }
     }
   ],
@@ -64,7 +64,7 @@ function handleExecuteClick() {
 
   const node = props.group.selectedNode
   if (node) {
-    nodeStore.executeVaroNode(node)
+    appStore.executeVaroNode(node)
   }
 }
 </script>

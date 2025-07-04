@@ -1,10 +1,10 @@
 <script setup lang="ts">
 
-const nodeStore = useVaroNodeStore();
+const appStore = useAppStore()
 
 const filteredDisplayCategories = computed(() => {
-  return nodeStore.filteredCategories.filter(category => {
-    if (nodeStore.showGroups) {
+  return appStore.filteredCategories.filter(category => {
+    if (appStore.showGroups) {
       return category.groups.some(group => group.nodes.length > 0)
     } else {
       return category.nodes.length > 0
@@ -27,7 +27,7 @@ const filteredDisplayCategories = computed(() => {
             <!-- content -->
             <template #content="{ item }">
               <div class="pb-4">
-                <NodeListView v-if="nodeStore.showGroups" v-model="item.groups"/>
+                <NodeListView v-if="appStore.showGroups" v-model="item.groups"/>
                 <NodeListView v-else v-model="item.nodes"/>
               </div>
             </template>

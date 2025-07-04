@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { dummyVaroNodes } from '@/data/dummyNodes';
-
-const nodeStore = useVaroNodeStore()
+const appStore = useAppStore()
 
 onMounted(() => {
-  nodeStore.setNodes(dummyVaroNodes);
-  nodeStore.loadFiles();
+  appStore.initializeApp();
 })
 
 const mainMenuItems = computed(() => [
@@ -14,37 +11,44 @@ const mainMenuItems = computed(() => [
         label: "Toggle Groups",
         type: 'checkbox' as const,
         icon: "i-lucide-layout-list",
-        checked: nodeStore.showGroups,
+        checked: appStore.showGroups,
         onSelect(e: Event) {
-            nodeStore.toggleGroups()
+            appStore.toggleGroups()
         },
     },
     {
         label: "Toggle Categories",
         type: 'checkbox' as const,
         icon: "i-lucide-shapes",
-        checked: nodeStore.showCategories,
+        checked: appStore.showCategories,
         onSelect(e: Event) {
-            nodeStore.toggleCategories()
+            appStore.toggleCategories()
         },
     },
   ],
   [
     {
+        label: "Refresh Data",
+        icon: "i-lucide-refresh-cw",
+        onSelect(e: Event) {
+            appStore.refreshData();
+        },
+    },
+    {
         label: "Unhide All Nodes",
         icon: "i-lucide-scan-eye",
         onSelect(e: Event) {
-            nodeStore.unhideAllNodes();
-            nodeStore.unhideAllNodeGroups();
+            appStore.unhideAllNodes();
+            appStore.unhideAllNodeGroups();
         },
     },
     {
         label: "Toggle Hidden Nodes",
         type: 'checkbox' as const,
-        checked: nodeStore.showHiddenNodes,
-        icon: nodeStore.showHiddenNodes ? "i-lucide-eye" : "i-lucide-eye-off",
+        checked: appStore.showHiddenNodes,
+        icon: appStore.showHiddenNodes ? "i-lucide-eye" : "i-lucide-eye-off",
         onSelect(e: Event) {
-            nodeStore.toggleHiddenNodeVisibility();
+            appStore.toggleHiddenNodeVisibility();
         },
     },
   ],
@@ -62,10 +66,16 @@ const mainMenuItems = computed(() => [
         }"
       >
       <div class="p-3 grow">
-        <CategorizedNodeListView v-if="nodeStore.showCategories"/>
+        <div v-if="appStore.loading" class="flex items-center justify-center h-32">
+          <UIcon name="i-lucide-loader-2" class="animate-spin h-6 w-6" />
+          <span class="ml-2">Loading...</span>
+        </div>
         <template v-else>
-          <NodeListView v-if="nodeStore.showGroups" v-model="nodeStore.filteredNodeGroups"/>
-          <NodeListView v-else v-model="nodeStore.filteredNodes"/>
+          <CategorizedNodeListView v-if="appStore.showCategories"/>
+          <template v-else>
+            <NodeListView v-if="appStore.showGroups" v-model="appStore.filteredNodeGroups"/>
+            <NodeListView v-else v-model="appStore.filteredNodes"/>
+          </template>
         </template>
       </div>
     </UContextMenu>
@@ -73,8 +83,8 @@ const mainMenuItems = computed(() => [
     <AppFooter/>
 
     <!-- Dialogs -->
-    <AboutModal v-model="nodeStore.showAboutDialog" />
-    <DeveloperModal v-model="nodeStore.showDeveloperDialog" />
+    <AboutModal v-model="appStore.showAboutDialog" />
+    <DeveloperModal v-model="appStore.showDeveloperDialog" />
     
   </div>
 </template>

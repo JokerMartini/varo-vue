@@ -3,7 +3,7 @@ import type { VaroNode } from "@/models/VaroNode";
 import type { DropdownMenuItem } from "@nuxt/ui";
 
 const props = defineProps<{ node: VaroNode }>();
-const nodeStore = useVaroNodeStore();
+const appStore = useAppStore();
 const nodeCard = useTemplateRef("nodeCard");
 
 const menuItems = computed<DropdownMenuItem[][]>(() => [
@@ -28,7 +28,7 @@ const menuItems = computed<DropdownMenuItem[][]>(() => [
             label: "Unhide All",
             icon: "i-lucide-eye",
             onSelect(e: Event) {
-                nodeStore.unhideAllNodes();
+                appStore.unhideAllNodes();
             },
         },
     ],
@@ -49,7 +49,7 @@ function handleExecuteClick() {
         nodeCard.value?.classList.remove("animate-scale-bounce");
     }, 300);
 
-    nodeStore.executeVaroNode(props.node);
+    appStore.executeNode(props.node.id);
 }
 
 </script>
