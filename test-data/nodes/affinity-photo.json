@@ -13,8 +13,7 @@
   },
   "commands": [
     {
-      "path": "${ProgramFiles}/Affinity/Photo/Photo.exe",
-      "path_type": "rel"
+      "path": "C:/Users/joker/AppData/Local/Microsoft/WindowsApps/AffinityPhoto2.exe"
     }
   ],
   "env": [

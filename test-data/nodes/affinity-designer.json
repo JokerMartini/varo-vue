@@ -6,8 +6,7 @@
     "category": "2D",
     "commands": [
     {
-      "path": "https://about.gitlab.com/",
-      "path_type": "url",
+      "path": "C:/Users/joker/AppData/Local/Microsoft/WindowsApps/AffinityDesigner2.exe",
       "nonBlocking": true
     }
   ]

@@ -1,0 +1,10 @@
+{
+  "name": "Notepad",
+  "category": "Tech",
+  "icon": "notepad.svg",
+  "commands": [
+    {
+      "path": "C:/Windows/System32/notepad.exe"
+    }
+  ]
+}

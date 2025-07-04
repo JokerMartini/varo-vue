@@ -196,3 +196,69 @@ pub fn open_file_in_folder(file_path: &Path) -> bool {
         return false;
     }
 }
+
+/// Opens a URL in the system's default browser
+pub fn open_url_in_browser(url: &str) -> bool {
+    println!("[Platform] Attempting to open URL in browser: {}", url);
+
+    #[cfg(target_os = "windows")]
+    {
+        // Use 'cmd /C start' on Windows
+        match std::process::Command::new("cmd")
+            .args(["/C", "start", "", url])
+            .spawn() {
+            Ok(_) => {
+                println!("[Platform] Successfully opened URL in browser via cmd");
+                return true;
+            },
+            Err(e) => {
+                println!("[Platform] Failed to open URL with cmd: {}", e);
+                return false;
+            }
+        }
+    }
+
+    #[cfg(target_os = "macos")]
+    {
+        // Use 'open' command on macOS
+        match std::process::Command::new("open")
+            .arg(url)
+            .spawn() {
+            Ok(_) => {
+                println!("[Platform] Successfully opened URL in browser via open");
+                return true;
+            },
+            Err(e) => {
+                println!("[Platform] Failed to open URL with open: {}", e);
+                return false;
+            }
+        }
+    }
+
+    #[cfg(target_os = "linux")]
+    {
+        // Try xdg-open first, then common browsers
+        let browsers = ["xdg-open", "firefox", "chromium", "google-chrome", "chrome"];
+        
+        println!("[Platform] Trying Linux browsers: {:?}", browsers);
+        
+        for browser in &browsers {
+            println!("[Platform] Trying browser: {}", browser);
+            if let Ok(_) = std::process::Command::new(browser)
+                .arg(url)
+                .spawn() {
+                println!("[Platform] Successfully opened URL with: {}", browser);
+                return true;
+            }
+        }
+        
+        println!("[Platform] No suitable browser found");
+        return false;
+    }
+
+    #[cfg(not(any(target_os = "windows", target_os = "macos", target_os = "linux")))]
+    {
+        println!("[Platform] Unsupported platform for URL opening: {}", env::consts::OS);
+        return false;
+    }
+}

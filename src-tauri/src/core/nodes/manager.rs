@@ -92,21 +92,35 @@ impl NodeManager {
         let wait_for_completion = !command.non_blocking;
         println!("[Node Manager]   Wait for completion: {}", wait_for_completion);
 
-        println!("[Node Manager] Calling execute_program with:");
-        println!("[Node Manager]   path: {}", command.path);
-        println!("[Node Manager]   args: {:?}", args);
-        println!("[Node Manager]   env_vars: {:?}", env_vars);
-        println!("[Node Manager]   wait: {}", wait_for_completion);
+        // Handle different path types
+        match command.path_type.to_lowercase().as_str() {
+            "url" => {
+                println!("[Node Manager] Detected URL path type, opening in browser");
+                if !platform::open_url_in_browser(&command.path) {
+                    return Err(VaroError::execution("Failed to open URL in browser"));
+                }
+                println!("[Node Manager] URL opened successfully");
+                Ok(())
+            },
+            _ => {
+                // Handle executable paths (rel, abs, or default)
+                println!("[Node Manager] Calling execute_program with:");
+                println!("[Node Manager]   path: {}", command.path);
+                println!("[Node Manager]   args: {:?}", args);
+                println!("[Node Manager]   env_vars: {:?}", env_vars);
+                println!("[Node Manager]   wait: {}", wait_for_completion);
 
-        execute_program(
-            command.path.clone(),
-            args,
-            env_vars,
-            wait_for_completion
-        ).map_err(|e| {
-            println!("[Node Manager] Error from execute_program: {}", e);
-            VaroError::execution(format!("Failed to execute command: {}", e))
-        })
+                execute_program(
+                    command.path.clone(),
+                    args,
+                    env_vars,
+                    wait_for_completion
+                ).map_err(|e| {
+                    println!("[Node Manager] Error from execute_program: {}", e);
+                    VaroError::execution(format!("Failed to execute command: {}", e))
+                })
+            }
+        }
     }
 
     pub fn refresh_with_preset(&mut self, _preset: &EnvPreset) -> VaroResult<()> {

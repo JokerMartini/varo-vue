@@ -1,0 +1,11 @@
+{
+  "name": "Notepad + Args",
+  "category": "Tech",
+  "icon": "notepad.svg",
+  "commands": [
+    {
+      "path": "C:/Windows/System32/notepad.exe",
+      "args": "C:/Users/joker/OneDrive/Desktop/voima.txt"
+    }
+  ]
+}

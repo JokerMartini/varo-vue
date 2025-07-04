@@ -1,0 +1,29 @@
+{
+  "id": "uuid-python-pyside2",
+  "group_id": "Python",
+  "name": "Python+PySide2",
+  "icon": "python.svg",
+  "category": "Tools",
+  "env": [
+    {
+      "name": "AAA_1",
+      "value": "//Network/Path"
+    },
+    {
+      "name": "AAA_2",
+      "value": "${VARO_PATH}/libs",
+      "operation": "append"
+    },
+    {
+      "name": "AAA_3",
+      "value": "${VARO_PATH}/libs",
+      "operation": "append"
+    }
+  ],
+  "commands": [
+    {
+      "path": "C:/Users/joker/AppData/Local/Programs/Python/Python310/python.exe",
+      "args": "${GITHUB_ROOT}/varo-vue/test-data/nodes/scripts/simpleDialog.py"
+    }
+  ]
+}
