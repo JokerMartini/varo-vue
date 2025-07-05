@@ -121,31 +121,6 @@ impl NodeManager {
             expansion_env.insert(env_var.name.clone(), env_var.value.clone());
         }
 
-        // Execute the first command (for now)
-        let command = &node.commands[0];
-        
-        println!("[Node Manager] Executing command:");
-        println!("[Node Manager]   Original Path: {}", command.path);
-        println!("[Node Manager]   Original Args: '{}'", command.args);
-        println!("[Node Manager]   Path type: {}", command.path_type);
-        println!("[Node Manager]   Non-blocking: {}", command.non_blocking);
-
-        // Expand environment variables in path and args
-        let expanded_path = expand_tokens_with_map(&command.path, &expansion_env);
-        let expanded_args_str = expand_tokens_with_map(&command.args, &expansion_env);
-        
-        println!("[Node Manager]   Expanded Path: {}", expanded_path);
-        println!("[Node Manager]   Expanded Args: '{}'", expanded_args_str);
-        
-        let args = if expanded_args_str.is_empty() {
-            println!("[Node Manager]   Parsed args: None (empty)");
-            None
-        } else {
-            let parsed_args: Vec<String> = expanded_args_str.split_whitespace().map(|s| s.to_string()).collect();
-            println!("[Node Manager]   Parsed args: {:?}", parsed_args);
-            Some(parsed_args)
-        };
-
         // Build environment variables to pass to execute_program (separate from expansion map)
         // These are the actual env vars that will be set in the child process
         // This includes both preset and node environment variables (expanded)
@@ -179,41 +154,83 @@ impl NodeManager {
             for (key, value) in &env_vars_for_execution {
                 println!("[Node Manager]     {}={}", key, value);
             }
-            Some(env_vars_for_execution)
+            Some(env_vars_for_execution.clone())
         };
 
-        let wait_for_completion = !command.non_blocking;
-        println!("[Node Manager]   Wait for completion: {}", wait_for_completion);
+        // Execute all commands in sequence
+        println!("[Node Manager] Executing {} commands in sequence", node.commands.len());
+        for (index, command) in node.commands.iter().enumerate() {
+            println!("[Node Manager] Executing command {}/{}", index + 1, node.commands.len());
+            println!("[Node Manager]   Original Path: {}", command.path);
+            println!("[Node Manager]   Original Args: '{}'", command.args);
+            println!("[Node Manager]   Path type: {}", command.path_type);
+            println!("[Node Manager]   Non-blocking: {}", command.non_blocking);
 
-        // Handle different path types
-        match command.path_type.to_lowercase().as_str() {
-            "url" => {
-                println!("[Node Manager] Detected URL path type, opening in browser");
-                if !platform::open_url_in_browser(&expanded_path) {
-                    return Err(VaroError::execution("Failed to open URL in browser"));
+            // Expand environment variables in path and args
+            let expanded_path = expand_tokens_with_map(&command.path, &expansion_env);
+            let expanded_args_str = expand_tokens_with_map(&command.args, &expansion_env);
+            
+            println!("[Node Manager]   Expanded Path: {}", expanded_path);
+            println!("[Node Manager]   Expanded Args: '{}'", expanded_args_str);
+            
+            let args = if expanded_args_str.is_empty() {
+                println!("[Node Manager]   Parsed args: None (empty)");
+                None
+            } else {
+                let parsed_args: Vec<String> = expanded_args_str.split_whitespace().map(|s| s.to_string()).collect();
+                println!("[Node Manager]   Parsed args: {:?}", parsed_args);
+                Some(parsed_args)
+            };
+
+            // Determine if we should wait for this command
+            let wait_for_completion = !command.non_blocking;
+            println!("[Node Manager]   Wait for completion: {}", wait_for_completion);
+
+            // Handle different path types
+            let result = match command.path_type.to_lowercase().as_str() {
+                "url" => {
+                    println!("[Node Manager] Detected URL path type, opening in browser");
+                    if !platform::open_url_in_browser(&expanded_path) {
+                        Err(VaroError::execution("Failed to open URL in browser"))
+                    } else {
+                        println!("[Node Manager] URL opened successfully");
+                        Ok(())
+                    }
+                },
+                _ => {
+                    // Handle executable paths (rel, abs, or default)
+                    println!("[Node Manager] Calling execute_program with:");
+                    println!("[Node Manager]   path: {}", expanded_path);
+                    println!("[Node Manager]   args: {:?}", args);
+                    println!("[Node Manager]   env_vars: {:?}", env_vars);
+                    println!("[Node Manager]   wait: {}", wait_for_completion);
+
+                    execute_program(
+                        expanded_path,
+                        args,
+                        env_vars.clone(),
+                        wait_for_completion
+                    ).map_err(|e| {
+                        println!("[Node Manager] Error from execute_program: {}", e);
+                        VaroError::execution(format!("Failed to execute command: {}", e))
+                    })
                 }
-                println!("[Node Manager] URL opened successfully");
-                Ok(())
-            },
-            _ => {
-                // Handle executable paths (rel, abs, or default)
-                println!("[Node Manager] Calling execute_program with:");
-                println!("[Node Manager]   path: {}", expanded_path);
-                println!("[Node Manager]   args: {:?}", args);
-                println!("[Node Manager]   env_vars: {:?}", env_vars);
-                println!("[Node Manager]   wait: {}", wait_for_completion);
+            };
 
-                execute_program(
-                    expanded_path,
-                    args,
-                    env_vars,
-                    wait_for_completion
-                ).map_err(|e| {
-                    println!("[Node Manager] Error from execute_program: {}", e);
-                    VaroError::execution(format!("Failed to execute command: {}", e))
-                })
+            // Handle execution result
+            match result {
+                Ok(()) => {
+                    println!("[Node Manager] Command {}/{} executed successfully", index + 1, node.commands.len());
+                },
+                Err(e) => {
+                    println!("[Node Manager] Command {}/{} failed: {}", index + 1, node.commands.len(), e);
+                    return Err(e);
+                }
             }
         }
+
+        println!("[Node Manager] All commands executed successfully");
+        Ok(())
     }
 
     pub fn refresh_with_preset(&mut self, preset: &EnvPreset) -> VaroResult<()> {

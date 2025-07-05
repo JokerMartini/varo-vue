@@ -161,11 +161,22 @@ impl VaroCore {
     }
 
     pub fn sync_execute_node(&self, node_id: &str) -> VaroResult<()> {
-        let node_manager = self.node_manager.blocking_read();
-        let preset_manager = self.preset_manager.blocking_read();
-        let selected_preset = preset_manager.get_selected_preset();
+        let node_manager = self.node_manager.clone();
+        let preset_manager = self.preset_manager.clone();
+        let node_id = node_id.to_string();
         
-        node_manager.execute_node_with_env_expansion(node_id, selected_preset)
+        // Execute in a separate thread to avoid blocking the UI
+        std::thread::spawn(move || {
+            let node_manager = node_manager.blocking_read();
+            let preset_manager = preset_manager.blocking_read();
+            let selected_preset = preset_manager.get_selected_preset();
+            
+            if let Err(e) = node_manager.execute_node_with_env_expansion(&node_id, selected_preset) {
+                eprintln!("[Node Execution] Error executing node {}: {}", node_id, e);
+            }
+        });
+        
+        Ok(())
     }
 
     pub fn sync_show_node_in_folder(&self, node_id: &str) -> VaroResult<()> {

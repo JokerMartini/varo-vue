@@ -1,0 +1,37 @@
+{
+  "name": "Python + Notepad + URL (async)",
+  "icon": "rocket.svg",
+  "category": "Multiple",
+  "env": [
+    {
+      "name": "AAA_1",
+      "value": "//Network/Path"
+    },
+    {
+      "name": "AAA_2",
+      "value": "${VARO_PATH}/libs",
+      "operation": "append"
+    },
+    {
+      "name": "AAA_3",
+      "value": "${VARO_PATH}/libs",
+      "operation": "append"
+    }
+  ],
+  "commands": [
+    {
+      "path": "C:/Users/joker/AppData/Local/Programs/Python/Python310/python.exe",
+      "args": "${GITHUB_ROOT}/varo-vue/test-data/nodes/scripts/simpleDialog.py",
+      "nonBlocking": true
+    },
+    {
+      "path": "C:/Windows/System32/notepad.exe",
+      "nonBlocking": true
+    },
+    {
+      "path": "https://www.google.com",
+      "path_type": "url",
+      "nonBlocking": true
+    }
+  ]
+}
