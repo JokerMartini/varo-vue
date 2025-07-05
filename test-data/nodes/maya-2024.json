@@ -12,7 +12,7 @@
     {
       "path": "https://about.gitlab.com/",
       "path_type": "url",
-      "nonBlocking": true
+      "wait": false
     }
   ]
 }

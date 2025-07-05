@@ -164,7 +164,7 @@ impl NodeManager {
             println!("[Node Manager]   Original Path: {}", command.path);
             println!("[Node Manager]   Original Args: '{}'", command.args);
             println!("[Node Manager]   Path type: {}", command.path_type);
-            println!("[Node Manager]   Non-blocking: {}", command.non_blocking);
+            println!("[Node Manager]   Wait: {}", command.wait);
 
             // Expand environment variables in path and args
             let expanded_path = expand_tokens_with_map(&command.path, &expansion_env);
@@ -183,7 +183,7 @@ impl NodeManager {
             };
 
             // Determine if we should wait for this command
-            let wait_for_completion = !command.non_blocking;
+            let wait_for_completion = command.wait;
             println!("[Node Manager]   Wait for completion: {}", wait_for_completion);
 
             // Handle different path types

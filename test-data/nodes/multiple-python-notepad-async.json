@@ -22,16 +22,16 @@
     {
       "path": "C:/Users/joker/AppData/Local/Programs/Python/Python310/python.exe",
       "args": "${GITHUB_ROOT}/varo-vue/test-data/nodes/scripts/simpleDialog.py",
-      "nonBlocking": true
+      "wait": false
     },
     {
       "path": "C:/Windows/System32/notepad.exe",
-      "nonBlocking": true
+      "wait": false
     },
     {
       "path": "https://www.google.com",
       "path_type": "url",
-      "nonBlocking": true
+      "wait": false
     }
   ]
 }

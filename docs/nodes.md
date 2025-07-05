@@ -105,7 +105,7 @@ Defines one or more launch commands executed when the node is launched.
   {
     "path": "https://www.google.com/",
     "path_type": "url",
-    "nonBlocking": true
+    "wait": false
   },
   {
     "path": "./${HOME}/scripts/simplePrint.py",
@@ -123,7 +123,7 @@ Defines one or more launch commands executed when the node is launched.
 | `path`        | string                | ✅        | The command path to execute. Can contain `${VARS}`. |
 | `path_type`        | `rel`/`abs`/`url`     | ⬜        | Defines how to interpret the path. If omitted, auto-inferred. |
 | `args`        | string                | ⬜        | Optional arguments passed to the command. |
-| `nonBlocking` | boolean               | ⬜        | If `true`, the command will not block the next one from running. Defaults to `false`. |
+| `wait` | boolean               | ⬜        | If `true`, the command will wait for completion before continuing. Defaults to `true`. |
 
 ---
 
@@ -177,7 +177,7 @@ Defines environment variables that are set when launching commands.
     {
       "path": "https://www.google.com/",
       "type": "url",
-      "nonBlocking": true
+      "wait": false
     },
     {
       "path": "./${HOME}/scripts/simplePrint.py",
@@ -227,7 +227,7 @@ access:
 commands:
   - path: https://www.google.com/
     type: url
-    nonBlocking: true
+    wait: false
   - path: ./${HOME}/scripts/simplePrint.py
     type: rel
   - path: C:/Users/${USERNAME}/Desktop/helloWorld.py

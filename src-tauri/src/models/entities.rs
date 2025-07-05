@@ -35,7 +35,11 @@ pub struct Command {
     pub path: String,
     pub path_type: String,
     pub args: String,
-    pub non_blocking: bool,
+    pub wait: bool,
+}
+
+fn default_wait() -> bool {
+    true
 }
 
 #[derive(Debug, Serialize, Clone)]

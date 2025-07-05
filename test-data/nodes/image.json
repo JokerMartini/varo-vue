@@ -5,7 +5,7 @@
   "commands": [
     {
       "path": "C:/Users/joker/OneDrive/Pictures/Luca2025-06-02.jpg",
-      "nonBlocking": true
+      "wait": true
     }
   ]
 }

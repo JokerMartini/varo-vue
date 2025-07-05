@@ -7,7 +7,7 @@
     "commands": [
     {
       "path": "C:/Users/joker/AppData/Local/Microsoft/WindowsApps/AffinityDesigner2.exe",
-      "nonBlocking": true
+      "wait": false
     }
   ]
 }

@@ -21,15 +21,17 @@
   "commands": [
     {
       "path": "C:/Users/joker/AppData/Local/Programs/Python/Python310/python.exe",
-      "args": "${GITHUB_ROOT}/varo-vue/test-data/nodes/scripts/simpleDialog.py"
+      "args": "${GITHUB_ROOT}/varo-vue/test-data/nodes/scripts/simpleDialog.py",
+      "wait": true
     },
     {
-      "path": "C:/Windows/System32/notepad.exe"
+      "path": "C:/Windows/System32/notepad.exe",
+      "wait": true
     },
     {
       "path": "https://www.google.com",
       "path_type": "url",
-      "blocking": false
+      "wait": false
     }
   ]
 }

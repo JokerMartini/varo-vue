@@ -17,7 +17,7 @@ fn parse_commands_from_json(json: &Value, path: &PathBuf) -> Vec<Command> {
                         path: cmd.get("path").and_then(|v| v.as_str()).unwrap_or("").to_string(),
                         path_type: cmd.get("path_type").and_then(|v| v.as_str()).unwrap_or("").to_string(),
                         args: cmd.get("args").and_then(|v| v.as_str()).unwrap_or("").to_string(),
-                        non_blocking: cmd.get("nonBlocking").and_then(|v| v.as_bool()).unwrap_or(false),
+                        wait: cmd.get("wait").and_then(|v| v.as_bool()).unwrap_or(true),
                     })
                 }).collect()
             } else {

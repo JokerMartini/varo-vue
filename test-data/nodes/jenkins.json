@@ -7,7 +7,7 @@
     {
       "path": "https://www.jenkins.io/",
       "path_type": "url",
-      "nonBlocking": true
+      "wait": false
     }
   ]
 }

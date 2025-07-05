@@ -5,7 +5,7 @@
     {
       "path": "https://google.com/",
       "path_type": "url",
-      "nonBlocking": true
+      "wait": true
     }
   ]
 }

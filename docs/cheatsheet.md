@@ -35,7 +35,7 @@ Perfect! Here's a **compact cheatsheet version** for you — designed for quick 
     "path": "string",         // Required
     "path_type": "rel" | "abs" | "url",  // Optional
     "args": "string",          // Optional
-    "nonBlocking": true        // Optional
+    "wait": false        // Optional
   }
 ]
 ```
@@ -43,7 +43,7 @@ Perfect! Here's a **compact cheatsheet version** for you — designed for quick 
 - `path`: Executable path or URL.
 - `path_type`: How to interpret the path (auto-inferred if missing).
 - `args`: Arguments to pass.
-- `nonBlocking`: If true, don't wait for this command to finish.
+- `wait`: If true, wait for this command to finish before continuing. Defaults to `true`.
 
 ---
 
