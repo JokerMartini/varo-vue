@@ -17,6 +17,15 @@ const isDark = computed({
 
 const mainMenuItems = computed(() => [
     [
+        {
+            label: "Refresh",
+            icon: 'i-lucide-refresh-cw',
+            onSelect(e: Event) {
+                appStore.refreshData();
+            },
+        },
+    ],
+    [
        {
             label: "Dark/Light Theme",
             icon: isDark.value ? 'i-lucide-moon' : 'i-lucide-sun',

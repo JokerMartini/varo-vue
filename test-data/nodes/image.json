@@ -1,11 +1,10 @@
 {
-  "name": "Image",
+  "name": "Image - Picture",
   "category": "Tech",
   "icon": "rocket.png",
   "commands": [
     {
-      "path": "https://about.gitlab.com/",
-      "path_type": "url",
+      "path": "C:/Users/joker/OneDrive/Pictures/Luca2025-06-02.jpg",
       "nonBlocking": true
     }
   ]

@@ -131,6 +131,21 @@ export const useAppStore = defineStore("app", () => {
         }
     }
 
+    async function syncSelectedPreset() {
+        try {
+            const result = await invoke<any>("get_selected_env_preset");
+            if (result) {
+                selectedEnvPresetId.value = result.id;
+                console.log("Synced selected preset:", result.id);
+            } else {
+                selectedEnvPresetId.value = null;
+                console.log("No preset selected in backend");
+            }
+        } catch (error) {
+            console.error("Failed to sync selected preset:", error);
+        }
+    }
+
     async function fetchSystemInfo() {
         try {
             username.value = await invoke<string>("get_os_username");
@@ -157,8 +172,12 @@ export const useAppStore = defineStore("app", () => {
             await invoke("select_env_preset", { id: presetId });
             selectedEnvPresetId.value = presetId;
             
-            // Reload nodes after preset change
+            // Reload nodes after preset change (this will refresh with the new VARO_PATH)
             await fetchNodes();
+            
+            // Ensure the selected preset is still maintained after refresh
+            // await syncSelectedPreset();
+            
             console.log(`Selected env preset: ${presetId}`);
         } catch (error) {
             console.error("Failed to select env preset:", error);
@@ -217,6 +236,9 @@ export const useAppStore = defineStore("app", () => {
                 fetchEnvPresets(),
             ]);
             
+            // Sync the selected preset from backend
+            await syncSelectedPreset();
+            
             // Load nodes after presets are available
             await fetchNodes();
             
@@ -238,9 +260,12 @@ export const useAppStore = defineStore("app", () => {
             
             // Refresh all data
             await Promise.all([
-                fetchEnvPresets(),
                 fetchAppConfig(),
+                fetchEnvPresets(),
             ]);
+            
+            // Sync the selected preset from backend
+            await syncSelectedPreset();
             
             // Reload nodes
             await fetchNodes();
@@ -287,6 +312,7 @@ export const useAppStore = defineStore("app", () => {
         refreshData,
         fetchNodes,
         fetchEnvPresets,
+        syncSelectedPreset,
         fetchSystemInfo,
         fetchAppConfig,
         selectEnvPreset,

@@ -1,9 +1,7 @@
 {
-  "id": "uuid-python-pyside2",
-  "group_id": "Python",
-  "name": "PySide2",
-  "icon": "python.svg",
-  "category": "Tools",
+  "name": "Python + Notepad + URL",
+  "icon": "rocket.svg",
+  "category": "Multiple",
   "env": [
     {
       "name": "AAA_1",
@@ -24,6 +22,14 @@
     {
       "path": "C:/Users/joker/AppData/Local/Programs/Python/Python310/python.exe",
       "args": "${GITHUB_ROOT}/varo-vue/test-data/nodes/scripts/simpleDialog.py"
+    },
+    {
+      "path": "C:/Windows/System32/notepad.exe"
+    },
+    {
+      "path": "https://www.google.com",
+      "path_type": "url",
+      "blocking": false
     }
   ]
 }

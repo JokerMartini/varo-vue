@@ -4,7 +4,7 @@ use crate::models::errors::{VaroError, VaroResult};
 use crate::utils::node::load_nodes_in_dir;
 use crate::utils::commands::execute_program;
 use crate::utils::platform;
-use crate::utils::env::{get_current_env_vars, expand_tokens_with_map};
+use crate::utils::env::{get_current_env_vars, expand_tokens_with_map, get_env_vars_with_preset};
 
 #[derive(Debug)]
 pub struct NodeManager {
@@ -19,25 +19,64 @@ impl NodeManager {
     }
 
     pub fn load_nodes_from_varo_path(&mut self) -> VaroResult<()> {
-        // test dir -> "C:/Users/jmartini/Documents/GitHub/varo-vue/test-data/nodes"
-        let varo_path = std::env::var("VARO_PATH")
-            .map_err(|_| VaroError::node("VARO_PATH environment variable not set"))?;
-            
-        let nodes_path = format!("{}/nodes", varo_path);
+        self.load_nodes_from_varo_path_with_preset(None)
+    }
+
+    pub fn load_nodes_from_varo_path_with_preset(&mut self, preset: Option<&EnvPreset>) -> VaroResult<()> {
+        // Get environment variables with preset precedence
+        let env_map = get_env_vars_with_preset(preset);
         
-        let nodes = load_nodes_in_dir(&nodes_path)
-            .map_err(|e| VaroError::node(format!("Failed to load nodes from {}: {}", nodes_path, e)))?;
-        
-        self.nodes.clear();
-        for node in nodes {
-            self.nodes.insert(node.id.clone(), node);
+        if let Some(preset) = preset {
+            println!("[Node Manager] Using preset '{}' for environment variables", preset.name);
+        } else {
+            println!("[Node Manager] Using system environment variables only");
         }
         
+        // Check if VARO_PATH is available in the combined environment
+        let varo_path = match env_map.get("VARO_PATH") {
+            Some(path) => path,
+            None => {
+                // Clear nodes and log warning but don't fail
+                self.nodes.clear();
+                if let Some(preset) = preset {
+                    println!("[Node Manager] Warning: Preset '{}' does not define VARO_PATH and no system VARO_PATH found. No nodes loaded.", preset.name);
+                } else {
+                    println!("[Node Manager] Warning: VARO_PATH environment variable not set. No nodes loaded.");
+                }
+                return Ok(());
+            }
+        };
+            
+        let nodes_path = format!("{}/nodes", varo_path);
+        println!("[Node Manager] Loading nodes from: {}", nodes_path);
+        
+        // Try to load nodes, but don't fail if the directory doesn't exist
+        let nodes = match load_nodes_in_dir(&nodes_path) {
+            Ok(nodes) => nodes,
+            Err(e) => {
+                // Clear nodes and log warning but don't fail
+                self.nodes.clear();
+                println!("[Node Manager] Warning: Failed to load nodes from {}: {}. No nodes loaded.", nodes_path, e);
+                return Ok(());
+            }
+        };
+        
+        println!("[Node Manager] Loaded {} nodes from disk", nodes.len());
+        
+        self.nodes.clear();
+        for node in &nodes {
+            println!("[Node Manager]   - Loading node: {} ({})", node.name, node.id);
+            self.nodes.insert(node.id.clone(), node.clone());
+        }
+        
+        println!("[Node Manager] Node loading complete. Total nodes in memory: {}", self.nodes.len());
         Ok(())
     }
 
     pub fn get_all_nodes(&self) -> Vec<&VaroNode> {
-        self.nodes.values().collect()
+        let mut nodes: Vec<&VaroNode> = self.nodes.values().collect();
+        nodes.sort_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()));
+        nodes
     }
 
     pub fn get_node(&self, id: &str) -> Option<&VaroNode> {
@@ -177,10 +216,9 @@ impl NodeManager {
         }
     }
 
-    pub fn refresh_with_preset(&mut self, _preset: &EnvPreset) -> VaroResult<()> {
-        // TODO: Implement preset-based node loading
-        // For now, just reload all nodes
-        self.load_nodes_from_varo_path()
+    pub fn refresh_with_preset(&mut self, preset: &EnvPreset) -> VaroResult<()> {
+        // Load nodes using the preset's environment variables
+        self.load_nodes_from_varo_path_with_preset(Some(preset))
     }
 
     pub fn get_node_count(&self) -> usize {

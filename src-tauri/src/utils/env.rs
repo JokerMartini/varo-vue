@@ -11,6 +11,22 @@ pub fn get_current_env_vars() -> HashMap<String, String> {
     env::vars().collect()
 }
 
+/// Returns a combined environment map with preset variables taking precedence over system variables
+pub fn get_env_vars_with_preset(preset: Option<&EnvPreset>) -> HashMap<String, String> {
+    let mut env_map = get_current_env_vars();
+    
+    // Add preset environment variables if available (these override system vars)
+    if let Some(preset) = preset {
+        for env_var in &preset.env {
+            // Expand tokens in the preset variable value using the current environment
+            let expanded_value = expand_tokens_with_map(&env_var.value, &env_map);
+            env_map.insert(env_var.name.clone(), expanded_value);
+        }
+    }
+    
+    env_map
+}
+
 /// Expands `${KEY}` placeholders in a string using values from the provided `vars` map.
 /// Returns the updated string with tokens replaced.
 pub fn expand_tokens_with_map(input: &str, vars: &HashMap<String, String>) -> String {

@@ -1,0 +1,19 @@
+{
+  "name": "No Varo Path",
+  "description": "Dev environment, use with caution",
+  "env": [
+    {
+      "name": "AAA_0",
+      "value": "DONUTS"
+    },
+    {
+      "name": "AAA_1",
+      "value": "//Dev/Network/Path"
+    },
+    {
+      "name": "VARO_PATH",
+      "value": "",
+      "operation": "set"
+    }
+  ]
+}

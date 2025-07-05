@@ -1,0 +1,16 @@
+{
+  "name": "URL + Notepad",
+  "category": "Multiple",
+  "icon": "rocket.svg",
+  "commands": [
+    {
+      "path": "https://www.google.com",
+      "path_type": "url",
+      "blocking": false
+    },
+    {
+      "path": "C:/Windows/System32/notepad.exe",
+      "blocking": false
+    }
+  ]
+}

@@ -89,8 +89,31 @@ impl VaroCore {
         self.preset_manager.blocking_read().get_all_presets()
     }
 
+    pub fn sync_get_selected_preset(&self) -> Option<EnvPreset> {
+        self.preset_manager.blocking_read().get_selected_preset().cloned()
+    }
+
     pub fn sync_select_preset(&self, preset_id: &str) -> VaroResult<()> {
-        self.preset_manager.blocking_write().select_preset(preset_id)
+        println!("[VaroCore] Selecting preset: {}", preset_id);
+        
+        // Select the preset
+        let mut preset_manager = self.preset_manager.blocking_write();
+        preset_manager.select_preset(preset_id)?;
+        
+        // Get the selected preset for node refresh
+        let selected_preset = preset_manager.get_selected_preset().cloned();
+        drop(preset_manager); // Release preset lock
+        
+        // Reload nodes with the new preset (which may have changed VARO_PATH)
+        let mut node_manager = self.node_manager.blocking_write();
+        if let Some(preset) = selected_preset {
+            node_manager.refresh_with_preset(&preset)?;
+        } else {
+            node_manager.load_nodes_from_varo_path()?;
+        }
+        
+        println!("[VaroCore] Preset selection and node refresh complete");
+        Ok(())
     }
 
     pub fn sync_get_config(&self) -> Value {
@@ -98,8 +121,11 @@ impl VaroCore {
     }
 
     pub fn sync_reload_config(&self) -> VaroResult<()> {
+        println!("[VaroCore] Starting config reload...");
+        
         let mut config_manager = self.config_manager.blocking_write();
         config_manager.reload()?;
+        println!("[VaroCore] Config reloaded successfully");
         
         // Also reload presets with new config
         let env_presets_config = config_manager.get_section("env_presets");
@@ -107,7 +133,15 @@ impl VaroCore {
         
         let mut preset_manager = self.preset_manager.blocking_write();
         preset_manager.reload(&env_presets_config)?;
+        println!("[VaroCore] Presets reloaded successfully");
+        drop(preset_manager); // Release preset lock
         
+        // Also reload nodes from disk
+        let mut node_manager = self.node_manager.blocking_write();
+        node_manager.load_nodes_from_varo_path()?;
+        println!("[VaroCore] Nodes reloaded successfully");
+        
+        println!("[VaroCore] Complete config reload finished successfully");
         Ok(())
     }
 

@@ -30,6 +30,12 @@ fn get_env_presets(state: tauri::State<Mutex<VaroCore>>) -> Result<Vec<crate::mo
 }
 
 #[tauri::command]
+fn get_selected_env_preset(state: tauri::State<Mutex<VaroCore>>) -> Result<Option<crate::models::entities::EnvPreset>, String> {
+    let state = state.lock().map_err(|e| format!("Failed to acquire state lock: {}", e))?;
+    Ok(state.sync_get_selected_preset())
+}
+
+#[tauri::command]
 fn select_env_preset(id: String, state: tauri::State<Mutex<VaroCore>>) -> Result<(), String> {
     let state = state.lock().map_err(|e| format!("Failed to acquire state lock: {}", e))?;
     handle_error(state.sync_select_preset(&id))
@@ -88,6 +94,7 @@ pub fn run() {
             get_platform,
             execute_program,
             get_env_presets,
+            get_selected_env_preset,
             select_env_preset,
             get_config,
             reload_config,
